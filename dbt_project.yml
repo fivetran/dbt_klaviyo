@@ -1,0 +1,26 @@
+name: 'klaviyo'
+version: '0.1.0'
+config-version: 2
+require-dbt-version: [">=0.18.0", "<0.20.0"]
+
+
+vars:
+  klaviyo:
+    event_table: "{{ ref( 'stg_klaviyo__event') }}" 
+    campaign: "{{ ref( 'stg_klaviyo__campaign') }}" 
+    flow: "{{ ref( 'stg_klaviyo__flow') }}" 
+    integration: "{{ ref( 'stg_klaviyo__integration') }}" 
+    person: "{{ ref( 'stg_klaviyo__person') }}" 
+    metric: "{{ ref( 'stg_klaviyo__metric') }}" 
+    
+  klaviyo_source:
+    klaviyo__event_pass_through_columns: []
+    klaviyo__person_pass_through_columns: []
+
+# models: 
+#   klaviyo_source:
+#     tmp:
+#       +materialized: view
+#     +materialized: table
+
+profile: klaviyo

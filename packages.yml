@@ -1,0 +1,3 @@
+packages:
+
+  - local: ../dbt_klaviyo_source

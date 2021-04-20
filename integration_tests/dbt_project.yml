@@ -1,0 +1,34 @@
+name: 'klaviyo_source_integration_tests'
+version: '0.1.0'
+config-version: 2
+profile: 'integration_tests'
+
+
+vars:
+  klaviyo_source:
+    event_table: "{{ ref('event') }}" 
+    campaign: "{{ ref('campaign') }}" 
+    flow: "{{ fivetran_utils.snowflake_seed_data('flow') }}" 
+    integration: "{{ ref('integration') }}" 
+    person: "{{ ref('person') }}" 
+    metric: "{{ ref('metric') }}" 
+    klaviyo__event_pass_through_columns: []
+    klaviyo__person_pass_through_columns: []
+
+
+seeds:
+  klaviyo_source_integration_tests:
+    +column_types:
+      _FIVETRAN_SYNCED: timestamp
+    person:
+      +column_types:
+        PHONE_NUMBER: "{{ 'string' if target.type == 'bigquery' else 'varchar' }}"
+    flow:
+      +enabled: "{{ true if target.type != 'snowflake' else false }}"
+    flow_snowflake:
+      +enabled: "{{ true if target.type == 'snowflake' else false }}"
+    # event_table:
+    #   +column_types:
+    #     datetime: timestamp
+    #     timestamp: timestamp
+    
