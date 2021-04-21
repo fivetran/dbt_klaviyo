@@ -13,8 +13,8 @@ vars:
     person: "{{ ref( 'stg_klaviyo__person') }}" 
     metric: "{{ ref( 'stg_klaviyo__metric') }}" 
 
-    event_attribution_window: 6
-    event_attribution_filter: ''
+    klaviyo__attribution_lookback_window: 180 # minutes
+    klaviyo__event_attribution_filter: "true"
 
   klaviyo_source:
     klaviyo__event_pass_through_columns:
