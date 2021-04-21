@@ -12,9 +12,14 @@ vars:
     integration: "{{ ref( 'stg_klaviyo__integration') }}" 
     person: "{{ ref( 'stg_klaviyo__person') }}" 
     metric: "{{ ref( 'stg_klaviyo__metric') }}" 
-    
+
+    event_attribution_window: 6
+    event_attribution_filter: ''
+
   klaviyo_source:
-    klaviyo__event_pass_through_columns: []
+    klaviyo__event_pass_through_columns:
+      - name: property_subject
+        alias: subject_line
     klaviyo__person_pass_through_columns: []
 
 # models: 

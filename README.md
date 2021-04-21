@@ -8,7 +8,7 @@ This package models Klaviyo data from [Fivetran's connector](https://fivetran.co
 - [ #3]
 ...
 
-## Models - transformation package version
+## Models
 
 This package contains transformation models, designed to work simultaneously with our [Connector source package](link to source package repo). A dependency on the source package is declared in this package's `packages.yml` file, so it will automatically download when you run `dbt deps`. The primary outputs of this package are described below. Intermediate models are used to create these output models.
 
@@ -19,6 +19,13 @@ This package contains transformation models, designed to work simultaneously wit
 
 ## Installation Instructions
 Check [dbt Hub](https://hub.getdbt.com/) for the latest installation instructions, or [read the dbt docs](https://docs.getdbt.com/docs/package-management) for more information on installing packages.
+
+```yml
+# packages.yml
+packages:
+  - package: fivetran/klaviyo
+    version: [">=0.1.0", "<0.2.0"]
+```
 
 ## Configuration
 By default, this package looks for your Klaviyo data in the `klaviyo` schema of your [target database](https://docs.getdbt.com/docs/running-a-dbt-project/using-the-command-line-interface/configure-your-profile). If this is not where your Klaviyo data is, add the following configuration to your `dbt_project.yml` file:
