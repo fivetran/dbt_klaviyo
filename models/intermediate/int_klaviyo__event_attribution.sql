@@ -5,7 +5,7 @@ with events as (
     from {{ var('event_table') }}
 
     {# {% if is_incremental() %}
-    -- will probably have to grab all events related to this person
+    -- will probably have to grab all events related to this person but ONLY if campaign_id and flow_id are null?
     {% endif %} #}
 ),
 
@@ -23,8 +23,9 @@ last_touches as (
 
     select 
         *,
+        -- the first event of each partition is the one with the non-null campaign/flow
         min(occurred_at) over(partition by person_id, campaign_partition) as last_campaign_touch_at,
-        min(occurred_at) over(partition by person_id, flow_partition) as last_partition_touch_at
+        min(occurred_at) over(partition by person_id, flow_partition) as last_flow_touch_at
 
     from create_partitions
 ),
@@ -45,9 +46,9 @@ attribute as (
 
         coalesce(flow_id,
             case 
-            when {{ dbt_utils.datediff('last_campaign_touch_at', 'occurred_at', 'minute') }} <= {{ var('klaviyo__attribution_lookback_window', 180) }} 
+            when {{ dbt_utils.datediff('last_flow_touch_at', 'occurred_at', 'minute') }} <= {{ var('klaviyo__attribution_lookback_window', 180) }} 
                 and {{ var('klaviyo__event_attribution_filter', 'true') }}
-                
+
                 then first_value(flow_id) over (partition by person_id, flow_partition order by occurred_at asc rows between unbounded preceding and current row)
                 else null end) as last_touch_flow_id
 

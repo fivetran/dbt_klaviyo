@@ -22,10 +22,10 @@ vars:
         alias: subject_line
     klaviyo__person_pass_through_columns: []
 
-# models: 
-#   klaviyo_source:
-#     tmp:
-#       +materialized: view
-#     +materialized: table
+models: 
+  klaviyo:
+    # intermediate:
+    #   +materialized: view
+    +materialized: table
 
 profile: klaviyo
