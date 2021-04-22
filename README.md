@@ -57,6 +57,14 @@ vars:
     example_list_variable: ['the', 'list', 'of', 'values']
 ```
 
+### Customizing Conversion Metrics
+todo: 
+- klaviyo [email](https://help.klaviyo.com/hc/en-us/articles/360036974872#email-metrics1)
+- klaviyo [sms](https://help.klaviyo.com/hc/en-us/articles/360035345572#sms-metrics0)
+- klaviyo [web tracking](https://help.klaviyo.com/hc/en-us/articles/115005076767-Guide-to-Klaviyo-Web-Tracking#overview0)
+- [shopify](https://help.klaviyo.com/hc/en-us/articles/115005080447-Reviewing-Your-Shopify-Data#the-shopify-metrics1)
+
+
 ## Contributions
 Don't see a model or specific metric you would have liked to be included? Notice any bugs when installing 
 and running the package? If so, we highly encourage and welcome contributions to this package! 

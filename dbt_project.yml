@@ -16,6 +16,23 @@ vars:
     klaviyo__attribution_lookback_window: 180 # minutes
     klaviyo__event_attribution_filter: "true"
 
+    klaviyo__pivot_conversions:
+      - 'Active on Site' # api ones
+      - 'Viewed Product'
+      - 'Received Email' # email ones
+      - 'Clicked Email'
+      - 'Opened Email'
+      - 'Bounced Email'
+      - 'Marked Email as Spam'
+      - 'Dropped Email'
+      - 'Subscribed to List'
+      - 'Unsubscribed to List'
+      - 'Unsubscribed'
+      - 'Updated Email Preferences'
+      - 'Subscribed to Back in Stock'
+      - 'Merged Profile'
+
+
   klaviyo_source:
     klaviyo__event_pass_through_columns:
       - name: property_subject

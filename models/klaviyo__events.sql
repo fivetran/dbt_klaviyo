@@ -60,7 +60,7 @@ join_fields as (
     from events
     left join campaign on events.last_touch_campaign_id = campaign.campaign_id 
     left join flow on events.last_touch_flow_id = flow.flow_id
-    left join person on events.person_id = person.person_id  -- what stuff to bring in?
+    left join person on events.person_id = person.person_id
     left join metric on events.metric_id = metric.metric_id 
     left join integration on metric.integration_id = integration.integration_id
 )
