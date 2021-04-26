@@ -13,8 +13,9 @@ vars:
     person: "{{ ref( 'stg_klaviyo__person') }}" 
     metric: "{{ ref( 'stg_klaviyo__metric') }}" 
 
-    klaviyo__attribution_lookback_window: 180 # minutes
-    klaviyo__event_attribution_filter: "true"
+    klaviyo__email_attribution_lookback: 120 # hours - 5 days
+    klaviyo__sms_attribution_lookback: 24 # hours
+    klaviyo__event_attribution_filter: "lower(type) in ('opened email', 'clicked email', 'clicked sms')"
 
     klaviyo__pivot_conversions:
       - 'Active on Site' # api ones
@@ -45,4 +46,3 @@ models:
     #   +materialized: view
     +materialized: table
 
-profile: klaviyo
