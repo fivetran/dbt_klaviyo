@@ -48,7 +48,7 @@ attribute as (
         -- making default lookback = 5 days (120 hours) for email and 1 day (24 hours) for sms
         coalesce(campaign_id,
             case 
-            when {{ dbt_utils.datediff('last_campaign_touch_at', 'occurred_at', 'day') }} <= (
+            when {{ dbt_utils.datediff('last_campaign_touch_at', 'occurred_at', 'hour') }} <= (
                 case when lower(last_campaign_touch_event_type) like '%sms%' then {{ var('klaviyo__sms_attribution_lookback') }}
                     else {{ var('klaviyo__email_attribution_lookback') }} end)
                 then first_value(campaign_id) over (
@@ -57,7 +57,7 @@ attribute as (
 
         coalesce(flow_id,
             case 
-            when {{ dbt_utils.datediff('last_flow_touch_at', 'occurred_at', 'day') }} <= (
+            when {{ dbt_utils.datediff('last_flow_touch_at', 'occurred_at', 'hour') }} <= (
                 case when lower(last_flow_touch_event_type) like '%sms%' then {{ var('klaviyo__sms_attribution_lookback') }}
                     else {{ var('klaviyo__email_attribution_lookback') }} end
             )
