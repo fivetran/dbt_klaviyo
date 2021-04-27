@@ -1,11 +1,7 @@
 with events as (
 
     select 
-    {% if target.type == 'snowflake' %}
-        {{ dbt_utils.star(from=ref('int_klaviyo__event_attribution'), except=["CAMPAIGN_OR_FLOW_PARTITION"]) }}
-    {% else %}
-        {{ dbt_utils.star(from=ref('int_klaviyo__event_attribution'), except=["campaign_or_flow_partition"]) }}
-    {% endif %}
+        {{ dbt_utils.star(from=ref('int_klaviyo__event_attribution'), except=["campaign_or_flow_partition"] if target.type != 'snowflake' else ["CAMPAIGN_OR_FLOW_PARTITION"]) }}
 
     from {{ ref('int_klaviyo__event_attribution') }}
 ),

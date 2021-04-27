@@ -17,21 +17,7 @@ vars:
     klaviyo__sms_attribution_lookback: 24 # hours
     klaviyo__event_attribution_filter: "lower(type) in ('opened email', 'clicked email', 'clicked sms')"
 
-    klaviyo__pivot_conversions:
-      - 'Active on Site' # api ones
-      - 'Viewed Product'
-      - 'Received Email' # email ones
-      - 'Clicked Email'
-      - 'Opened Email'
-      - 'Bounced Email'
-      - 'Marked Email as Spam'
-      - 'Dropped Email'
-      - 'Subscribed to List'
-      - 'Unsubscribed to List'
-      - 'Unsubscribed'
-      - 'Updated Email Preferences'
-      - 'Subscribed to Back in Stock'
-      - 'Merged Profile'
+    klaviyo__pivot_conversion_filter: "integration_name != 'Mailchimp'"
 
 
   klaviyo_source:
@@ -46,3 +32,4 @@ models:
     #   +materialized: view
     +materialized: table
 
+profile: klaviyo
