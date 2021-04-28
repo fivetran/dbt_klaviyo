@@ -9,14 +9,14 @@ with person_campaign_flow as (
 agg_metrics as (
 
     select
-        last_touch_campaign_or_flow_id,
+        last_touch_campaign_id,
+        last_touch_flow_id,
         variation_id,
-        last_touch_message_type,
         count(distinct person_id) as total_count_unique_people,
         min(first_touch_at) as first_touch_at,
         max(last_touch_at) as last_touch_at
         
-        {% for col in pcf_columns if col.name|lower not in ['last_touch_campaign_or_flow_id', 'person_id', 'last_touch_message_type', 
+        {% for col in pcf_columns if col.name|lower not in ['last_touch_campaign_id', 'person_id', 'last_touch_flow_id', 
                                                             'campaign_name', 'flow_name','variation_id', 'first_touch_at', 'last_touch_at'] %}
         -- add up all instances of these events
         , sum( {{ col.name }} ) as {{ col.name }}

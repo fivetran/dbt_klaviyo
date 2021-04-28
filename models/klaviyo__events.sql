@@ -1,8 +1,17 @@
 with events as (
 
+    {% set exclude_fields = ['campaign_or_flow_partition', 'last_touch_campaign_or_flow_id'] %}
+    {% set exclude_fields = exclude_fields | upper if target.type == 'snowflake' else exclude_fields %}
+
     select 
-        {{ dbt_utils.star(from=ref('int_klaviyo__event_attribution'), 
-                            except=["campaign_or_flow_partition"] if target.type != 'snowflake' else ["CAMPAIGN_OR_FLOW_PARTITION"]) }}
+        {{ dbt_utils.star(from=ref('int_klaviyo__event_attribution'), except=exclude_fields) }},
+
+        case 
+            when last_touch_type = 'campaign' then last_touch_campaign_or_flow_id 
+        else null end as last_touch_campaign_id,
+        case 
+            when last_touch_type = 'flow' then last_touch_campaign_or_flow_id 
+        else null end as last_touch_flow_id
 
     from {{ ref('int_klaviyo__event_attribution') }}
 ),
@@ -54,11 +63,8 @@ join_fields as (
         integration.category as integration_category
 
     from events
-    left join campaign 
-        on events.last_touch_campaign_or_flow_id = campaign.campaign_id 
-        and coalesce(last_touch_message_type, '') = 'campaign'
-    left join flow on events.last_touch_campaign_or_flow_id = flow.flow_id
-        and coalesce(last_touch_message_type, '') = 'flow'
+    left join campaign on events.last_touch_campaign_id = campaign.campaign_id 
+    left join flow on events.last_touch_flow_id = flow.flow_id
     left join person on events.person_id = person.person_id
     left join metric on events.metric_id = metric.metric_id 
     left join integration on metric.integration_id = integration.integration_id

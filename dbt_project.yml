@@ -17,7 +17,7 @@ vars:
     klaviyo__sms_attribution_lookback: 24 # hours
     klaviyo__event_attribution_filter: "lower(type) in ('opened email', 'clicked email', 'clicked sms')"
 
-    klaviyo__pivot_conversion_filter: "integration_name != 'Mailchimp'"
+    klaviyo__pivot_conversion_filter: "true"
 
 
   klaviyo_source:

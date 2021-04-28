@@ -16,6 +16,7 @@ with events as (
 {% endset %}
 {% set revenue_metric_results = run_query(revenue_metrics_query) %}
 
+-- run the results of the above queries
 {% if execute %}
     {% set conversion_metrics = conversion_metric_results.columns[0].values() %}
     {% set revenue_metrics = revenue_metric_results.columns[0].values() %}
@@ -50,8 +51,8 @@ pivot_out_events as (
     
     select 
         person_id,
-        last_touch_campaign_or_flow_id,
-        last_touch_message_type,
+        last_touch_campaign_id,
+        last_touch_flow_id,
         campaign_name,
         flow_name,
         variation_id,

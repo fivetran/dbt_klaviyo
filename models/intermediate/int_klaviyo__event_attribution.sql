@@ -3,7 +3,12 @@ with events as (
 
     select 
         *,
-        coalesce(campaign_id, flow_id) as campaign_or_flow_id
+        coalesce(campaign_id, flow_id) as campaign_or_flow_id,
+        case 
+            when campaign_id is not null then 'campaign' 
+            when flow_id is not null then 'flow' 
+        else null end as touch_type
+
     from {{ var('event_table') }}
 
     {# {% if is_incremental() %}
@@ -30,6 +35,7 @@ last_touches as (
         -- the first event of each partition is the one with the non-null campaign/flow
         min(occurred_at) over(partition by person_id, campaign_or_flow_partition) as last_campaign_or_flow_touch_at,
 
+        -- get the type of metric/event
         first_value(type) over(
             partition by person_id, campaign_or_flow_partition order by occurred_at asc rows between unbounded preceding and current row) as last_campaign_or_flow_event_type
 
@@ -60,13 +66,13 @@ final as (
 
     select
         *,
-        case 
-        when last_touch_campaign_or_flow_id is null then null 
-        when last_touch_campaign_or_flow_id = first_value(campaign_id) over(
-            partition by person_id, campaign_or_flow_partition order by occurred_at asc rows between unbounded preceding and current row)
-        then 'campaign'
-        else 'flow' end as last_touch_message_type
-    from attribute
+        case when last_touch_campaign_or_flow_id is not null then 
+            coalesce(touch_type, first_value(touch_type) over(
+                partition by person_id, campaign_or_flow_partition order by occurred_at asc rows between unbounded preceding and current row)) 
+
+        else null end as last_touch_type
+
+    from attribute 
 )
 
 select * from final
