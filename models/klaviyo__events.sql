@@ -1,7 +1,8 @@
 with events as (
 
     select 
-        {{ dbt_utils.star(from=ref('int_klaviyo__event_attribution'), except=["campaign_or_flow_partition"] if target.type != 'snowflake' else ["CAMPAIGN_OR_FLOW_PARTITION"]) }}
+        {{ dbt_utils.star(from=ref('int_klaviyo__event_attribution'), 
+                            except=["campaign_or_flow_partition"] if target.type != 'snowflake' else ["CAMPAIGN_OR_FLOW_PARTITION"]) }}
 
     from {{ ref('int_klaviyo__event_attribution') }}
 ),
@@ -43,12 +44,11 @@ join_fields as (
         campaign.campaign_name,
         campaign.campaign_type,
         campaign.subject as campaign_subject_line,
-        -- any other fields? they can join with stuff later... 
         flow.flow_name, 
         person.city as person_city,
         person.country as person_country,
         person.region as person_region,
-        person.email as person_email, -- idk how people will feel about PII issues here
+        person.email as person_email, -- any PII concerns here?
         person.timezone as person_timezone,
         integration.integration_name,
         integration.category as integration_category

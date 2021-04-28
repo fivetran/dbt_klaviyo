@@ -43,7 +43,7 @@ with events as (
             'Failed to Deliver SMS'
         ] %}
 
-    {% set revenue_metrics = ['Placed Order', 'Refunded Order'] %}
+    {% set revenue_metrics = ['Placed Order', 'Refunded Order'] %} -- just some default shopify events
 {% endif %}
 
 pivot_out_events as (
@@ -54,8 +54,10 @@ pivot_out_events as (
         last_touch_message_type,
         campaign_name,
         flow_name,
-        variation_id
-        
+        variation_id,
+        min(occurred_at) as first_touch_at,
+        max(occurred_at) as last_touch_at
+
     -- look at revenue
     {% for rm in revenue_metrics %}
     , sum(case when lower(type) = '{{ rm | lower }}' then numeric_value else 0 end) as {{ 'sum_revenue_' ~ rm | replace(' ', '_') | lower }}
@@ -64,7 +66,7 @@ pivot_out_events as (
     -- look at revenue associated stuff
     {% for cm in conversion_metrics %}
     , sum(case when lower(type) = '{{ cm | lower }}' then 1 else 0 end) as {{ 'count_' ~ cm | replace(' ', '_') | replace('(', '') | replace(')', '') | lower }}
-    -- can perhaps create a variable to add up any other columns...
+    -- we can perhaps create a variable to add up any other columns...
     {% endfor %}
 
     from events
