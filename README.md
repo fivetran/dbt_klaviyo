@@ -118,7 +118,7 @@ vars:
 ```
 
 ### Changing the Build Schema
-By default this package will build the Iterable staging models within a schema titled (<target_schema> + `_stg_klaviyo`) in your target database. If this is not where you would like you Klaviyo staging data to be written to, add the following configuration to your `dbt_project.yml` file:
+By default this package will build the Klaviyo staging models within a schema titled (<target_schema> + `_stg_klaviyo`) in your target database. If this is not where you would like you Klaviyo staging data to be written to, add the following configuration to your `dbt_project.yml` file:
 
 ```yml
 # dbt_project.yml
