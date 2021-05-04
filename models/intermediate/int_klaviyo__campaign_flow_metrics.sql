@@ -22,7 +22,7 @@ agg_metrics as (
         , sum( {{ col.name }} ) as {{ col.name }}
         {% if 'sum_revenue' not in col.name|lower %}
         -- get unique users
-        , sum(case when {{ col.name }} = 0 then 1 else 0 end) as {{ 'unique_' ~ col.name }}
+        , sum(case when {{ col.name }} > 0 then 1 else 0 end) as {{ 'unique_' ~ col.name }}
 
         {% endif %}
         {% endfor -%}
