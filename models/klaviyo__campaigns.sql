@@ -1,36 +1,36 @@
-with flow as (
+with campaign as (
 
     select *
-    from {{ var('flow') }}
+    from {{ var('campaign') }}
 ),
 
-flow_metrics as (
+campaign_metrics as (
 
     select *
     from {{ ref('int_klaviyo__campaign_flow_metrics') }}
-    where last_touch_flow_id is not null
+    where last_touch_campaign_id is not null
 ),
 
-flow_join as (
+campaign_join as (
     
     {% set exclude_fields = [ 'last_touch_campaign_id', 'last_touch_flow_id'] %}
     {% set exclude_fields = exclude_fields | upper if target.type == 'snowflake' else exclude_fields %}
 
     select
-        flow.*, -- has flow_id
+        campaign.*, -- has campaign_id
         {{ dbt_utils.star(from=ref('int_klaviyo__campaign_flow_metrics'), except=exclude_fields) }}
 
-    from flow
-    left join flow_metrics on flow.flow_id = flow_metrics.last_touch_flow_id
+    from campaign
+    left join campaign_metrics on campaign.campaign_id = campaign_metrics.last_touch_campaign_id
 ),
 
 final as (
 
     select 
         *,
-        {{ dbt_utils.surrogate_key(['flow_id','variation_id']) }} as flow_variation_key
+        {{ dbt_utils.surrogate_key(['campaign_id','variation_id']) }} as campaign_variation_key
 
-    from flow_join
+    from campaign_join
 )
 
 select *
