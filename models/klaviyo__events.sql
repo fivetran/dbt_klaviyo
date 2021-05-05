@@ -1,11 +1,16 @@
 with events as (
 
-    {% set exclude_fields = ['touch_session', 'last_touch_id', 'last_touch_at', 'last_touch_event_type'] %}
+    -- excluding some fields to rename them and/or make them null if needed
+    {% set exclude_fields = ['touch_session', 'last_touch_id', 'last_touch_at', 'last_touch_event_type', 'type'] %}
+    -- snowflake has to be uppercase :)
     {% set exclude_fields = exclude_fields | upper if target.type == 'snowflake' else exclude_fields %}
 
     select 
         {{ dbt_utils.star(from=ref('int_klaviyo__event_attribution'), except=exclude_fields) }},
 
+        type, -- need to pull this out because it gets removed, due to being a substring of last_touch_event_type
+
+        -- split out campaign and flow IDs
         case 
             when last_touch_type = 'campaign' then last_touch_id 
         else null end as last_touch_campaign_id,
@@ -13,6 +18,7 @@ with events as (
             when last_touch_type = 'flow' then last_touch_id 
         else null end as last_touch_flow_id,
 
+        -- make sure that last_touch_* columns are null if the event was not attributed to any campaign or flow
         case 
             when last_touch_id is not null then last_touch_at 
         else null end as last_touch_at,
@@ -41,6 +47,7 @@ person as (
     from {{ var('person') }}
 ),
 
+-- just pulling this to join with INTEGRATION
 metric as (
 
     select *

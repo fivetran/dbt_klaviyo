@@ -15,10 +15,45 @@ vars:
 
     klaviyo__email_attribution_lookback: 120 # hours - 5 days
     klaviyo__sms_attribution_lookback: 24 # hours
-    klaviyo__event_attribution_filter: "lower(type) in ('opened email', 'clicked email', 'clicked sms')"
+    klaviyo__eligible_attribution_events:
+      - 'opened email'
+      - 'clicked email'
+      - 'clicked sms'
 
-    klaviyo__pivot_conversion_filter: "true"
+    # klaviyo__pivot_conversion_filter: "true"
+    klaviyo__count_metrics: 
+      - 'Active on Site' # default API metrics
+      - 'Viewed Product'
+      - 'Ordered Product' # default Shopify metrics
+      - 'Placed Order'
+      - 'Refunded Order' # note: klaviyo only tracks FULL refunds (not partial)
+      - 'Cancelled Order'
+      - 'Fulfilled Order'
+      - 'Received Email' # default email and sms conversion metrics in Klaviyo
+      - 'Clicked Email'
+      - 'Opened Email'
+      - 'Bounced Email'
+      - 'Marked Email as Spam'
+      - 'Dropped Email'
+      - 'Subscribed to List'
+      - 'Unsubscribed to List'
+      - 'Unsubscribed'
+      - 'Updated Email Preferences'
+      - 'Subscribed to Back in Stock'
+      - 'Merged Profile'
+      - 'Received SMS'
+      - 'Clicked SMS'
+      - 'Consented to Receive SMS'
+      - 'Sent SMS'
+      - 'Unsubscribed from SMS'
+      - 'Failed to Deliver SMS'
 
+    klaviyo__sum_revenue_metrics:
+      - 'Refunded Order'
+      - 'Placed Order'
+      - 'Ordered Product'
+      - 'checkout started'
+      - 'cancelled order'
 
   klaviyo_source:
     klaviyo__event_pass_through_columns:
