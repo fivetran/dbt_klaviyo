@@ -20,12 +20,13 @@ agg_metrics as (
                                                             'campaign_name', 'flow_name','variation_id', 'first_touch_at', 'last_touch_at'] %}
         -- sum up any person-level metrics to the flow/campaign level
         , sum( {{ col.name }} ) as {{ col.name }}
+
         {% if 'sum_revenue' not in col.name|lower %} -- only look at count metrics
         -- get unique number of people who did each kind of event
         -- each record in person_campaign_flow is at the person-campaign/flow-variation level, so we can just sum up 0s and 1s to get totals at the
         -- campaign/flow-variation grain.
         , sum(case when {{ col.name }} > 0 then 1 else 0 end) as {{ 'unique_' ~ col.name }}
-
+        
         {% endif %}
         {% endfor -%}
 
