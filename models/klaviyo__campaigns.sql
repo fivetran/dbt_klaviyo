@@ -8,13 +8,13 @@ campaign_metrics as (
 
     select *
     from {{ ref('int_klaviyo__campaign_flow_metrics') }}
-    where last_touch_campaign_id is not null
+    where last_touch_campaign_id is not null -- only pull campaigns
 ),
 
 campaign_join as (
     
     {% set exclude_fields = [ 'last_touch_campaign_id', 'last_touch_flow_id'] %}
-    {% set exclude_fields = exclude_fields | upper if target.type == 'snowflake' else exclude_fields %}
+    {% set exclude_fields = exclude_fields | upper if target.type == 'snowflake' else exclude_fields %} -- snowflake needs uppercase :)
 
     select
         campaign.*, -- has campaign_id
