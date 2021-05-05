@@ -1,10 +1,10 @@
 with person_campaign_flow as (
 
     select *
-    from {{ ref('int_klaviyo__person_campaign_flow') }}
+    from {{ ref('klaviyo__person_campaign_flow') }}
 ),
 
-{%- set pcf_columns = adapter.get_columns_in_relation(ref('int_klaviyo__person_campaign_flow')) %}
+{%- set pcf_columns = adapter.get_columns_in_relation(ref('klaviyo__person_campaign_flow')) %}
 
 agg_metrics as (
 
