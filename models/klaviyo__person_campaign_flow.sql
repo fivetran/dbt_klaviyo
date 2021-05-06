@@ -21,7 +21,7 @@ pivot_out_events as (
         as {{ 'sum_revenue_' ~ rm | replace(' ', '_') | replace('(', '') | replace(')', '') | lower }} -- removing special characters that I have seen in different integration events
     {% endfor %}
 
-    -- look at revenue associated stuff
+    -- count up the number of instances of each metric
     {% for cm in var('klaviyo__count_metrics') %}
     , sum(case when lower(type) = '{{ cm | lower }}' then 1 else 0 end) 
         as {{ 'count_' ~ cm | replace(' ', '_') | replace('(', '') | replace(')', '') | lower }} -- removing special characters that I have seen in different integration events

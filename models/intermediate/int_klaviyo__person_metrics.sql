@@ -24,7 +24,7 @@ agg_metrics as (
         -- sum up any count/sum_revenue metrics -> prefix with `total` since we're pulling out organic sums as well
         , sum( {{ col.name }} ) as {{ 'total_' ~ col.name }}
 
-        -- let's pull out the organic revenue sums
+        -- let's pull out the organic (not attributed to a flow or campaign) revenue sums
         {% if 'sum_revenue' in col.name|lower %}
         , sum( case when coalesce(last_touch_campaign_id, last_touch_flow_id) is null then {{ col.name }} else 0 end ) as {{ 'organic_' ~ col.name }}
         {% endif %}
