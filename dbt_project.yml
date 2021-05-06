@@ -60,11 +60,13 @@ vars:
       - name: property_subject
         alias: subject_line
     klaviyo__person_pass_through_columns: []
-
+  
 models: 
   klaviyo:
-    # intermediate:
-    #   +materialized: view
+    intermediate:
+      +materialized: view
+      # note: int_klaviyo__event_attribution is configured as incremental
     +materialized: table
+    # note: klaviyo__events is configured as incremental
 
 profile: klaviyo

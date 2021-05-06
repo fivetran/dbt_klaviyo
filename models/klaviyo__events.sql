@@ -1,4 +1,33 @@
+{{
+    config(
+        materialized='incremental',
+        unique_key='event_id',
+        partition_by={
+            "field": "occurred_on",
+            "data_type": "date"
+        }
+    )
+}}
+
 with events as (
+
+    select *
+    from {{ ref('int_klaviyo__event_attribution') }}
+
+    {% if is_incremental() %}
+
+    -- most events (from all kinds of integrations) at least once every hour
+    where occurred_at >= cast(coalesce( 
+            (
+                select {{ dbt_utils.dateadd(datepart = 'hour', 
+                                            interval = -1,
+                                            from_date_or_timestamp = 'max(occurred_at)' ) }}  
+                from {{ this }}
+            ), '2010-01-01') as {{ dbt_utils.type_timestamp() }} )
+    {% endif %}
+),
+
+event_fields as (
 
     -- excluding some fields to rename them and/or make them null if needed
     {% set exclude_fields = ['touch_session', 'last_touch_id', 'last_touch_at', 'last_touch_event_type', 'type'] %}
@@ -25,8 +54,8 @@ with events as (
         case 
             when last_touch_id is not null then last_touch_event_type 
         else null end as last_touch_event_type
-
-    from {{ ref('int_klaviyo__event_attribution') }}
+    
+    from events
 ),
 
 campaign as (
@@ -63,7 +92,7 @@ integration as (
 join_fields as (
 
     select
-        events.*,
+        event_fields.*,
         campaign.campaign_name,
         campaign.campaign_type,
         campaign.subject as campaign_subject_line,
@@ -76,11 +105,11 @@ join_fields as (
         integration.integration_name,
         integration.category as integration_category
 
-    from events
-    left join campaign on events.last_touch_campaign_id = campaign.campaign_id 
-    left join flow on events.last_touch_flow_id = flow.flow_id
-    left join person on events.person_id = person.person_id
-    left join metric on events.metric_id = metric.metric_id 
+    from event_fields
+    left join campaign on event_fields.last_touch_campaign_id = campaign.campaign_id 
+    left join flow on event_fields.last_touch_flow_id = flow.flow_id
+    left join person on event_fields.person_id = person.person_id
+    left join metric on event_fields.metric_id = metric.metric_id 
     left join integration on metric.integration_id = integration.integration_id
 )
 

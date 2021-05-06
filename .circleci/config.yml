@@ -16,6 +16,7 @@ jobs:
       - run:
           name: "Setup dbt"
           command: |
+            sudo apt install libsasl2-dev
             python3 -m venv venv
             . venv/bin/activate
             pip install --upgrade pip setuptools
@@ -69,3 +70,13 @@ jobs:
             dbt run --target postgres --full-refresh
             dbt run --target postgres
             dbt test --target postgres
+      - run:
+          name: "Run Tests - Spark"
+          command: |
+            . venv/bin/activate
+            echo `pwd`
+            cd integration_tests
+            dbt deps
+            dbt seed --target spark --full-refresh
+            dbt run --target spark --full-refresh
+            dbt test --target spark

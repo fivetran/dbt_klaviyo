@@ -1,3 +1,14 @@
+{{
+    config(
+        materialized='incremental',
+        unique_key='event_id',
+        partition_by={
+            "field": "occurred_on",
+            "data_type": "date"
+        }
+    )
+}}
+
 with events as (
 
     select 
@@ -11,9 +22,23 @@ with events as (
 
     from {{ var('event_table') }}
 
-    {# {% if is_incremental() %}
-    -- will probably have to grab all events related to this person but ONLY if campaign_id and flow_id are null?
-    {% endif %} #}
+    {% if is_incremental() %}
+    -- grab **ALL** events for users who have any events in this new increment
+    where person_id in (
+
+        select distinct person_id
+        from {{ var('event_table') }}
+
+        -- most events (from all kinds of integrations) at least once every hour
+        where occurred_at >= cast(coalesce( 
+            (
+                select {{ dbt_utils.dateadd(datepart = 'hour', 
+                                            interval = -1,
+                                            from_date_or_timestamp = 'max(occurred_at)' ) }}  
+                from {{ this }}
+            ), '2010-01-01') as {{ dbt_utils.type_timestamp() }} )
+    )
+    {% endif %}
 ),
 
 -- sessionize events based on attribution eligibility -- is it the right kind of event, and does it have a campaign or flow?
