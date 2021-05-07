@@ -56,7 +56,7 @@ create_sessions as (
             and lower(type) in {{ "('" ~ (var('klaviyo__eligible_attribution_events') | join("', '")) ~ "')" }}
         {% endif %}
             then 1 else 0 end) over (
-                partition by person_id order by occurred_at) as touch_session 
+                partition by person_id order by occurred_at asc rows between unbounded preceding and current row) as touch_session 
 
     from events
 
