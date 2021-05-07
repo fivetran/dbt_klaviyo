@@ -81,4 +81,8 @@ seeds:
         TRIGGER: "{{ 'string' if target.type in ('bigquery', 'spark') else 'varchar' }}"
     flow_snowflake:
       +enabled: "{{ true if target.type == 'snowflake' else false }}"
+    event:
+      +column_types:
+        FLOW_ID: "{{ 'string' if target.type in ('bigquery', 'spark') else 'varchar' }}"
+        CAMPAIGN_ID: "{{ 'string' if target.type in ('bigquery', 'spark') else 'varchar' }}"
     
