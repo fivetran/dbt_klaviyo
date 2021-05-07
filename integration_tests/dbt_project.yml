@@ -67,14 +67,18 @@ vars:
       - 'cancelled order'
 
 seeds:
-  klaviyo_source_integration_tests:
+  klaviyo_integration_tests:
+    +quote_columns: "{{ true if target.type == 'redshift' else false }}"
     +column_types:
       _FIVETRAN_SYNCED: timestamp
     person:
       +column_types:
-        PHONE_NUMBER: "{{ 'string' if target.type == 'bigquery' else 'varchar' }}"
+        PHONE_NUMBER: "{{ 'string' if target.type in ('bigquery', 'spark') else 'varchar' }}"
     flow:
       +enabled: "{{ true if target.type != 'snowflake' else false }}"
+      +quote_columns: "{{ true if target.type == 'redshift' else false }}"
+      +column_types:
+        TRIGGER: "{{ 'string' if target.type in ('bigquery', 'spark') else 'varchar' }}"
     flow_snowflake:
       +enabled: "{{ true if target.type == 'snowflake' else false }}"
     
