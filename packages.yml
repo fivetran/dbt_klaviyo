@@ -2,3 +2,4 @@ packages:
 
   - git: https://github.com/fivetran/dbt_klaviyo_source.git
     warn-unpinned: false
+    revision: main
