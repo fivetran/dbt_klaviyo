@@ -114,7 +114,7 @@ Use the following format for declaring the respective passthrough variables:
 
 ...
 vars:
-  klaviyo__event_pass_through_columns:
+  klaviyo__event_pass_through_columns: 
     - name:           "property_field_id"
       alias:          "new_name_for_this_field_id"
       transform_sql:  "cast(new_name_for_this_field as int64)"
