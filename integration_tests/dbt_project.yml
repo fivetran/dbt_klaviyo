@@ -1,4 +1,4 @@
-name: 'klaviyo_source_integration_tests'
+name: 'klaviyo_integration_tests'
 version: '0.1.0'
 config-version: 2
 profile: 'integration_tests'
@@ -12,9 +12,59 @@ vars:
     integration: "{{ ref('integration') }}" 
     person: "{{ ref('person') }}" 
     metric: "{{ ref('metric') }}" 
-    klaviyo__event_pass_through_columns: []
+    klaviyo__event_pass_through_columns:
+      - name: property_subject
+        alias: subject_line
     klaviyo__person_pass_through_columns: []
 
+  klaviyo:
+    event_table: "{{ ref( 'stg_klaviyo__event') }}" 
+    campaign: "{{ ref( 'stg_klaviyo__campaign') }}" 
+    flow: "{{ ref( 'stg_klaviyo__flow') }}" 
+    integration: "{{ ref( 'stg_klaviyo__integration') }}" 
+    person: "{{ ref( 'stg_klaviyo__person') }}" 
+    metric: "{{ ref( 'stg_klaviyo__metric') }}" 
+    klaviyo__email_attribution_lookback: 120 # in hours - 5 days -> https://help.klaviyo.com/hc/en-us/articles/115005248128#conversion-tracking1
+    klaviyo__sms_attribution_lookback: 24 # in hours -> https://help.klaviyo.com/hc/en-us/articles/115005248128#sms-conversion-tracking7
+
+    klaviyo__eligible_attribution_events: # default in klaviyo -> https://help.klaviyo.com/hc/en-us/articles/115005248128 
+      - 'opened email'
+      - 'clicked email'
+      - 'clicked sms'
+
+    klaviyo__count_metrics: 
+      - 'Active on Site' # default API metrics
+      - 'Viewed Product'
+      - 'Ordered Product' # default Shopify metrics
+      - 'Placed Order'
+      - 'Refunded Order' # note: klaviyo only tracks FULL refunds (not partial)
+      - 'Cancelled Order'
+      - 'Fulfilled Order'
+      - 'Received Email' # default email and sms conversion metrics in Klaviyo
+      - 'Clicked Email'
+      - 'Opened Email'
+      - 'Bounced Email'
+      - 'Marked Email as Spam'
+      - 'Dropped Email'
+      - 'Subscribed to List'
+      - 'Unsubscribed to List'
+      - 'Unsubscribed'
+      - 'Updated Email Preferences'
+      - 'Subscribed to Back in Stock'
+      - 'Merged Profile'
+      - 'Received SMS'
+      - 'Clicked SMS'
+      - 'Consented to Receive SMS'
+      - 'Sent SMS'
+      - 'Unsubscribed from SMS'
+      - 'Failed to Deliver SMS'
+
+    klaviyo__sum_revenue_metrics:
+      - 'Refunded Order'
+      - 'Placed Order'
+      - 'Ordered Product'
+      - 'checkout started'
+      - 'cancelled order'
 
 seeds:
   klaviyo_source_integration_tests:
@@ -27,8 +77,4 @@ seeds:
       +enabled: "{{ true if target.type != 'snowflake' else false }}"
     flow_snowflake:
       +enabled: "{{ true if target.type == 'snowflake' else false }}"
-    # event_table:
-    #   +column_types:
-    #     datetime: timestamp
-    #     timestamp: timestamp
     

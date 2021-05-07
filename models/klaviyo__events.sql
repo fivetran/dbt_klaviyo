@@ -17,11 +17,11 @@ with events as (
     {% if is_incremental() %}
 
     -- most events (from all kinds of integrations) at least once every hour
-    where occurred_at >= cast(coalesce( 
+    where _fivetran_synced >= cast(coalesce( 
             (
                 select {{ dbt_utils.dateadd(datepart = 'hour', 
                                             interval = -1,
-                                            from_date_or_timestamp = 'max(occurred_at)' ) }}  
+                                            from_date_or_timestamp = 'max(_fivetran_synced)' ) }}  
                 from {{ this }}
             ), '2010-01-01') as {{ dbt_utils.type_timestamp() }} )
     {% endif %}

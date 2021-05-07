@@ -68,5 +68,3 @@ models:
       # note: int_klaviyo__event_attribution is configured as incremental
     +materialized: table
     # note: klaviyo__events is configured as incremental
-
-profile: klaviyo
