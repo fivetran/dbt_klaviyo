@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: klaviyo__events
+  - name: klaviyo__person_campaign_flow
+  - name: klaviyo__campaigns 
+  - name: klaviyo__flows 
+  - name: klaviyo__persons
