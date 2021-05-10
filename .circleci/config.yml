@@ -33,6 +33,7 @@ jobs:
             dbt seed --target spark --full-refresh
             dbt run --target spark --full-refresh
             dbt test --target spark
+          no_output_timeout: 30m
       - run:
           name: "Run Tests - Redshift"
           command: |
