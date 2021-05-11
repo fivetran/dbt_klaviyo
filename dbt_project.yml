@@ -24,29 +24,19 @@ vars:
     klaviyo__count_metrics: 
       - 'Active on Site' # default API metrics
       - 'Viewed Product'
-      - 'Ordered Product' # default Shopify metrics
-      - 'Placed Order'
+      - 'Ordered Product' # some default Shopify metrics
+      - 'Placed Order' # there are X 'ordered product' events for every `placed order` purchase event of X products
       - 'Refunded Order' # note: klaviyo only tracks FULL refunds (not partial)
-      - 'Cancelled Order'
-      - 'Fulfilled Order'
       - 'Received Email' # default email and sms conversion metrics in Klaviyo
       - 'Clicked Email'
       - 'Opened Email'
-      - 'Bounced Email'
       - 'Marked Email as Spam'
-      - 'Dropped Email'
-      - 'Subscribed to List'
-      - 'Unsubscribed to List'
       - 'Unsubscribed'
-      - 'Updated Email Preferences'
-      - 'Subscribed to Back in Stock'
-      - 'Merged Profile'
       - 'Received SMS'
       - 'Clicked SMS'
-      - 'Consented to Receive SMS'
       - 'Sent SMS'
       - 'Unsubscribed from SMS'
-      - 'Failed to Deliver SMS'
+
 
     klaviyo__sum_revenue_metrics:
       - 'Refunded Order'
@@ -56,9 +46,7 @@ vars:
       - 'cancelled order'
 
   klaviyo_source:
-    klaviyo__event_pass_through_columns:
-      - name: property_subject
-        alias: subject_line
+    klaviyo__event_pass_through_columns: []
     klaviyo__person_pass_through_columns: []
   
   dbt_utils_dispatch_list: [spark_utils, fivetran_utils]
