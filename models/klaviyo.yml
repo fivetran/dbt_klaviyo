@@ -56,7 +56,7 @@ models:
           The type of event through which, relative to the current event, the person last interacted with a campaign 
           or flow. This information is used to determine which lookback window to use (email vs sms).
           This will be null if the event is not attributed to any flow or campaign.
-      - name:  last_touch_type 
+      - name: last_touch_type 
         description: What kind of touch the event was attributed to by the package -- 'campaign', 'flow', or null. 
       - name: last_touch_campaign_id
         description: Foreign key referencing the CAMPAIGN that the event is attributed to by the package. 
@@ -65,7 +65,7 @@ models:
       - name: campaign_name
         description: A name for this campaign. If not specified, this will default to the subject of the campaign.
       - name: campaign_type
-        description: 
+        description: Type of campaign.
       - name: campaign_subject_line
         description: Type of campaign.
       - name: flow_name
@@ -110,10 +110,10 @@ models:
         description: > 
           Unique ID of the attributed flow or campaign variation group. 
           This does not map onto another table. 
-      - name: first_touch_at
-        description: Timestamp of the first ever interaction between this campaign/flow and a person. 
-      - name: last_touch_at
-        description: Timestamp of the most recent interaction between this campaign/flow and a person.
+      - name: first_event_at
+        description: Timestamp of the first ever interaction between this campaign/flow and a person. In other words, the first event trigger attributed to the campaign/flow. 
+      - name: last_event_at
+        description: Timestamp of the most recent interaction between this campaign/flow and a person. In other words, the last event trigger attributed to the campaign/flow. 
 
   - name: klaviyo__campaigns 
     description: > 
@@ -167,9 +167,9 @@ models:
           This does not map onto another table. 
       - name: total_count_unique_people
         description: The count of the distinct people that have interacted with this campaign.
-      - name: first_touch_at
+      - name: first_event_at
         description: Timestamp of the first ever interaction between this campaign and a person. 
-      - name: last_touch_at
+      - name: last_event_at
         description: Timestamp of the most recent interaction between this campaign and a person.
 
   - name: klaviyo__flows 
@@ -205,9 +205,9 @@ models:
           This does not map onto another table. 
       - name: total_count_unique_people
         description: The count of the distinct people that have interacted with this flow.
-      - name: first_touch_at
+      - name: first_event_at
         description: Timestamp of the first ever interaction between this flow and a person. 
-      - name: last_touch_at
+      - name: last_event_at
         description: Timestamp of the most recent interaction between this flow and a person.
 
   - name: klaviyo__persons
@@ -262,9 +262,9 @@ models:
         description: Count of the number of campaigns this person has interacted with.
       - name: count_total_flows
         description: Count of the number of flows this person has interacted with.
-      - name: first_touch_at
+      - name: first_event_at
         description: Timestamp of when the user first triggered an event (not limited to campaign and flow interactions).
-      - name: last_touch_at
+      - name: last_event_at
         description: Timestamp of when the user last triggered an event (not limited to campaign and flow interactions).
       - name: first_campaign_touch_at
         description: Timestamp of when the user first interacted with a campaign.  

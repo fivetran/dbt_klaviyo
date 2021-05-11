@@ -62,21 +62,20 @@ create_sessions as (
 
 ),
 
--- "last touch" refers to the event in a "session" that is already attributed with a campaign or flow by Klaviyo
--- there will be only one recorded "touch" per attribution session
--- events that are missing attributions will borrow from their "last touch"
+-- "session start" refers to the event in a "touch session" that is already attributed with a campaign or flow by Klaviyo
+-- a new event that is attributed with a campaign/flow will trigger a new session, so there will only be one already-attributed event per each session 
+-- events that are missing attributions will borrow data from the event that triggered the session, if they are in the lookback window (see `attribute` CTE)
 last_touches as (
 
     select 
         *,
-        -- in each attribution session, when did the eligible-to-attribute (ie the first) event happen? 
-        -- we'll make this null in klaviyo__events for events that don't end up with an attributed flow/campaign
-        min(occurred_at) over(partition by person_id, touch_session) as last_touch_at,
+        -- when did the touch session begin?
+        min(occurred_at) over(partition by person_id, touch_session) as session_start_at,
 
         -- get the kind of metric/event that triggered the attribution session, in order to decide 
-        -- to use the sms or email lookback value. we'll make this null in klaviyo__events for events that don't end up with an attributed flow/campaign
+        -- to use the sms or email lookback value. 
         first_value(type) over(
-            partition by person_id, touch_session order by occurred_at asc rows between unbounded preceding and current row) as last_touch_event_type
+            partition by person_id, touch_session order by occurred_at asc rows between unbounded preceding and current row) as session_event_type
 
     from create_sessions
 ),
@@ -91,14 +90,14 @@ attribute as (
 
         coalesce(touch_id, -- use pre-attributed flow/campaign if provided
             case 
-            when {{ dbt_utils.datediff('last_touch_at', 'occurred_at', 'hour') }} <= (
+            when {{ dbt_utils.datediff('session_start_at', 'occurred_at', 'hour') }} <= (
                 case 
-                when lower(last_touch_event_type) like '%sms%' then {{ var('klaviyo__sms_attribution_lookback') }}
+                when lower(session_event_type) like '%sms%' then {{ var('klaviyo__sms_attribution_lookback') }}
                 else {{ var('klaviyo__email_attribution_lookback') }} end
             ) -- if the events fall within the lookback window, attribute
             then first_value(touch_id) over (
                 partition by person_id, touch_session order by occurred_at asc rows between unbounded preceding and current row)
-            else null end) as last_touch_id
+            else null end) as last_touch_id -- session qualified for attribution -> we will call this "last touch"
 
     from last_touches 
 ),
@@ -113,7 +112,7 @@ final as (
             coalesce(touch_type, first_value(touch_type) over(
                 partition by person_id, touch_session order by occurred_at asc rows between unbounded preceding and current row)) 
 
-        else null end as last_touch_type
+        else null end as last_touch_type -- if the session events qualified for attribution, extract the type of touch they are attributed to
 
     from attribute 
 )

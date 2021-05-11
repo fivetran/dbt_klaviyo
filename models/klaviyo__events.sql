@@ -30,7 +30,7 @@ with events as (
 event_fields as (
 
     -- excluding some fields to rename them and/or make them null if needed
-    {% set exclude_fields = ['touch_session', 'last_touch_id', 'last_touch_at', 'last_touch_event_type', 'type'] %}
+    {% set exclude_fields = ['touch_session', 'last_touch_id', 'session_start_at', 'session_event_type', 'type'] %}
     -- snowflake has to be uppercase :)
     {% set exclude_fields = exclude_fields | upper if target.type == 'snowflake' else exclude_fields %}
 
@@ -47,12 +47,12 @@ event_fields as (
             when last_touch_type = 'flow' then last_touch_id 
         else null end as last_touch_flow_id,
 
-        -- make sure that last_touch_* columns are NULL if the event was not attributed to any campaign or flow
+        -- only make these non-null if the event indeed qualified for attribution
         case 
-            when last_touch_id is not null then last_touch_at 
+            when last_touch_id is not null then session_start_at 
         else null end as last_touch_at,
         case 
-            when last_touch_id is not null then last_touch_event_type 
+            when last_touch_id is not null then session_event_type 
         else null end as last_touch_event_type
     
     from events

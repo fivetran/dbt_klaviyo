@@ -8,7 +8,6 @@ campaign_metrics as (
 
     select *
     from {{ ref('int_klaviyo__campaign_flow_metrics') }}
-    where last_touch_campaign_id is not null -- only pull campaigns
 ),
 
 campaign_join as (

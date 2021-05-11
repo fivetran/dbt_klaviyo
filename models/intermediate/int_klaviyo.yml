@@ -63,17 +63,17 @@ models:
           ID used to batch an individual person's events into attribution-groups. Each event that comes 
           attributed to a campaign or flow begins a new session/batch, in which the following events without 
           a flow/campaign_id have the same `touch_session` (and may be attributed to the same flow/campaign).
-      - name: last_touch_at
+      - name: session_start_at
         description: >
           Timestamp of when, relative to the current event, this person last interacted with a campaign or flow 
-          according to Klaviyo. 
-      - name: last_touch_event_type
+          according to Klaviyo. This is the beginning of the event's touch-session.
+      - name: session_event_type
         description: >
           The type of event through which, relative to the current event, the person last interacted with a campaign 
           or flow. This information is used to determine which lookback window to use (email vs sms).
       - name: last_touch_id 
         description: The campaign or flow that the package attributed the event to. 
-      - name:  last_touch_type 
+      - name: last_touch_type 
         description: What kind of touch the event was attributed to by the package -- 'campaign', 'flow', or null. 
 
   - name: int_klaviyo__campaign_flow_metrics
@@ -96,9 +96,9 @@ models:
           This does not map onto another table. 
       - name: total_count_unique_people
         description: The count of the distinct people that have interacted with this campaign or flow.
-      - name: first_touch_at
+      - name: first_event_at
         description: Timestamp of the first ever interaction between this campaign/flow and a person. 
-      - name: last_touch_at
+      - name: last_event_at
         description: Timestamp of the most recent interaction between this campaign/flow and a person.
 
   - name: int_klaviyo__person_metrics
@@ -120,9 +120,9 @@ models:
         description: Count of the number of campaigns this person has interacted with.
       - name: count_total_flows
         description: Count of the number of flows this person has interacted with.
-      - name: first_touch_at
+      - name: first_event_at
         description: Timestamp of when the user first triggered an event (not limited to campaign and flow interactions).
-      - name: last_touch_at
+      - name: last_event_at
         description: Timestamp of when the user last triggered an event (not limited to campaign and flow interactions).
       - name: first_campaign_touch_at
         description: Timestamp of when the user first interacted with a campaign.  

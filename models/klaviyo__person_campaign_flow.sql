@@ -12,8 +12,8 @@ pivot_out_events as (
         campaign_name,
         flow_name,
         variation_id,
-        min(occurred_at) as first_touch_at,
-        max(occurred_at) as last_touch_at
+        min(occurred_at) as first_event_at,
+        max(occurred_at) as last_event_at
 
     -- sum up the numeric value associated with events (most likely will mean revenue)
     {% for rm in var('klaviyo__sum_revenue_metrics') %}

@@ -8,7 +8,6 @@ flow_metrics as (
 
     select *
     from {{ ref('int_klaviyo__campaign_flow_metrics') }}
-    where last_touch_flow_id is not null -- only pull flows
 ),
 
 flow_join as (
