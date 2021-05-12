@@ -5,7 +5,7 @@ This package models Klaviyo data from [Fivetran's connector](https://fivetran.co
 This package enables you to better understand the efficacy of your email and SMS marketing efforts. It achieves this by:
 - Performing last-touch attribution on events in order to properly credit campaigns and flows with conversions
 - Enriching the core event table with data regarding associated users, flows, and campaigns
-- Aggregating key metrics, such as associated revenue, related to each users' interactions with individual campaigns and flows
+- Aggregating key metrics, such as associated revenue, related to each user's interactions with individual campaigns and flows (and organic actions)
 - Aggregating these metrics further, to the grain of campaigns, flows, and individual users
 
 ## Models
@@ -48,11 +48,11 @@ vars:
 
 ### Attribution Lookback Window
 
-This package attributes events to campaigns and flows via a last-touch attribution model in line with Klaviyo's internal [attribution](https://help.klaviyo.com/hc/en-us/articles/115005248128). This is necessary to perform, as Klaviyo does not automatically send attribution data for certain metrics. 
+This package attributes events to campaigns and flows via a last-touch attribution model in line with Klaviyo's internal [attribution](https://help.klaviyo.com/hc/en-us/articles/115005248128). This is necessary to perform, as Klaviyo does not automatically send attribution data for certain metrics.
 
-By default, the package will use a lookback window of **5 days** for email-events and a window of **1 day** for SMS-events. For example, if an `'Ordered Product'` conversion is tracked on April 27th, and the customer clicked a campaign email on April 24th, their purchase order event will be attributed with the email they interacted with. If the campaign was sent and opened via SMS instead of email, the `'Ordered Product'` conversion would not be attributed to any campaign.
+By default, the package will use a lookback window of **120 hours (5 days)** for email-events and a window of **24 hours** for SMS-events. For example, if an `'Ordered Product'` conversion is tracked on April 27th, and the customer clicked a campaign email on April 24th, their purchase order event will be attributed with the email they interacted with. If the campaign was sent and opened via SMS instead of email, the `'Ordered Product'` conversion would not be attributed to any campaign.
 
-To change either of these lookback windows, add the following configuration to your `dbt_project.yml` file:
+To change either of these lookback windows, add the following configuration to your `dbt_project.yml` file.
 
 ```yml
 # dbt_project.yml
@@ -62,13 +62,17 @@ config-version: 2
 
 vars:
   klaviyo:
-    klaviyo__email_attribution_lookback: x_number_of_hours # default = 120 hours = 5 days
-    klaviyo__sms_attribution_lookback: y_number_of_hours # default = 24 hours
+    klaviyo__email_attribution_lookback: x_number_of_hours # default = 120 hours = 5 days. MUST BE INTEGER.
+    klaviyo__sms_attribution_lookback: y_number_of_hours # default = 24 hours. MUST BE INTEGER.
 ```
 
-> Note that events already associated with campaigns or flows in Klaviyo will not have their source attribution data overwritten by the package modeling. 
+> Note that events already associated with campaigns or flows in Klaviyo will not have their source attribution data overwritten by the package modeling.
 
-### Attribution Event Filter
+### Attribution-Eligible Event Types
+
+By default, this package will only credit email opens, email clicks, and SMS opens with conversions. That is, only flows and campaigns attached to these kinds of events will qualify for attribution in our package. This is aligned with Klaviyo's internal attribution model, in which you cannot change these attribution-eligible event types. 
+
+Howeve
 
 By default, this package will only credit email opens, email clicks, and SMS opens with conversions. This event-type filter is applied when selecting from the staging `EVENT` table, whose column names can be found [here](https://github.com/fivetran/dbt_klaviyo_source/blob/main/models/stg_klaviyo__event.sql#L22).
 
@@ -82,7 +86,7 @@ config-version: 2
 
 vars:
   klaviyo:
-    klaviyo__event_attribution_filter: "sql clause returning a boolean" # default = "lower(type) in ('opened email', 'clicked email', 'clicked sms')"
+    klaviyo__eligible_attribution_events: "sql clause returning a boolean" # default = "lower(type) in ('opened email', 'clicked email', 'clicked sms')"
 ```
 
 ### Filtering Conversion Metrics to Pivot Out
