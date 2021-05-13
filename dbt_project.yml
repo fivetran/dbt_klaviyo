@@ -37,7 +37,6 @@ vars:
       - 'Sent SMS'
       - 'Unsubscribed from SMS'
 
-
     klaviyo__sum_revenue_metrics:
       - 'Refunded Order'
       - 'Placed Order'
@@ -55,7 +54,7 @@ vars:
 models: 
   klaviyo:
     intermediate:
-      +materialized: view
-      # note: int_klaviyo__event_attribution is configured as incremental
-    +materialized: table
-    # note: klaviyo__events is configured as incremental
+      +schema: int_klaviyo
+      +materialized: view # note: int_klaviyo__event_attribution is configured as incremental
+    +materialized: table # note: klaviyo__events is configured as incremental
+    +schema: klaviyo
