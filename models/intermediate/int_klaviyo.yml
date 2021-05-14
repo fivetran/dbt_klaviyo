@@ -8,7 +8,7 @@ models:
       as certain kinds of events/metrics never get attributed to flows or campaigns via Klaviyo's internal model. 
 
       By default, the package performs attribution [in line with Klaviyo](https://help.klaviyo.com/hc/en-us/articles/115005248128). 
-      It considers email opens and clicks, and SMS opens as the events eligibile to be credited with conversions. 
+      It considers email opens and clicks, and SMS opens as the events eligible to be credited with conversions. 
       This attribution-eligibility can be configured by the `klaviyo__eligible_attribution_events` variable. 
       Note that this refers to the events eligible to credit campaigns and flows with conversions, _not_ the events 
       eligible to receive attribution (all kinds of events are privvy to this).
