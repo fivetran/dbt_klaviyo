@@ -181,7 +181,7 @@ models:
       These columns will be prefixed with `count_`, `unique_count_`, and `sum_revenue_`.
     columns:
       - name: flow_variation_key
-        description: Unqiue key hashed on the flow and variation IDs. 
+        description: Unique key hashed on the flow and variation IDs. 
         tests: 
           - unique
           - not_null
