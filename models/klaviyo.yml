@@ -6,7 +6,7 @@ models:
       Table of Klaviyo events, enriched with attribution data (see `int_klaviyo__event_attribution` for details), and 
       information regarding the event's associated user, flow, campaign, and platform/integration. 
 
-      Note: this model has an incremental materalization. Custom event-columns specified by the `klaviyo__event_pass_through_columns`
+      Note: this model has an incremental materialization. Custom event-columns specified by the `klaviyo__event_pass_through_columns`
       variable will appear here as well.
 
     columns:
@@ -92,7 +92,7 @@ models:
       interactions (someone with null campaign_id/flow_id) are included in this table. 
 
       **Counts** of the instances of the events, as well as **sums** of the numeric value associated 
-      with events (i.e. revenue) will be pivoted out into columns, as configued by the `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`
+      with events (i.e. revenue) will be pivoted out into columns, as configured by the `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`
       variables, respectively. See the dbt_project.yml file for the default metrics used. 
       These columns will be prefixed with `count_` and `sum_revenue_`.
     columns:
@@ -117,14 +117,14 @@ models:
 
   - name: klaviyo__campaigns 
     description: > 
-      Table of unqiue campaign versions. A campaign with 2 variations will have 2 distinct rows. 
+      Table of unique campaign versions. A campaign with 2 variations will have 2 distinct rows. 
       **Counts** of the unique users and instances of the events, as well as **sums** of the numeric value associated 
-      with events (i.e. revenue) will be pivoted out into columns, as configued by the `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`
+      with events (i.e. revenue) will be pivoted out into columns, as configured by the `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`
       variables, respectively. See the dbt_project.yml file for the default metrics used. 
       These columns will be prefixed with `count_`, `unique_count_`, and `sum_revenue_`.
     columns:
       - name: campaign_variation_key
-        description: Unqiue key hashed on the campaign and variation IDs. 
+        description: Unique key hashed on the campaign and variation IDs. 
         tests: 
           - unique
           - not_null
@@ -174,14 +174,14 @@ models:
 
   - name: klaviyo__flows 
     description: > 
-      Table of unqiue flow versions. A flow with 2 variations will have 2 distinct rows. 
+      Table of unique flow versions. A flow with 2 variations will have 2 distinct rows. 
       **Counts** of the unique users and instances of the events, as well as **sums** of the numeric value associated 
-      with events (i.e. revenue) will be pivoted out into columns, as configued by the `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`
+      with events (i.e. revenue) will be pivoted out into columns, as configured by the `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`
       variables, respectively. See the dbt_project.yml file for the default metrics used. 
       These columns will be prefixed with `count_`, `unique_count_`, and `sum_revenue_`.
     columns:
       - name: flow_variation_key
-        description: Unqiue key hashed on the flow and variation IDs. 
+        description: Unique key hashed on the flow and variation IDs. 
         tests: 
           - unique
           - not_null
@@ -215,7 +215,7 @@ models:
       Table of unique person profiles, enhanced with event, campaign, flow, and revenue metrics. 
 
       **Counts** of instances of triggered events and **sums** of the numeric value (i.e. revenue) associated 
-      with events (total vs organic/not attributed to flows or campaigns) will be pivoted out into columns, as configued by the 
+      with events (total vs organic/not attributed to flows or campaigns) will be pivoted out into columns, as configured by the 
       `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`variables, respectively. See the dbt_project.yml file for 
       the default metrics used. 
       These columns will be prefixed with `total_count_`, `total_sum_revenue_` (organic + attributed), and `organic_sum_revenue_`
