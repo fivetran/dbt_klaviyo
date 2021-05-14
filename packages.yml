@@ -1,3 +1,4 @@
 packages:
 
-  - local: ../dbt_klaviyo_source
+  - package: fivetran/klaviyo_source
+    version: [">=0.1.0","<0.2.0"] 
