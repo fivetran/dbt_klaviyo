@@ -16,8 +16,8 @@ This package contains transformation models, designed to work simultaneously wit
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | [klaviyo__events](models/klaviyo__events.sql)             | Each record represents a unique event in Klaviyo, enhanced with a customizable last-touch attribution model associating events with flows and campaigns. Also includes information about the user who triggered the event. |
 | [klaviyo__person_campaign_flow](models/klaviyo__person_campaign_flow.sql)             | Each record represents a unique person-campaign or person-flow combination, enriched with sums of the numeric values (i.e. revenue) associated with each kind of conversion, and counts of the number of triggered conversion events. |
-| [klaviyo__campaigns](models/klaviyo__campaigns.sql)             | Each record represents a unique campaign, enriched with metrics regarding users interacted with, revenue associated with the campaign, and other conversions. |
-| [klaviyo__flows](models/klaviyo__flows.sql)             | Each record represents a unique flow, enriched with metrics regarding users interacted with, revenue associated with the flow, and other conversions. |
+| [klaviyo__campaigns](models/klaviyo__campaigns.sql)             | Each record represents a unique campaign, enriched with user interaction metrics, any revenue attributed to the campaign, and other conversions. |
+| [klaviyo__flows](models/klaviyo__flows.sql)             | Each record represents a unique flow, enriched with user interaction metrics, any revenue attributed to the flow, and other conversions. |
 | [klaviyo__person](models/klaviyo__person.sql)             | Each record represents a unique user, enriched with metrics around the campaigns and flows they have interacted with, any associated revenue (organic as well as attributed to flows/campaigns), and their recent activity. |
 
 ## Installation Instructions
@@ -84,7 +84,7 @@ config-version: 2
 
 vars:
   klaviyo:
-    klaviyo__eligible_attribution_events: ['some type of event', 'event type #2', 'EveNt TyPe 3'] # this is case-insensitive
+    klaviyo__eligible_attribution_events: ['types', 'of', 'events', 'to', 'attribute', 'conversions', 'to'] # this is case-insensitive!!
 ```
 
 ### Filtering Conversion Metrics to Pivot Out
@@ -160,6 +160,8 @@ By default, this package will build the Klaviyo final models within a schema tit
 models:
   klaviyo:
     +schema: my_new_schema_name # leave blank for just the target_schema
+    intermediate:
+      +schema: my_new_schema_name # leave blank for just the target_schema
   klaviyo_source:
     +schema: my_new_schema_name # leave blank for just the target_schema
 ```

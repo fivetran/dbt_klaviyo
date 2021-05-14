@@ -226,6 +226,9 @@ models:
         description: >
           Unique ID of the user if you use your own unique identifier. Otherwise, Klaviyo 
           recommends using the email as the primary key. 
+        tests:
+          - unique
+          - not_null
       - name: address_1
         description: First line of the person's address.
       - name: address_2
@@ -240,6 +243,10 @@ models:
         description: Timestamp of when the person's profile was created. 
       - name: email
         description: The email address and the unique identifier for a profile.
+        tests:
+          - unique:
+              severity: warn
+          - not_null
       - name: full_name
         description: Person's full name.
       - name: latitude
