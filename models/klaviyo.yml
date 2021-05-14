@@ -124,7 +124,7 @@ models:
       These columns will be prefixed with `count_`, `unique_count_`, and `sum_revenue_`.
     columns:
       - name: campaign_variation_key
-        description: Unqiue key hashed on the campaign and variation IDs. 
+        description: Unique key hashed on the campaign and variation IDs. 
         tests: 
           - unique
           - not_null
