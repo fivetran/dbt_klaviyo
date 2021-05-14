@@ -75,6 +75,8 @@ models:
         description: The campaign or flow that the package attributed the event to. 
       - name: last_touch_type 
         description: What kind of touch the event was attributed to by the package -- 'campaign', 'flow', or null. 
+      - name: _fivetran_synced
+        description: UTC Timestamp that indicates the start time of the Fivetran job that synced this event row.
 
   - name: int_klaviyo__campaign_flow_metrics
     description: > 

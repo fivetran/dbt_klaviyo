@@ -84,6 +84,8 @@ models:
         description: Name of the platform that triggered the event (either Klaviyo, the API, or another integration).
       - name: integration_category
         description: Use-case category of the platform that sent the event. 
+      - name: _fivetran_synced
+        description: UTC Timestamp that indicates the start time of the Fivetran job that synced this event row.
 
   - name: klaviyo__person_campaign_flow
     description: > 
