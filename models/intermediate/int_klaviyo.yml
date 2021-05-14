@@ -17,7 +17,7 @@ models:
       be 120 hours (5 days) and 24 hours for SMS events. These can be configured through the 
       `klaviyo__email_attribution_lookback` and `klaviyo__sms_attribution_lookback` variables, respectively (in integer-hours).
 
-      Note: this model has an incremental materalization. Custom event-columns specified by the `klaviyo__event_pass_through_columns`
+      Note: this model has an incremental materialization. Custom event-columns specified by the `klaviyo__event_pass_through_columns`
       variable will appear here as well.
     
     columns:
