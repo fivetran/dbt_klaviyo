@@ -95,6 +95,13 @@ models:
       with events (i.e. revenue) will be pivoted out into columns, as configured by the `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`
       variables, respectively. See the dbt_project.yml file for the default metrics used. 
       These columns will be prefixed with `count_` and `sum_revenue_`.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - person_id
+            - last_touch_campaign_id
+            - last_touch_flow_id
+            - variation_id
     columns:
       - name: person_id
         description: Foreign key referencing the PERSON who interacted with the flow/message. 

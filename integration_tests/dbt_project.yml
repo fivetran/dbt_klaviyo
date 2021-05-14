@@ -12,9 +12,7 @@ vars:
     integration: "{{ ref('integration') }}" 
     person: "{{ ref('person') }}" 
     metric: "{{ ref('metric') }}" 
-    klaviyo__event_pass_through_columns:
-      - name: property_subject
-        alias: subject_line
+    klaviyo__event_pass_through_columns: []
     klaviyo__person_pass_through_columns: []
 
   klaviyo:
