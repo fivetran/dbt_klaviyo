@@ -176,7 +176,7 @@ models:
     description: > 
       Table of unique flow versions. A flow with 2 variations will have 2 distinct rows. 
       **Counts** of the unique users and instances of the events, as well as **sums** of the numeric value associated 
-      with events (i.e. revenue) will be pivoted out into columns, as configued by the `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`
+      with events (i.e. revenue) will be pivoted out into columns, as configured by the `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`
       variables, respectively. See the dbt_project.yml file for the default metrics used. 
       These columns will be prefixed with `count_`, `unique_count_`, and `sum_revenue_`.
     columns:
