@@ -107,7 +107,7 @@ models:
       to the person grain. 
        
       **Counts** of instances of the events and **sums** of the numeric value (i.e. revenue) associated 
-      with events (total vs organic/not attributed to flows or campaigns) will be pivoted out into columns, as configued by the 
+      with events (total vs organic/not attributed to flows or campaigns) will be pivoted out into columns, as configured by the 
       `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`variables, respectively. See the dbt_project.yml file for 
       the default metrics used. 
       
