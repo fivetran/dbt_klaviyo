@@ -11,7 +11,7 @@ models:
       It considers email opens and clicks, and SMS opens as the events eligible to be credited with conversions. 
       This attribution-eligibility can be configured by the `klaviyo__eligible_attribution_events` variable. 
       Note that this refers to the events eligible to credit campaigns and flows with conversions, _not_ the events 
-      eligible to receive attribution (all kinds of events are privvy to this).
+      eligible to receive attribution (all kinds of events are privy to this).
 
       Similar to Klaviyo, the package by default considers the conversion period/lookback window for email events to 
       be 120 hours (5 days) and 24 hours for SMS events. These can be configured through the 
