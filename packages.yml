@@ -3,3 +3,6 @@ packages:
   - git: https://github.com/fivetran/dbt_klaviyo_source.git
     warn-unpinned: false
     revision: main
+  
+  - package: fishtown-analytics/spark_utils
+    version: [">=0.2.0", "<0.3.0"] 
