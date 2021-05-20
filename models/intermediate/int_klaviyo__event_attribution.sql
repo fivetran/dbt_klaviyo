@@ -1,4 +1,4 @@
-{{
+{# {{
     config(
         materialized='incremental',
         unique_key='event_id',
@@ -7,7 +7,7 @@
             "data_type": "date"
         } if target.type != 'spark' else ['occurred_on']
     )
-}}
+}} #}
 
 with events as (
 
