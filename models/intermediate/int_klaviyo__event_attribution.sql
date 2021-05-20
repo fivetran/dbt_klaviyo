@@ -5,7 +5,7 @@
         partition_by={
             "field": "occurred_on",
             "data_type": "date"
-        } if target.type == 'bigquery'
+        } if target.type == 'bigquery' else none
     )
 }}
 
