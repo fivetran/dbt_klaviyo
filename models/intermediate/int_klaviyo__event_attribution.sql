@@ -5,7 +5,9 @@
         partition_by={
             "field": "occurred_on",
             "data_type": "date"
-        } if target.type == 'bigquery' else none
+        } if target.type == 'bigquery' else none,
+        incremental_strategy = 'merge',
+        file_format = 'delta'
     )
 }}
 
