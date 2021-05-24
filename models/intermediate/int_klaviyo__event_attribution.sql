@@ -39,7 +39,7 @@ with events as (
                                             interval = -1,
                                             from_date_or_timestamp = 'max(_fivetran_synced)' ) }}  
                 from {{ this }}
-            ), '2010-01-01') as {{ dbt_utils.type_timestamp() }} )
+            ), '2012-01-01') as {{ dbt_utils.type_timestamp() }} ) -- klaviyo was founded in 2012, so let's default the min date to then
     )
     {% endif %}
 ),
