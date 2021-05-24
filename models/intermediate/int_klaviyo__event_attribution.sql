@@ -110,11 +110,10 @@ final as (
         *,
 
         -- get whether the event is attributed to a flow or campaign
-        case when last_touch_id is not null then 
-            coalesce(touch_type, first_value(touch_type) over(
-                partition by person_id, touch_session order by occurred_at asc rows between unbounded preceding and current row)) 
+        coalesce(touch_type, first_value(touch_type) over(
+            partition by person_id, touch_session order by occurred_at asc rows between unbounded preceding and current row)) 
 
-        else null end as last_touch_type -- if the session events qualified for attribution, extract the type of touch they are attributed to
+            as session_touch_type -- if the session events qualified for attribution, extract the type of touch they are attributed to
 
     from attribute 
 )
