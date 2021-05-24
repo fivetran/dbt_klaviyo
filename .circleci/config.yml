@@ -31,7 +31,7 @@ jobs:
             cd integration_tests
             dbt deps
             dbt seed --target spark --full-refresh
-            dbt -d run --target spark --full-refresh
+            dbt run --target spark --full-refresh
             dbt test --target spark
           no_output_timeout: 10m
       - run:
