@@ -32,6 +32,7 @@ jobs:
             dbt deps
             dbt seed --target spark --full-refresh
             dbt run --target spark --full-refresh
+            dbt run --target spark
             dbt test --target spark
       - run:
           name: "Run Tests - Redshift"
