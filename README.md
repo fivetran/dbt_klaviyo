@@ -175,7 +175,7 @@ Please create issues or open PRs against `main`. Check out [this post](https://d
 
 ## Database Support
 
-This package has been tested on BigQuery, Snowflake, Redshift, and Postgres.
+This package has been tested on BigQuery, Snowflake, Redshift, Postgres, and Databricks.
 
 ## Resources:
 

@@ -5,7 +5,9 @@
         partition_by={
             "field": "occurred_on",
             "data_type": "date"
-        }
+        } if target.type == 'bigquery' else none,
+        incremental_strategy = 'merge',
+        file_format = 'delta'
     )
 }}
 
@@ -30,21 +32,21 @@ with events as (
 event_fields as (
 
     -- excluding some fields to rename them and/or make them null if needed
-    {% set exclude_fields = ['touch_session', 'last_touch_id', 'session_start_at', 'session_event_type', 'type'] %}
+    {% set exclude_fields = ['touch_session', 'last_touch_id', 'session_start_at', 'session_event_type', 'type', 'session_touch_type'] %}
     -- snowflake has to be uppercase :)
     {% set exclude_fields = exclude_fields | upper if target.type == 'snowflake' else exclude_fields %}
 
     select 
         {{ dbt_utils.star(from=ref('int_klaviyo__event_attribution'), except=exclude_fields) }},
 
-        type, -- need to pull this out because it gets removed by dbt_utils.star, due to being a substring of 'last_touch_event_type'
+        type, -- need to pull this out because it gets removed by dbt_utils.star, due to being a substring of 'session_event_type' and 'session_touch_type'
 
         -- split out campaign and flow IDs
         case 
-            when last_touch_type = 'campaign' then last_touch_id 
+            when session_touch_type = 'campaign' then last_touch_id 
         else null end as last_touch_campaign_id,
         case 
-            when last_touch_type = 'flow' then last_touch_id 
+            when session_touch_type = 'flow' then last_touch_id 
         else null end as last_touch_flow_id,
 
         -- only make these non-null if the event indeed qualified for attribution
@@ -53,7 +55,11 @@ event_fields as (
         else null end as last_touch_at,
         case 
             when last_touch_id is not null then session_event_type 
-        else null end as last_touch_event_type
+        else null end as last_touch_event_type,
+        case 
+            when last_touch_id is not null then session_touch_type 
+        else null end as last_touch_type -- flow vs campaign
+
     
     from events
 ),
