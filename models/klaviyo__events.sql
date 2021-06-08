@@ -6,10 +6,13 @@
             "field": "occurred_on",
             "data_type": "date"
         } if target.type == 'bigquery' else none,
-        incremental_strategy = 'merge',
+        incremental_strategy = 'merge' if target.type != 'snowflake' else 'delete+insert',
         file_format = 'delta'
     )
 }}
+-- ^ the incremental strategy is split into delete+insert for snowflake since there is a bit of
+-- overlap in transformed data blocks for incremental runs (we look back an extra hour, see lines 23 - 30)
+-- this configuration solution was taken from https://docs.getdbt.com/reference/resource-configs/snowflake-configs#merge-behavior-incremental-models
 
 with events as (
 
