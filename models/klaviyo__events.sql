@@ -10,6 +10,9 @@
         file_format = 'delta'
     )
 }}
+-- ^ the incremental strategy is split into delete+insert for snowflake since there is a bit of
+-- overlap in transformed data blocks for incremental runs (we look back an extra hour, see lines 23 - 30)
+-- this configuration solution was taken from https://docs.getdbt.com/reference/resource-configs/snowflake-configs#merge-behavior-incremental-models
 
 with events as (
 
