@@ -3,6 +3,9 @@ version: '0.2.0'
 config-version: 2
 profile: 'integration_tests'
 
+dispatch:
+  - macro_namespace: dbt_utils
+    search_order: ['spark_utils','dbt_utils']
 
 vars:
   klaviyo_source:
