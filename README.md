@@ -1,3 +1,4 @@
+[![Apache License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) ![dbt logo and version](https://img.shields.io/static/v1?logo=dbt&label=dbt-version&message=0.20.x&color=orange)
 # Klaviyo
 
 This package models Klaviyo data from [Fivetran's connector](https://fivetran.com/docs/applications/klaviyo). It uses data in the format described by [this ERD](https://fivetran.com/docs/applications/klaviyo#schemainformation).
@@ -21,14 +22,14 @@ This package contains transformation models, designed to work simultaneously wit
 | [klaviyo__person](models/klaviyo__person.sql)             | Each record represents a unique user, enriched with metrics around the campaigns and flows they have interacted with, any associated revenue (organic as well as attributed to flows/campaigns), and their recent activity. |
 
 ## Installation Instructions
-
 Check [dbt Hub](https://hub.getdbt.com/) for the latest installation instructions, or [read the dbt docs](https://docs.getdbt.com/docs/package-management) for more information on installing packages.
 
-```yml
-# packages.yml
+Include in your `packages.yml`
+
+```yaml
 packages:
-  - package: fivetran/klaviyo
-    version: [">=0.1.0", "<0.2.0"]
+  - package: fivetran/zendesk_source
+    version: [">=0.2.0", "<0.3.0"]
 ```
 
 ## Configuration
