@@ -6,8 +6,6 @@ profile: 'integration_tests'
 dispatch:
   - macro_namespace: dbt_utils
     search_order: ['spark_utils', 'dbt_utils']
-  - macro_namespace: spark_utils
-    search_order: ['spark_utils']
 
 vars:
   klaviyo_source:
