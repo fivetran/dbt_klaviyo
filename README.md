@@ -28,7 +28,7 @@ Include in your `packages.yml`
 
 ```yaml
 packages:
-  - package: fivetran/zendesk_source
+  - package: fivetran/klaviyo
     version: [">=0.2.0", "<0.3.0"]
 ```
 
