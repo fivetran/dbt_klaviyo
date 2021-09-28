@@ -13,7 +13,7 @@ flow_metrics as (
 flow_join as (
     
     {% set exclude_fields = [ 'last_touch_campaign_id', 'last_touch_flow_id'] %}
-    {% set exclude_fields = exclude_fields | upper if target.type == 'snowflake' else exclude_fields %} -- snowflake needs uppercase :)
+    {% set exclude_fields = exclude_fields %} 
 
     select
         flow.*, -- has flow_id
