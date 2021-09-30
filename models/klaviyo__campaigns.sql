@@ -13,7 +13,6 @@ campaign_metrics as (
 campaign_join as (
     
     {% set exclude_fields = [ 'last_touch_campaign_id', 'last_touch_flow_id'] %}
-    {% set exclude_fields = exclude_fields %} 
 
     select
         campaign.*, -- has campaign_id
