@@ -14,7 +14,7 @@ person_join as (
 
     select
         person.*,
-        {{ dbt_utils.star(from=ref('int_klaviyo__person_metrics'), except=['person_id'] if target.type != 'snowflake' else ['PERSON_ID'] ) }}
+        {{ dbt_utils.star(from=ref('int_klaviyo__person_metrics'), except=['person_id']) }}
 
     from person
     left join person_metrics using(person_id)

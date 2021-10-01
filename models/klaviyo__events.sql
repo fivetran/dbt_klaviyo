@@ -36,8 +36,7 @@ event_fields as (
 
     -- excluding some fields to rename them and/or make them null if needed
     {% set exclude_fields = ['touch_session', 'last_touch_id', 'session_start_at', 'session_event_type', 'type', 'session_touch_type'] %}
-    -- snowflake has to be uppercase :)
-    {% set exclude_fields = exclude_fields | upper if target.type == 'snowflake' else exclude_fields %}
+    -- as of the patch release of dbt-utils v0.7.3, the snowflake uppercasing is not needed anymore so we have deleted the snowflake conditional in the exclusion
 
     select 
         {{ dbt_utils.star(from=ref('int_klaviyo__event_attribution'), except=exclude_fields) }},
