@@ -19,7 +19,11 @@ campaign_join as (
         {{ dbt_utils.star(from=ref('int_klaviyo__campaign_flow_metrics'), except=exclude_fields) }}
 
     from campaign
-    left join campaign_metrics on campaign.campaign_id = campaign_metrics.last_touch_campaign_id
+    left join campaign_metrics on (
+      campaign.campaign_id = campaign_metrics.last_touch_campaign_id
+      and
+      campaign.source_relation = campaign_metrics.source_relation
+    )
 ),
 
 final as (

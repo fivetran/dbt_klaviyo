@@ -19,7 +19,11 @@ flow_join as (
         {{ dbt_utils.star(from=ref('int_klaviyo__campaign_flow_metrics'), except=exclude_fields) }}
 
     from flow
-    left join flow_metrics on flow.flow_id = flow_metrics.last_touch_flow_id
+    left join flow_metrics on (
+      flow.flow_id = flow_metrics.last_touch_flow_id
+      and
+      flow.source_relation = flow_metrics.source_relation
+    )
 ),
 
 final as (

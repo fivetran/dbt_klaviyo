@@ -17,7 +17,7 @@ person_join as (
         {{ dbt_utils.star(from=ref('int_klaviyo__person_metrics'), except=['person_id']) }}
 
     from person
-    left join person_metrics using(person_id)
+    left join person_metrics using(person_id, source_relation)
 
 )
 
