@@ -13,6 +13,7 @@ agg_metrics as (
         last_touch_campaign_id,
         last_touch_flow_id,
         variation_id,
+        source_relation,
         count(distinct person_id) as total_count_unique_people,
         min(first_event_at) as first_event_at,
         max(last_event_at) as last_event_at
@@ -32,7 +33,7 @@ agg_metrics as (
         {% endfor -%}
 
     from person_campaign_flow
-    group by 1,2,3
+    group by 1,2,3,4
 )
 
 select * from agg_metrics

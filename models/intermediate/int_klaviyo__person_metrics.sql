@@ -10,6 +10,7 @@ agg_metrics as (
 
     select
         person_id,
+        source_relation,
         count(distinct last_touch_campaign_id) as count_total_campaigns,
         count(distinct last_touch_flow_id) as count_total_flows,
         min(first_event_at) as first_event_at, -- first ever event occurred at
@@ -32,7 +33,7 @@ agg_metrics as (
         {% endfor -%}
 
     from person_campaign_flow
-    group by 1
+    group by 1,2
 
 )
 
