@@ -18,7 +18,7 @@ agg_metrics as (
         min(first_event_at) as first_event_at,
         max(last_event_at) as last_event_at
         
-        {% for col in pcf_columns if col.name|lower not in ['last_touch_campaign_id', 'person_id', 'last_touch_flow_id', 
+        {% for col in pcf_columns if col.name|lower not in ['last_touch_campaign_id', 'person_id', 'last_touch_flow_id', 'source_relation',
                                                             'campaign_name', 'flow_name','variation_id', 'first_event_at', 'last_event_at'] %}
         -- sum up any person-level metrics to the flow/campaign level
         , sum( {{ col.name }} ) as {{ col.name }}
