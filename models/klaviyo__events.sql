@@ -114,11 +114,31 @@ join_fields as (
         integration.category as integration_category
 
     from event_fields
-    left join campaign on event_fields.last_touch_campaign_id = campaign.campaign_id 
-    left join flow on event_fields.last_touch_flow_id = flow.flow_id
-    left join person on event_fields.person_id = person.person_id
-    left join metric on event_fields.metric_id = metric.metric_id 
-    left join integration on metric.integration_id = integration.integration_id
+    left join campaign on (
+      event_fields.last_touch_campaign_id = campaign.campaign_id
+      and
+      event_fields.source_relation = campaign.source_relation
+    )
+    left join flow on (
+      event_fields.last_touch_flow_id = flow.flow_id
+      and
+      event_fields.source_relation = flow.source_relation  
+    )
+    left join person on (
+      event_fields.person_id = person.person_id
+      and
+      event_fields.source_relation = person.source_relation
+    )
+    left join metric on (
+      event_fields.metric_id = metric.metric_id
+      and
+      event_fields.source_relation = metric.source_relation
+    )
+    left join integration on (
+      metric.integration_id = integration.integration_id
+      and
+      metric.source_relation = integration.source_relation
+    )
 )
 
 select * from join_fields

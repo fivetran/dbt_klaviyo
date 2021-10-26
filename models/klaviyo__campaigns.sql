@@ -12,14 +12,18 @@ campaign_metrics as (
 
 campaign_join as (
     
-    {% set exclude_fields = [ 'last_touch_campaign_id', 'last_touch_flow_id'] %}
+    {% set exclude_fields = [ 'last_touch_campaign_id', 'last_touch_flow_id', 'source_relation'] %}
 
     select
         campaign.*, -- has campaign_id
         {{ dbt_utils.star(from=ref('int_klaviyo__campaign_flow_metrics'), except=exclude_fields) }}
 
     from campaign
-    left join campaign_metrics on campaign.campaign_id = campaign_metrics.last_touch_campaign_id
+    left join campaign_metrics on (
+      campaign.campaign_id = campaign_metrics.last_touch_campaign_id
+      and
+      campaign.source_relation = campaign_metrics.source_relation
+    )
 ),
 
 final as (
