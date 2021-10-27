@@ -15,7 +15,7 @@ flow_join as (
     {% set exclude_fields = ['last_touch_campaign_id', 'last_touch_flow_id', 'source_relation'] %}
 
     select
-        flow.*, -- has flow_id
+        flow.*, -- has flow_id and source_relation
         {{ dbt_utils.star(from=ref('int_klaviyo__campaign_flow_metrics'), except=exclude_fields) }}
 
     from flow
