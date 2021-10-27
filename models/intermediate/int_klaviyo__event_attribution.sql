@@ -58,7 +58,7 @@ create_sessions as (
             and lower(type) in {{ "('" ~ (var('klaviyo__eligible_attribution_events') | join("', '")) ~ "')" }}
         {% endif %}
             then 1 else 0 end) over (
-                partition by person_id order by occurred_at asc rows between unbounded preceding and current row) as touch_session 
+                partition by person_id, source_relation order by occurred_at asc rows between unbounded preceding and current row) as touch_session 
 
     from events
 
@@ -72,12 +72,12 @@ last_touches as (
     select 
         *,
         -- when did the touch session begin?
-        min(occurred_at) over(partition by person_id, touch_session) as session_start_at,
+        min(occurred_at) over(partition by person_id, source_relation, touch_session) as session_start_at,
 
         -- get the kind of metric/event that triggered the attribution session, in order to decide 
         -- to use the sms or email lookback value. 
         first_value(type) over(
-            partition by person_id, touch_session order by occurred_at asc rows between unbounded preceding and current row) as session_event_type
+            partition by person_id, source_relation, touch_session order by occurred_at asc rows between unbounded preceding and current row) as session_event_type
 
     from create_sessions
 ),
@@ -98,7 +98,7 @@ attribute as (
                 else {{ var('klaviyo__email_attribution_lookback') }} end
             ) -- if the events fall within the lookback window, attribute
             then first_value(touch_id) over (
-                partition by person_id, touch_session order by occurred_at asc rows between unbounded preceding and current row)
+                partition by person_id, source_relation, touch_session order by occurred_at asc rows between unbounded preceding and current row)
             else null end) as last_touch_id -- session qualified for attribution -> we will call this "last touch"
 
     from last_touches 
@@ -111,7 +111,7 @@ final as (
 
         -- get whether the event is attributed to a flow or campaign
         coalesce(touch_type, first_value(touch_type) over(
-            partition by person_id, touch_session order by occurred_at asc rows between unbounded preceding and current row)) 
+            partition by person_id, source_relation, touch_session order by occurred_at asc rows between unbounded preceding and current row)) 
 
             as session_touch_type -- if the session events qualified for attribution, extract the type of touch they are attributed to
 
