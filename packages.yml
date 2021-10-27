@@ -1,3 +1,7 @@
 packages:
-  - package: fivetran/klaviyo_source
-    version: [">=0.2.1","<0.3.0"]
+  # - package: fivetran/klaviyo_source
+  #   version: [">=0.2.1","<0.3.0"]
+
+  - git: https://github.com/fivetran/dbt_klaviyo_source.git
+    revision: feature/unioned-data
+    warn-unpinned: false
