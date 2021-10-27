@@ -92,8 +92,8 @@ models:
           combination_of_columns:
             - variation_id
             - source_relation
-            - campaign_id
-            - flow_id
+            - last_touch_campaign_id
+            - last_touch_flow_id
     columns:
       - name: last_touch_campaign_id
         description: Foreign key referencing the CAMPAIGN attributed with these metrics (by the package's attribution model).
