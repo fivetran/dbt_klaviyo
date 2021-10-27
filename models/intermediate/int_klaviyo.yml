@@ -78,6 +78,11 @@ models:
         description: What kind of touch the event was attributed to by the package -- 'campaign', 'flow', or null. 
       - name: _fivetran_synced
         description: UTC Timestamp that indicates the start time of the Fivetran job that synced this event row.
+      - name: source_relation
+        description: >
+          The source where this data was pulled from. If you are making use of the `union_schemas` variable, this will be the source schema.
+          If you are making use of the `union_databases` variable, this will be the source database. If you are not unioining together multiple
+          sources, this will be an empty string.
 
   - name: int_klaviyo__campaign_flow_metrics
     description: > 
@@ -109,12 +114,17 @@ models:
         description: Timestamp of the first ever interaction between this campaign/flow and a person. 
       - name: last_event_at
         description: Timestamp of the most recent interaction between this campaign/flow and a person.
+      - name: source_relation
+        description: >
+          The source where this data was pulled from. If you are making use of the `union_schemas` variable, this will be the source schema.
+          If you are making use of the `union_databases` variable, this will be the source database. If you are not unioining together multiple
+          sources, this will be an empty string.
 
   - name: int_klaviyo__person_metrics
     description: > 
       Table that draws from the `klaviyo__person_campaign_flow` model to aggregate event metrics 
       to the person grain. 
-       
+      
       **Counts** of instances of the events and **sums** of the numeric value (i.e. revenue) associated 
       with events (total vs organic/not attributed to flows or campaigns) will be pivoted out into columns, as configured by the 
       `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`variables, respectively. See the dbt_project.yml file for 
@@ -146,4 +156,8 @@ models:
         description: Timestamp of when the user first interacted with a flow.
       - name: last_flow_touch_at
         description: Timestamp of when the user last interacted with a flow.
-      
+      - name: source_relation
+        description: >
+          The source where this data was pulled from. If you are making use of the `union_schemas` variable, this will be the source schema.
+          If you are making use of the `union_databases` variable, this will be the source database. If you are not unioining together multiple
+          sources, this will be an empty string.

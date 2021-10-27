@@ -87,6 +87,11 @@ models:
         description: Use-case category of the platform that sent the event. 
       - name: _fivetran_synced
         description: UTC Timestamp that indicates the start time of the Fivetran job that synced this event row.
+      - name: source_relation
+        description: >
+          The source where this data was pulled from. If you are making use of the `union_schemas` variable, this will be the source schema.
+          If you are making use of the `union_databases` variable, this will be the source database. If you are not unioining together multiple
+          sources, this will be an empty string.
 
   - name: klaviyo__person_campaign_flow
     description: > 
@@ -125,7 +130,12 @@ models:
         description: Timestamp of the first ever interaction between this campaign/flow and a person. In other words, the first event trigger attributed to the campaign/flow. 
       - name: last_event_at
         description: Timestamp of the most recent interaction between this campaign/flow and a person. In other words, the last event trigger attributed to the campaign/flow. 
-
+      - name: source_relation
+        description: >
+          The source where this data was pulled from. If you are making use of the `union_schemas` variable, this will be the source schema.
+          If you are making use of the `union_databases` variable, this will be the source database. If you are not unioining together multiple
+          sources, this will be an empty string.
+          
   - name: klaviyo__campaigns 
     description: > 
       Table of unique campaign versions. A campaign with 2 variations will have 2 distinct rows. 
@@ -184,6 +194,11 @@ models:
         description: Timestamp of the first ever interaction between this campaign and a person. 
       - name: last_event_at
         description: Timestamp of the most recent interaction between this campaign and a person.
+      - name: source_relation
+        description: >
+          The source where this data was pulled from. If you are making use of the `union_schemas` variable, this will be the source schema.
+          If you are making use of the `union_databases` variable, this will be the source database. If you are not unioining together multiple
+          sources, this will be an empty string.
 
   - name: klaviyo__flows 
     description: > 
@@ -224,6 +239,11 @@ models:
         description: Timestamp of the first ever interaction between this flow and a person. 
       - name: last_event_at
         description: Timestamp of the most recent interaction between this flow and a person.
+      - name: source_relation
+        description: >
+          The source where this data was pulled from. If you are making use of the `union_schemas` variable, this will be the source schema.
+          If you are making use of the `union_databases` variable, this will be the source database. If you are not unioining together multiple
+          sources, this will be an empty string.
 
   - name: klaviyo__persons
     description: > 
@@ -297,3 +317,8 @@ models:
         description: Timestamp of when the user first interacted with a flow.
       - name: last_flow_touch_at
         description: Timestamp of when the user last interacted with a flow.
+      - name: source_relation
+        description: >
+          The source where this data was pulled from. If you are making use of the `union_schemas` variable, this will be the source schema.
+          If you are making use of the `union_databases` variable, this will be the source database. If you are not unioining together multiple
+          sources, this will be an empty string.

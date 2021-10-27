@@ -29,7 +29,7 @@ pivot_out_events as (
     {% endfor %}
 
     from events
-    group by 1,2,3,4,5,6,7
+    {{ dbt_utils.group_by(n=7) }}
 )
 
 select *
