@@ -41,6 +41,8 @@ models:
           This does not map onto another table.
       - name: event_id
         description: Unique ID of the event. 
+        tests:
+          - not_null
       - name: metric_id
         description: Foreign key referencing the metric being captured. 
       - name: person_id
@@ -140,6 +142,8 @@ models:
     columns:
       - name: person_id
         description: Unique ID of the person.
+        tests:
+          - not_null
       - name: count_total_campaigns
         description: Count of the number of campaigns this person has interacted with.
       - name: count_total_flows
