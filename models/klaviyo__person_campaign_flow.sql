@@ -12,6 +12,7 @@ pivot_out_events as (
         campaign_name,
         flow_name,
         variation_id,
+        source_relation,
         min(occurred_at) as first_event_at,
         max(occurred_at) as last_event_at
 
@@ -28,7 +29,7 @@ pivot_out_events as (
     {% endfor %}
 
     from events
-    group by 1,2,3,4,5,6
+    {{ dbt_utils.group_by(n=7) }}
 )
 
 select *

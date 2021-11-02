@@ -19,7 +19,11 @@ models:
 
       Note: this model has an incremental materialization. Custom event-columns specified by the `klaviyo__event_pass_through_columns`
       variable will appear here as well.
-    
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - event_id
+            - source_relation
     columns:
       - name: variation_id
         description: >
@@ -38,7 +42,6 @@ models:
       - name: event_id
         description: Unique ID of the event. 
         tests:
-          - unique
           - not_null
       - name: metric_id
         description: Foreign key referencing the metric being captured. 
@@ -77,6 +80,11 @@ models:
         description: What kind of touch the event was attributed to by the package -- 'campaign', 'flow', or null. 
       - name: _fivetran_synced
         description: UTC Timestamp that indicates the start time of the Fivetran job that synced this event row.
+      - name: source_relation
+        description: >
+          The source where this data was pulled from. If you are making use of the `union_schemas` variable, this will be the source schema.
+          If you are making use of the `union_databases` variable, this will be the source database. If you are not unioining together multiple
+          sources, this will be an empty string.
 
   - name: int_klaviyo__campaign_flow_metrics
     description: > 
@@ -86,7 +94,13 @@ models:
       with events (i.e. revenue) will be pivoted out into columns, as configured by the `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`
       variables, respectively. See the dbt_project.yml file for the default metrics used. 
       These columns will be prefixed with `count_`, `unique_count_`, and `sum_revenue_`.
-
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - variation_id
+            - source_relation
+            - last_touch_campaign_id
+            - last_touch_flow_id
     columns:
       - name: last_touch_campaign_id
         description: Foreign key referencing the CAMPAIGN attributed with these metrics (by the package's attribution model).
@@ -102,12 +116,17 @@ models:
         description: Timestamp of the first ever interaction between this campaign/flow and a person. 
       - name: last_event_at
         description: Timestamp of the most recent interaction between this campaign/flow and a person.
+      - name: source_relation
+        description: >
+          The source where this data was pulled from. If you are making use of the `union_schemas` variable, this will be the source schema.
+          If you are making use of the `union_databases` variable, this will be the source database. If you are not unioining together multiple
+          sources, this will be an empty string.
 
   - name: int_klaviyo__person_metrics
     description: > 
       Table that draws from the `klaviyo__person_campaign_flow` model to aggregate event metrics 
       to the person grain. 
-       
+      
       **Counts** of instances of the events and **sums** of the numeric value (i.e. revenue) associated 
       with events (total vs organic/not attributed to flows or campaigns) will be pivoted out into columns, as configured by the 
       `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`variables, respectively. See the dbt_project.yml file for 
@@ -115,9 +134,16 @@ models:
       
       These columns will be prefixed with `total_count_`, `total_sum_revenue_` (organic + attributed), and `organic_sum_revenue_`
       (not attributed to a campaign or flow). 
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - person_id
+            - source_relation
     columns:
       - name: person_id
         description: Unique ID of the person.
+        tests:
+          - not_null
       - name: count_total_campaigns
         description: Count of the number of campaigns this person has interacted with.
       - name: count_total_flows
@@ -134,4 +160,8 @@ models:
         description: Timestamp of when the user first interacted with a flow.
       - name: last_flow_touch_at
         description: Timestamp of when the user last interacted with a flow.
-      
+      - name: source_relation
+        description: >
+          The source where this data was pulled from. If you are making use of the `union_schemas` variable, this will be the source schema.
+          If you are making use of the `union_databases` variable, this will be the source database. If you are not unioining together multiple
+          sources, this will be an empty string.
