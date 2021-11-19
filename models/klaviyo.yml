@@ -332,3 +332,9 @@ models:
           The source where this data was pulled from. If you are making use of the `union_schemas` variable, this will be the source schema.
           If you are making use of the `union_databases` variable, this will be the source database. If you are not unioining together multiple
           sources, this will be an empty string.
+      - name: unique_person_key
+        description: Surrogate key hashed on email and source_relation. This was necessary to create in order to alter the severity of the test on these two columns to `warn`.
+        tests:
+          - unique:
+              severity: warn
+          - not_null

@@ -14,7 +14,8 @@ person_join as (
 
     select
         person.*,
-        {{ dbt_utils.star(from=ref('int_klaviyo__person_metrics'), except=["person_id", "source_relation"]) }}
+        {{ dbt_utils.star(from=ref('int_klaviyo__person_metrics'), except=["person_id", "source_relation"]) }},
+        {{ dbt_utils.surrogate_key(['email', 'source_relation']) }} as unique_person_key
 
     from person
     left join person_metrics on (
