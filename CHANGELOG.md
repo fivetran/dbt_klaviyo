@@ -1,7 +1,7 @@
 # dbt_klaviyo v0.4.0
 ## 🚨 Breaking Changes 🚨
-- The updates highlighted within the Bug Fixes section are changes to the incremental logic of the `kalviyo__events` table. As such, a `dbt run --full-refresh` will be needed after installing this version of the dbt_klaviyo package as a dependency within your `packages.yml`
-- Accommodating the breaking change within the dbt_klaviyo_source package for the name change of the `union_schemas/datbases` variables to be `kklaviyo_union_schemas/databases`.
+- The updates highlighted within the Bug Fixes section are changes to the incremental logic of the `klaviyo__events` table. As such, a `dbt run --full-refresh` will be needed after installing this version of the dbt_klaviyo package as a dependency within your `packages.yml`
+- Accommodating the breaking change within the dbt_klaviyo_source package for the name change of the `union_schemas/datbases` variables to be `klaviyo_union_schemas/databases`.
 
 ## Bug Fixes
 - Leverage the `unique_event_id` surrogate key from the `stg_klaviyo__events` model within the incremental logic of `int_klaviyo__event_attribution` and `klaviyo__events` to better account for the uniqueness of events across different connectors.
