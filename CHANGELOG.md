@@ -6,6 +6,11 @@
   - For help upgrading your dbt project to dbt v1.0.0, I recommend reviewing dbt-labs [upgrading to 1.0.0 docs](https://docs.getdbt.com/docs/guides/migration-guide/upgrading-to-1-0-0) for more details on what changes must be made.
 - Upgrades the package dependency to refer to the latest `dbt_klaviyo_source`. Additionally, the latest `dbt_klaviyo_source` package has a dependency on the latest `dbt_fivetran_utils`. Further, the latest `dbt_fivetran_utils` package also has a dependency on `dbt_utils` [">=0.8.0", "<0.9.0"].
   - Please note, if you are installing a version of `dbt_utils` in your `packages.yml` that is not in the range above then you will encounter a package dependency error.
+- The updates highlighted within the Bug Fixes section are changes to the incremental logic of the `klaviyo__events` table. As such, a `dbt run --full-refresh` will be needed after installing this version of the dbt_klaviyo package as a dependency within your `packages.yml`
+- Accommodating the breaking change within the dbt_klaviyo_source package for the name change of the `union_schemas/datbases` variables to be `klaviyo_union_schemas/databases`.
+
+## Bug Fixes
+- Leverage the `unique_event_id` surrogate key from the `stg_klaviyo__events` model within the incremental logic of `int_klaviyo__event_attribution` and `klaviyo__events` to better account for the uniqueness of events across different connectors.
 
 # dbt_klaviyo v0.3.0
 

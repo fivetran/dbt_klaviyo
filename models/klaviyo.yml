@@ -89,6 +89,8 @@ models:
         description: Use-case category of the platform that sent the event. 
       - name: _fivetran_synced
         description: UTC Timestamp that indicates the start time of the Fivetran job that synced this event row.
+      - name: unique_event_id
+        description: The unique identifier for the combination of event_id and source_relation columns.
       - name: source_relation
         description: >
           The source where this data was pulled from. If you are making use of the `union_schemas` variable, this will be the source schema.
