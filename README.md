@@ -29,7 +29,7 @@ Include in your `packages.yml`
 ```yaml
 packages:
   - package: fivetran/klaviyo
-    version: [">=0.4.1", "<0.5.0"]
+    version: [">=0.4.0", "<0.5.0"]
 ```
 
 ## Configuration
