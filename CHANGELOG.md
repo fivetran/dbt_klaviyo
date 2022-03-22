@@ -1,3 +1,6 @@
+# dbt_klaviyo v0.4.1
+🎉 update 🎉
+
 # dbt_klaviyo v0.4.0
 🎉 dbt v1.0.0 Compatibility 🎉
 ## 🚨 Breaking Changes 🚨

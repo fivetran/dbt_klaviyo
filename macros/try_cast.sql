@@ -26,7 +26,19 @@ $func$
 
 
 {% macro redshift__try_cast(field, type) %}
-    try_cast({{field}} as {{type}})
+{%- if type == 'bigint' or type == 'int' or type == 'numeric' -%}
+
+    case
+        when trim({{field}}) ~ '^(0|[1-9][0-9]*)$' then trim({{field}})
+        else null
+    end::{{type}}
+
+{% else %}
+
+    {{ exceptions.raise_compiler_error(
+            "non-integer datatypes are not currently supported") }}
+
+{% endif %}
 {% endmacro %}
 
 
