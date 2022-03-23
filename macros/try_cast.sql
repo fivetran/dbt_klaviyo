@@ -1,3 +1,5 @@
+-- note that the macro only takes numeric-type data casts
+
 {% macro try_cast(field, type) %}
     {{ return(adapter.dispatch('try_cast') (field, type)) }}
 {% endmacro %}
@@ -25,19 +27,43 @@
 {% endmacro %}
 
 
-
 {% macro postgres__try_cast(field, type) %}
--- {%- if type == 'bigint' or type == 'int' or type == 'numeric' -%}
-    ifnull(cast( {{field}} as {{'type'}} ), 0)
+{%- if lower(type) = 'bigint' or lower(type) == 'int' or lower(type) == 'int64' -%}
+    postgres_type = 'dbt_utils.type_int()' 
+
+{%- if lower(type) = 'numeric' -%}
+    postgres_type = 'dbt_utils.type_numeric()'
+
+{%- if lower(type) = 'float64' or lower(type) = 'float' -%}
+    postgres_type = 'dbt_utils.type_float()'
+
+{% else %}
+    postgres_type = type
+{% endif %}
+
+    ifnull(cast( {{field}} as {{postgres_type}} ), 0)
+
 {% endif %}
 
 {% endmacro %}
 
 
 {% macro redshift__try_cast(field, type) %}
--- {%- if type == 'bigint' or type == 'int' or type == 'numeric' -%}
-    -- redshift_type = 'float'
+{%- if lower(type) = 'bigint' or lower(type) == 'int' or lower(type) == 'int64' -%}
+    redshift_type = 'dbt_utils.type_int()' 
+
+{%- if lower(type) = 'numeric' -%}
+    redshift_type = 'dbt_utils.type_numeric()'
+
+{%- if lower(type) = 'float64' or lower(type) = 'float' -%}
+    redshift_type = 'dbt_utils.type_float()'
+
+{% else %}
+    redshift_type = type
+{% endif %}
+
     try_cast({{field}} as {{redshift_type}})
+
 {% else %}
 
 {% endif %}
@@ -46,26 +72,67 @@
 
 
 {% macro snowflake__try_cast(field, type) %}
--- {%- if type == 'bigint' or type == 'int' or type == 'numeric' -%}
-    try_cast({{field}} as {{type}})
+{%- if lower(type) = 'bigint' or lower(type) == 'int' or lower(type) == 'int64' -%}
+    snowflake_type = 'dbt_utils.type_int()' 
+
+{%- if lower(type) = 'numeric' -%}
+    snowflake_type = 'dbt_utils.type_numeric()'
+
+{%- if lower(type) = 'float64' or lower(type) = 'float' -%}
+    snowflake_type = 'dbt_utils.type_float()'
+
+{% else %}
+
+    snowflake_type = type
+
+{% endif %}
+
+    try_cast({{field}} as {{snowflake_type}})
+
 {% endif %}
 
 {% endmacro %}
 
 
 {% macro spark__try_cast(field, type) %}
--- {%- if type == 'bigint' or type == 'int' or type == 'numeric' -%}
-    try_cast({{field}} as {{type}})
+{%- if lower(type) = 'bigint' or lower(type) == 'int' or lower(type) == 'int64' -%}
+    spark_type = 'dbt_utils.type_int()' 
+
+{%- if lower(type) = 'numeric' -%}
+    spark_type = 'dbt_utils.type_numeric()'
+
+{%- if lower(type) = 'float64' or lower(type) = 'float' -%}
+    spark_type = 'dbt_utils.type_float()'
+
+{% else %}
+
+    spark_type = type
+
+{% endif %}
+
+    try_cast({{field}} as {{spark_type}})
+
 {% endif %}
 
 {% endmacro %}
 
 
 {% macro snowflake__safe_cast(field, type) %}
-    try_cast({{field}} as {{type}})
-{% endmacro %}
+{%- if lower(type) = 'bigint' or lower(type) == 'int' or lower(type) == 'int64' -%}
+    snowflake_type = 'dbt_utils.type_int()' 
 
+{%- if lower(type) = 'numeric' -%}
+    snowflake_type = 'dbt_utils.type_numeric()'
 
-{% macro bigquery__safe_cast(field, type) %}
-    safe_cast({{field}} as {{type}})
+{%- if lower(type) = 'float64' or lower(type) = 'float' -%}
+    snowflake_type = 'dbt_utils.type_float()'
+
+{% else %}
+
+    snowflake_type = type
+
+{% endif %}
+
+    try_cast({{field}} as {{snowflake_type}})
+
 {% endmacro %}
