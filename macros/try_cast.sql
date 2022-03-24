@@ -2,7 +2,13 @@
     {{ return(adapter.dispatch('try_cast') (field, type)) }}
 {% endmacro %}
 
-{% macro default__try_cast(field, type) %}
+{% macro default__safe_cast(field, type) %}
+    {# most databases don't support this function yet
+    so we just need to use cast #}
+    cast({{field}} as {{type}})
+{% endmacro %}
+
+{% macro redshift__try_cast(field, type) %}
 {%- if type == 'numeric' -%}
 
     case
