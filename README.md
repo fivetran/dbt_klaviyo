@@ -15,11 +15,11 @@ This package contains transformation models, designed to work simultaneously wit
 
 | **model**                | **description**                                                                                                                                |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| [klaviyo__events](models/klaviyo__events.sql)             | Each record represents a unique event in Klaviyo, enhanced with a customizable last-touch attribution model associating events with flows and campaigns. Also includes information about the user who triggered the event. |
-| [klaviyo__person_campaign_flow](models/klaviyo__person_campaign_flow.sql)             | Each record represents a unique person-campaign or person-flow combination, enriched with sums of the numeric values (i.e. revenue) associated with each kind of conversion, and counts of the number of triggered conversion events. |
-| [klaviyo__campaigns](models/klaviyo__campaigns.sql)             | Each record represents a unique campaign, enriched with user interaction metrics, any revenue attributed to the campaign, and other conversions. |
-| [klaviyo__flows](models/klaviyo__flows.sql)             | Each record represents a unique flow, enriched with user interaction metrics, any revenue attributed to the flow, and other conversions. |
-| [klaviyo__persons](models/klaviyo__persons.sql)             | Each record represents a unique user, enriched with metrics around the campaigns and flows they have interacted with, any associated revenue (organic as well as attributed to flows/campaigns), and their recent activity. |
+| [klaviyo__events](https://github.com/fivetran/dbt_klaviyo/blob/master/models/klaviyo__events.sql)             | Each record represents a unique event in Klaviyo, enhanced with a customizable last-touch attribution model associating events with flows and campaigns. Also includes information about the user who triggered the event. |
+| [klaviyo__person_campaign_flow](https://github.com/fivetran/dbt_klaviyo/blob/master/models/klaviyo__person_campaign_flow.sql)             | Each record represents a unique person-campaign or person-flow combination, enriched with sums of the numeric values (i.e. revenue) associated with each kind of conversion, and counts of the number of triggered conversion events. |
+| [klaviyo__campaigns](https://github.com/fivetran/dbt_klaviyo/blob/master/models/klaviyo__campaigns.sql)             | Each record represents a unique campaign, enriched with user interaction metrics, any revenue attributed to the campaign, and other conversions. |
+| [klaviyo__flows](https://github.com/fivetran/dbt_klaviyo/blob/master/models/klaviyo__flows.sql)             | Each record represents a unique flow, enriched with user interaction metrics, any revenue attributed to the flow, and other conversions. |
+| [klaviyo__persons](https://github.com/fivetran/dbt_klaviyo/blob/master/models/klaviyo__persons.sql)             | Each record represents a unique user, enriched with metrics around the campaigns and flows they have interacted with, any associated revenue (organic as well as attributed to flows/campaigns), and their recent activity. |
 
 ## Installation Instructions
 Check [dbt Hub](https://hub.getdbt.com/) for the latest installation instructions, or [read the dbt docs](https://docs.getdbt.com/docs/package-management) for more information on installing packages.
@@ -62,7 +62,7 @@ vars:
 
 ### Attribution Lookback Window
 
-This package attributes events to campaigns and flows via a last-touch attribution model in line with Klaviyo's internal [attribution](https://help.klaviyo.com/hc/en-us/articles/115005248128). This is necessary to perform, as Klaviyo does not automatically send attribution data for certain metrics. Read more about how the package's attribution works [here](models/intermediate/int_klaviyo.yml#L4) and see the source code [here](models/intermediate/int_klaviyo__event_attribution.sql).
+This package attributes events to campaigns and flows via a last-touch attribution model in line with Klaviyo's internal [attribution](https://help.klaviyo.com/hc/en-us/articles/115005248128). This is necessary to perform, as Klaviyo does not automatically send attribution data for certain metrics. Read more about how the package's attribution works [here](https://github.com/fivetran/dbt_klaviyo/blob/master/models/intermediate/int_klaviyo.yml#L4) and see the source code [here](https://github.com/fivetran/dbt_klaviyo/blob/master/models/intermediate/int_klaviyo__event_attribution.sql).
 
 By default, the package will use a lookback window of **120 hours (5 days)** for email-events and a window of **24 hours** for SMS-events. For example, if an `'Ordered Product'` conversion is tracked on April 27th, and the customer clicked a campaign email on April 24th, their purchase order event will be attributed with the email they interacted with. If the campaign was sent and opened via SMS instead of email, the `'Ordered Product'` conversion would not be attributed to any campaign.
 
@@ -86,7 +86,7 @@ vars:
 
 ### Attribution-Eligible Event Types
 
-By default, this package will only credit email opens, email clicks, and SMS opens with conversions. That is, only flows and campaigns attached to these kinds of events will qualify for attribution in our package. This is aligned with Klaviyo's internal [attribution model]((https://help.klaviyo.com/hc/en-us/articles/115005248128)).
+By default, this package will only credit email opens, email clicks, and SMS opens with conversions. That is, only flows and campaigns attached to these kinds of events will qualify for attribution in our package. This is aligned with Klaviyo's internal [attribution model](https://help.klaviyo.com/hc/en-us/articles/115005248128).
 
 However, this package allows for the customization of which events can qualify for attribution. To expand or otherwise change this filter on attribution, add the following configuration to your `dbt_project.yml` file:
 
