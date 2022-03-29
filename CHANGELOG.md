@@ -1,6 +1,6 @@
 # dbt_klaviyo v0.4.1
 ## Bug Fixes
-- Incorporate the `try_cast` macro from [dbt_utils](https://github.com/fivetran/dbt_fivetran_utils/tree/releases/v0.3.latest) to ensure that the `numeric_value` field in `klaviyo__person_campaign_flow` is the same data type as '0'. [Issue #17](https://github.com/fivetran/dbt_klaviyo/issues/17)
+- Incorporate the `try_cast` macro from [fivetran_utils](https://github.com/fivetran/dbt_fivetran_utils/tree/releases/v0.3.latest) to ensure that the `numeric_value` field in `klaviyo__person_campaign_flow` is the same data type as '0'. [Issue #17](https://github.com/fivetran/dbt_klaviyo/issues/17)
 
 # dbt_klaviyo v0.4.0
 🎉 dbt v1.0.0 Compatibility 🎉
