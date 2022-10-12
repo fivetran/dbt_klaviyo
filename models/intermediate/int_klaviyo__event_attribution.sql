@@ -6,7 +6,7 @@
             "field": "occurred_on",
             "data_type": "date"
         } if target.type == 'bigquery' else none,
-        incremental_strategy = 'merge',
+        incremental_strategy = 'merge' if target.type != 'postgres' else 'delete+insert',
         file_format = 'delta'
     )
 }}
