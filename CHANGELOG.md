@@ -1,3 +1,8 @@
+# dbt_klaviyo v0.4.2
+
+## Under the Hood
+- Ensures that the incremental strategy used by Postgres and Redshift adapters in the `klaviyo__events` and `int_klaviyo__event_attribution` models is `delete+insert` ([#9](https://github.com/fivetran/dbt_klaviyo/pull/22)). Newer versions of dbt introduced an error message if the provided incremental strategy is not `append` or `delete+insert` for these adapters.
+
 # dbt_klaviyo v0.4.1
 ## Bug Fixes
 - Incorporate the `try_cast` macro from [fivetran_utils](https://github.com/fivetran/dbt_fivetran_utils/tree/releases/v0.3.latest) to ensure that the `numeric_value` field in `klaviyo__person_campaign_flow` is the same data type as '0'. [Issue #17](https://github.com/fivetran/dbt_klaviyo/issues/17)
