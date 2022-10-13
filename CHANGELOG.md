@@ -1,7 +1,7 @@
 # dbt_klaviyo v0.4.2
 
 ## Under the Hood
-- Ensures that the incremental strategy used by Postgres and Redshift adapters in the `klaviyo__events` and `int_klaviyo__event_attribution` models is `delete+insert` ([#9](https://github.com/fivetran/dbt_klaviyo/pull/9)). Newer versions of dbt introduced an error message if the provided incremental strategy is not `append` or `delete+insert` for these adapters.
+- Ensures that the incremental strategy used by Postgres and Redshift adapters in the `klaviyo__events` and `int_klaviyo__event_attribution` models is `delete+insert` ([#9](https://github.com/fivetran/dbt_klaviyo/pull/22)). Newer versions of dbt introduced an error message if the provided incremental strategy is not `append` or `delete+insert` for these adapters.
 
 # dbt_klaviyo v0.4.1
 ## Bug Fixes
