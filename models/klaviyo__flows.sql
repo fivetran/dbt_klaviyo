@@ -30,7 +30,7 @@ final as (
 
     select 
         *,
-        {{ dbt_utils.surrogate_key(['flow_id','variation_id']) }} as flow_variation_key
+        {{ dbt_utils.generate_surrogate_key(['flow_id','variation_id']) }} as flow_variation_key
 
     from flow_join
 )

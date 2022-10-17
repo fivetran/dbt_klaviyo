@@ -30,7 +30,7 @@ final as (
 
     select 
         *,
-        {{ dbt_utils.surrogate_key(['campaign_id','variation_id']) }} as campaign_variation_key
+        {{ dbt_utils.generate_surrogate_key(['campaign_id','variation_id']) }} as campaign_variation_key
 
     from campaign_join
 )
