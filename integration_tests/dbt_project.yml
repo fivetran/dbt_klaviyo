@@ -1,11 +1,11 @@
 name: 'klaviyo_integration_tests'
-version: '0.4.2'
+version: '0.5.0'
 config-version: 2
 profile: 'integration_tests'
 
 dispatch:
   - macro_namespace: dbt_utils
-    search_order: ['!!!!!!! REPLACE 'spark' WITH 'spark','databricks' OR EQUIV !!!!!!!_utils', 'dbt_utils']
+    search_order:['spark_utils', 'dbt_utils']
 
 vars:
   klaviyo_source:
@@ -74,16 +74,16 @@ seeds:
       _FIVETRAN_SYNCED: timestamp
     person:
       +column_types:
-        PHONE_NUMBER: "{{ 'string' if target.type in ('bigquery', '!!!!!!! REPLACE 'spark' WITH 'spark','databricks' OR EQUIV !!!!!!!') else 'varchar' }}"
+        PHONE_NUMBER: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
     flow:
       +enabled: "{{ true if target.type != 'snowflake' else false }}"
       +quote_columns: "{{ true if target.type == 'redshift' else false }}"
       +column_types:
-        TRIGGER: "{{ 'string' if target.type in ('bigquery', '!!!!!!! REPLACE 'spark' WITH 'spark','databricks' OR EQUIV !!!!!!!') else 'varchar' }}"
+        TRIGGER: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
     flow_snowflake:
       +enabled: "{{ true if target.type == 'snowflake' else false }}"
     event:
       +column_types:
-        FLOW_ID: "{{ 'string' if target.type in ('bigquery', '!!!!!!! REPLACE 'spark' WITH 'spark','databricks' OR EQUIV !!!!!!!') else 'varchar' }}"
-        CAMPAIGN_ID: "{{ 'string' if target.type in ('bigquery', '!!!!!!! REPLACE 'spark' WITH 'spark','databricks' OR EQUIV !!!!!!!') else 'varchar' }}"
+        FLOW_ID: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
+        CAMPAIGN_ID: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
     
