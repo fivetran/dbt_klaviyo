@@ -9,12 +9,12 @@ dispatch:
 
 vars:
   klaviyo_source:
-    event_table: "{{ ref('event') }}" 
-    campaign: "{{ ref('campaign') }}" 
-    flow: "{{ fivetran_utils.snowflake_seed_data('flow') }}" 
-    integration: "{{ ref('integration') }}" 
-    person: "{{ ref('person') }}" 
-    metric: "{{ ref('metric') }}" 
+    klaviyo_campaign_identifier: "campaign"
+    klaviyo_event_identifier: "event"
+    flow: "{{ fivetran_utils.snowflake_seed_data('flow') }}"
+    klaviyo_integration_identifier: "integration"
+    klaviyo_person_identifier: "person"
+    klaviyo_metric_identifier: "metric"
     klaviyo__event_pass_through_columns: []
     klaviyo__person_pass_through_columns: []
 
