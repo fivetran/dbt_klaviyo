@@ -8,6 +8,7 @@ dispatch:
     search_order: ['spark_utils', 'dbt_utils']
 
 vars:
+  klaviyo_schema: klaviyo_integration_tests
   klaviyo_source:
     klaviyo_campaign_identifier: "campaign"
     klaviyo_event_identifier: "event"
