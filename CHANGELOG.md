@@ -1,4 +1,4 @@
-# dbt_klaviyo v0.4.2
+# dbt_klaviyo v0.5.0
 
 ## 🚨 Breaking Changes 🚨:
 [PR #23](https://github.com/fivetran/dbt_klaviyo/pull/23) includes the following breaking changes:
