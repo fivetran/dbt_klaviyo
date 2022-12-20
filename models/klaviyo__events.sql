@@ -24,11 +24,11 @@ with events as (
     -- most events (from all kinds of integrations) at least once every hour
     where _fivetran_synced >= cast(coalesce( 
             (
-                select {{ dbt_utils.dateadd(datepart = 'hour', 
+                select {{ dbt.dateadd(datepart = 'hour', 
                                             interval = -1,
                                             from_date_or_timestamp = 'max(_fivetran_synced)' ) }}  
                 from {{ this }}
-            ), '2012-01-01') as {{ dbt_utils.type_timestamp() }} ) -- klaviyo was founded in 2012, so let's default the min date to then
+            ), '2012-01-01') as {{ dbt.type_timestamp() }} ) -- klaviyo was founded in 2012, so let's default the min date to then
     {% endif %}
 ),
 

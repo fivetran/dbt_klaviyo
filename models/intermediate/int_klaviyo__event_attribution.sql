@@ -35,11 +35,11 @@ with events as (
         -- https://help.klaviyo.com/hc/en-us/articles/115005253208
         where _fivetran_synced >= cast(coalesce( 
             (
-                select {{ dbt_utils.dateadd(datepart = 'hour', 
+                select {{ dbt.dateadd(datepart = 'hour', 
                                             interval = -1,
                                             from_date_or_timestamp = 'max(_fivetran_synced)' ) }}  
                 from {{ this }}
-            ), '2012-01-01') as {{ dbt_utils.type_timestamp() }} ) -- klaviyo was founded in 2012, so let's default the min date to then
+            ), '2012-01-01') as {{ dbt.type_timestamp() }} ) -- klaviyo was founded in 2012, so let's default the min date to then
     )
     {% endif %}
 ),
@@ -92,7 +92,7 @@ attribute as (
 
         coalesce(touch_id, -- use pre-attributed flow/campaign if provided
             case 
-            when {{ dbt_utils.datediff('session_start_at', 'occurred_at', 'hour') }} <= (
+            when {{ dbt.datediff('session_start_at', 'occurred_at', 'hour') }} <= (
                 case 
                 when lower(session_event_type) like '%sms%' then {{ var('klaviyo__sms_attribution_lookback') }}
                 else {{ var('klaviyo__email_attribution_lookback') }} end

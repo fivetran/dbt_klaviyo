@@ -1,5 +1,5 @@
 name: 'klaviyo_integration_tests'
-version: '0.4.2'
+version: '0.5.0'
 config-version: 2
 profile: 'integration_tests'
 
@@ -8,13 +8,14 @@ dispatch:
     search_order: ['spark_utils', 'dbt_utils']
 
 vars:
+  klaviyo_schema: klaviyo_integration_tests
   klaviyo_source:
-    event_table: "{{ ref('event') }}" 
-    campaign: "{{ ref('campaign') }}" 
-    flow: "{{ fivetran_utils.snowflake_seed_data('flow') }}" 
-    integration: "{{ ref('integration') }}" 
-    person: "{{ ref('person') }}" 
-    metric: "{{ ref('metric') }}" 
+    klaviyo_campaign_identifier: "campaign"
+    klaviyo_event_identifier: "event"
+    flow: "{{ fivetran_utils.snowflake_seed_data('flow') }}"
+    klaviyo_integration_identifier: "integration"
+    klaviyo_person_identifier: "person"
+    klaviyo_metric_identifier: "metric"
     klaviyo__event_pass_through_columns: []
     klaviyo__person_pass_through_columns: []
 
@@ -74,16 +75,16 @@ seeds:
       _FIVETRAN_SYNCED: timestamp
     person:
       +column_types:
-        PHONE_NUMBER: "{{ 'string' if target.type in ('bigquery', 'spark') else 'varchar' }}"
+        PHONE_NUMBER: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
     flow:
       +enabled: "{{ true if target.type != 'snowflake' else false }}"
       +quote_columns: "{{ true if target.type == 'redshift' else false }}"
       +column_types:
-        TRIGGER: "{{ 'string' if target.type in ('bigquery', 'spark') else 'varchar' }}"
+        TRIGGER: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
     flow_snowflake:
       +enabled: "{{ true if target.type == 'snowflake' else false }}"
     event:
       +column_types:
-        FLOW_ID: "{{ 'string' if target.type in ('bigquery', 'spark') else 'varchar' }}"
-        CAMPAIGN_ID: "{{ 'string' if target.type in ('bigquery', 'spark') else 'varchar' }}"
+        FLOW_ID: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
+        CAMPAIGN_ID: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
     
