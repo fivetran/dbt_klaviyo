@@ -12,7 +12,7 @@
 
 
 # Klaviyo Transformation dbt Package ([Docs](https://fivetran.github.io/dbt_klaviyo/))
-
+# 📣 What does this dbt package do?
 - Produces modeled tables that leverage Klaviyo data from [Fivetran's connector](https://fivetran.com/docs/applications/klaviyo) in the format described by [this ERD](https://fivetran.com/docs/applications/klaviyo#schemainformation) and builds off the output of our [Klaviyo source package](https://github.com/fivetran/dbt_klaviyo_source).
 
 - Enables you to better understand the efficacy of your email and SMS marketing efforts. It achieves this by:
