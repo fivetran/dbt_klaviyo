@@ -12,7 +12,7 @@ vars:
   klaviyo_source:
     klaviyo_campaign_identifier: "campaign"
     klaviyo_event_identifier: "event"
-    flow: "{{ fivetran_utils.snowflake_seed_data('flow') }}"
+    klaviyo_flow_identifier: "flow"
     klaviyo_integration_identifier: "integration"
     klaviyo_person_identifier: "person"
     klaviyo_metric_identifier: "metric"
