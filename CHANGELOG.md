@@ -1,3 +1,8 @@
+# dbt_klaviyo v0.7.0
+
+## 🚨 Breaking Changes 🚨:
+
+
 # dbt_klaviyo v0.6.0
 ## 🚨 Breaking Changes 🚨:
 - We recommend running `dbt run --full-refresh` after upgrading to this version due to casting changes in the source package affecting incremental models.

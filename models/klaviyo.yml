@@ -173,9 +173,7 @@ models:
       - name: from_name
         description: The name or label associated with the email address you're sending from.
       - name: campaign_id
-        description: Unique ID of the campaign. 
-      - name: is_segmented
-        description: Boolean that is true if the campaign is directed at a Klaviyo segment (not a list).
+        description: Unique ID of the campaign.
       - name: campaign_name
         description: A name for this campaign. If not specified, this will default to the subject of the campaign.
       - name: scheduled_to_send_at
@@ -202,6 +200,10 @@ models:
         description: Timestamp of the first ever interaction between this campaign and a person. 
       - name: last_event_at
         description: Timestamp of the most recent interaction between this campaign and a person.
+      - name: is_archived
+        description: Boolean of whether the campaign has been archived or not
+      - name: scheduled_at
+        description: The datetime when the campaign was scheduled for future sending
       - name: source_relation
         description: >
           The source where this data was pulled from. If you are making use of the `union_schemas` variable, this will be the source schema.
@@ -233,12 +235,8 @@ models:
         description: Name of the flow. 
       - name: status
         description: Current status of the flow. Either 'manual', 'live', or 'draft'. Read more [here](https://help.klaviyo.com/hc/en-us/articles/115002774932-Getting-Started-with-Flows#the-flow-action-status9).
-      - name: flow_trigger
-        description: JSON of metric, segment, list, and/or date-property filters that will trigger this flow. These are applied to the **event level**.
       - name: updated_at
         description: Timestamp of when the flow was last updated. 
-      - name: person_filter
-        description: JSON of flow filters placed on the **person level** that will trigger this flow. 
       - name: variation_id 
         description: >
           Unique ID of the attributed flow variation group. 
@@ -249,6 +247,10 @@ models:
         description: Timestamp of the first ever interaction between this flow and a person. 
       - name: last_event_at
         description: Timestamp of the most recent interaction between this flow and a person.
+      - name: is_archived
+        description: Boolean of whether this record has been archived
+      - name: trigger_type
+        description: Corresponds to the object which triggered the flow.
       - name: source_relation
         description: >
           The source where this data was pulled from. If you are making use of the `union_schemas` variable, this will be the source schema.
@@ -329,6 +331,8 @@ models:
         description: Timestamp of when the user first interacted with a flow.
       - name: last_flow_touch_at
         description: Timestamp of when the user last interacted with a flow.
+      - name: last_event_date_at
+        description: Date and time of the most recent event the triggered an update to the profile, in ISO 8601 format (YYYY-MM-DDTHH:MM:SS.mmmmmm)
       - name: source_relation
         description: >
           The source where this data was pulled from. If you are making use of the `union_schemas` variable, this will be the source schema.
