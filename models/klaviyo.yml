@@ -83,6 +83,8 @@ models:
         description: The email address and the unique identifier for the person who triggered the event. 
       - name: person_timezone
         description: Timezone that the person who triggered this event is situated in. 
+      - name: integration_id
+        description: Foreign key referencing the integration. 
       - name: integration_name
         description: Name of the platform that triggered the event (either Klaviyo, the API, or another integration).
       - name: integration_category

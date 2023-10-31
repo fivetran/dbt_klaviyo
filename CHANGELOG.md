@@ -1,5 +1,7 @@
 # dbt_klaviyo v0.7.0
 
+[PR #30](https://github.com/fivetran/dbt_klaviyo/pull/30) 
+
 ## 🚨 Breaking Changes 🚨:
 
 

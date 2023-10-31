@@ -91,12 +91,6 @@ metric as (
     from {{ var('metric') }}
 ),
 
-integration as (
-
-    select *
-    from {{ var('integration') }}
-),
-
 join_fields as (
 
     select
@@ -110,8 +104,9 @@ join_fields as (
         person.region as person_region,
         person.email as person_email,
         person.timezone as person_timezone,
-        integration.integration_name,
-        integration.category as integration_category
+        metric.integration_id,
+        metric.integration_name,
+        metric.integration_category
 
     from event_fields
     left join campaign on (
@@ -133,11 +128,6 @@ join_fields as (
       event_fields.metric_id = metric.metric_id
       and
       event_fields.source_relation = metric.source_relation
-    )
-    left join integration on (
-      metric.integration_id = integration.integration_id
-      and
-      metric.source_relation = integration.source_relation
     )
 )
 
