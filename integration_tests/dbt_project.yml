@@ -1,5 +1,5 @@
 name: 'klaviyo_integration_tests'
-version: '0.6.0'
+version: '0.7.0'
 config-version: 2
 profile: 'integration_tests'
 
@@ -12,7 +12,7 @@ vars:
   klaviyo_source:
     klaviyo_campaign_identifier: "campaign"
     klaviyo_event_identifier: "event"
-    flow: "{{ fivetran_utils.snowflake_seed_data('flow') }}"
+    klaviyo_flow_identifier: "flow"
     klaviyo_integration_identifier: "integration"
     klaviyo_person_identifier: "person"
     klaviyo_metric_identifier: "metric"
@@ -75,9 +75,4 @@ seeds:
       +column_types:
         PHONE_NUMBER: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
     flow:
-      +enabled: "{{ true if target.type != 'snowflake' else false }}"
       +quote_columns: "{{ true if target.type == 'redshift' else false }}"
-      +column_types:
-        TRIGGER: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
-    flow_snowflake:
-      +enabled: "{{ true if target.type == 'snowflake' else false }}"
