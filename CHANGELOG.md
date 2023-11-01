@@ -1,3 +1,11 @@
+# dbt_klaviyo v0.7.0
+
+[PR #30](https://github.com/fivetran/dbt_klaviyo/pull/30) includes updates regarding the [September 2023](https://fivetran.com/docs/applications/klaviyo/changelog#september2023) changes to the Klaviyo connector.
+
+## 🚨 Breaking Changes 🚨:
+- We have removed and added respective fields following the new schema in the Klaviyo connector. In addition, we have removed the deprecated `integration` table and have instead passed the integration columns through `metric`. For more information, refer to the [source Klaviyo package](https://github.com/fivetran/dbt_klaviyo_source/blob/main/CHANGELOG.md), where most of these changes took place.
+
+
 # dbt_klaviyo v0.6.0
 ## 🚨 Breaking Changes 🚨:
 - We recommend running `dbt run --full-refresh` after upgrading to this version due to casting changes in the source package affecting incremental models.
