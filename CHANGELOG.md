@@ -1,8 +1,12 @@
 # dbt_klaviyo v0.7.1
-[PR #33](https://github.com/fivetran/dbt_klaviyo/pull/33) includes the following updates:
 
- ## Dependency Updates
+## Dependency Updates
+[PR #33](https://github.com/fivetran/dbt_klaviyo/pull/33) includes the following updates:
  - Corrected the package to reference the proper upstream `dbt_klaviyo_source` package dependency.
+
+## Under the Hood:
+[PR #34](https://github.com/fivetran/dbt_klaviyo/pull/34) includes the following updates:
+- For Databricks compatibility, added the Catalog variable and updated the range to >=1.6.0,<2.0.0 in order to pass in integration testing.
 
 # dbt_klaviyo v0.7.0
 
