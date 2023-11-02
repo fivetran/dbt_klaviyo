@@ -2,7 +2,7 @@
 [PR #32](https://github.com/fivetran/dbt_klaviyo/pull/32) includes the following updates:
 
  ## Dependency Updates
- - Corrected the package to reference the proper upstream dbt_klaviyo_source package dependency.
+ - Corrected the package to reference the proper upstream `dbt_klaviyo_source` package dependency.
 
 # dbt_klaviyo v0.7.0
 
