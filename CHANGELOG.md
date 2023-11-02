@@ -1,3 +1,9 @@
+# dbt_klaviyo v0.7.1
+[PR #33](https://github.com/fivetran/dbt_klaviyo/pull/33) includes the following updates:
+
+ ## Dependency Updates
+ - Corrected the package to reference the proper upstream `dbt_klaviyo_source` package dependency.
+
 # dbt_klaviyo v0.7.0
 
 [PR #30](https://github.com/fivetran/dbt_klaviyo/pull/30) includes updates regarding the [September 2023](https://fivetran.com/docs/applications/klaviyo/changelog#september2023) changes to the Klaviyo connector.
