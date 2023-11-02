@@ -1,6 +1,5 @@
 # dbt_klaviyo v0.7.1
-
-
+[PR #32](https://github.com/fivetran/dbt_klaviyo/pull/32) updates the package to reference the correct upstream package dependency.
 
 # dbt_klaviyo v0.7.0
 
