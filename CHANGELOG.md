@@ -6,7 +6,7 @@
 
 ## Under the Hood:
 [PR #34](https://github.com/fivetran/dbt_klaviyo/pull/34) includes the following updates:
-- Added the catalog variable in order for Databricks to pass in integration testing.
+- For Databricks compatibility, added the Catalog variable and updated the range to >=1.6.0,<2.0.0 in order to pass in integration testing.
 
 # dbt_klaviyo v0.7.0
 
