@@ -1,3 +1,7 @@
+# dbt_klaviyo v0.7.1
+
+
+
 # dbt_klaviyo v0.7.0
 
 [PR #30](https://github.com/fivetran/dbt_klaviyo/pull/30) includes updates regarding the [September 2023](https://fivetran.com/docs/applications/klaviyo/changelog#september2023) changes to the Klaviyo connector.
