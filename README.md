@@ -24,6 +24,7 @@
   - Aggregating key metrics, such as associated revenue, related to each user's interactions with individual campaigns and flows (and organic actions)
   - Aggregating these metrics further, to the grain of campaigns, flows, and individual users
 
+<!--section="klaviyo_transformation_model-->
 The following table provides a detailed list of all models materialized within this package by default. 
 
 | **Model**                | **Description**                                                                                                                                |
@@ -33,6 +34,8 @@ The following table provides a detailed list of all models materialized within t
 | [klaviyo__campaigns](https://github.com/fivetran/dbt_klaviyo/blob/main/models/klaviyo__campaigns.sql)             | Each record represents a unique campaign, enriched with user interaction metrics, any revenue attributed to the campaign, and other conversions. |
 | [klaviyo__flows](https://github.com/fivetran/dbt_klaviyo/blob/main/models/klaviyo__flows.sql)             | Each record represents a unique flow, enriched with user interaction metrics, any revenue attributed to the flow, and other conversions. |
 | [klaviyo__persons](https://github.com/fivetran/dbt_klaviyo/blob/main/models/klaviyo__persons.sql)             | Each record represents a unique user, enriched with metrics around the campaigns and flows they have interacted with, any associated revenue (organic as well as attributed to flows/campaigns), and their recent activity. |
+
+<!--section-end-->
 
 # 🎯 How do I use the dbt package?
 
