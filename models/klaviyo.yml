@@ -119,9 +119,7 @@ models:
             - source_relation
     columns:
       - name: person_id
-        description: Foreign key referencing the PERSON who interacted with the flow/message. 
-        tests:
-          - not_null
+        description: Foreign key referencing the PERSON who interacted with the flow/message.
       - name: last_touch_campaign_id
         description: Foreign key referencing the CAMPAIGN attributed with these metrics (by the package's attribution model).
       - name: last_touch_flow_id

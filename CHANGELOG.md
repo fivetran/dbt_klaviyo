@@ -1,3 +1,6 @@
+# dbt_klaviyo v0.7.2
+
+
 # dbt_klaviyo v0.7.1
 
 ## Dependency Updates
