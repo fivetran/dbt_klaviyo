@@ -2,7 +2,7 @@
 [PR #38](https://github.com/fivetran/dbt_klaviyo/pull/38) includes the following updates:
 
 ## Bug Fixes
-- Removes `not_null` tests for `person_id` from select models. This is because Klaviyo can record events with deactivated profiles, resulting in null `person_id`s. Therefore models built off of tables with event-based grains may have null `person_id`s.
+- Removes `not_null` tests for `person_id` from `int_klaviyo__person_metrics` and `klaviyo__person_campaign_flow`. This is because Klaviyo can record events with deactivated profiles, resulting in null `person_id`s. Therefore models built off of tables with event-based grains may have null `person_id`s.
 
 # dbt_klaviyo v0.7.1
 
