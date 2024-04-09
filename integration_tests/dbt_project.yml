@@ -8,7 +8,7 @@ dispatch:
     search_order: ['spark_utils', 'dbt_utils']
 
 vars:
-  klaviyo_schema: klaviyo_integration_tests
+  klaviyo_schema: avinash_klaviyo_integrations_tests
   klaviyo_source:
     klaviyo_campaign_identifier: "campaign"
     klaviyo_event_identifier: "event"
@@ -33,6 +33,7 @@ vars:
       - 'opened email'
       - 'clicked email'
       - 'clicked sms'
+      - 'received email'
 
     klaviyo__count_metrics: 
       - 'Active on Site' # default API metrics
@@ -67,6 +68,7 @@ vars:
       - 'Ordered Product'
       - 'checkout started'
       - 'cancelled order'
+      - 'received email'
 
 seeds:
   klaviyo_integration_tests:
@@ -76,3 +78,6 @@ seeds:
         PHONE_NUMBER: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
     flow:
       +quote_columns: "{{ true if target.type == 'redshift' else false }}"
+    event:
+      +column_types:
+        property_value: float

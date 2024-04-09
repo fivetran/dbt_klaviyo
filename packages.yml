@@ -1,3 +1,4 @@
 packages:
-- package: fivetran/klaviyo_source
-  version: [">=0.7.0", "<0.8.0"]
+  - git: https://github.com/fivetran/dbt_klaviyo_source
+    revision: bugfix/property-value-as-numeric
+    warn-unpinned: false 
