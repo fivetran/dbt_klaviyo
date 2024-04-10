@@ -33,7 +33,6 @@ vars:
       - 'opened email'
       - 'clicked email'
       - 'clicked sms'
-      - 'received email'
 
     klaviyo__count_metrics: 
       - 'Active on Site' # default API metrics
@@ -43,7 +42,6 @@ vars:
       - 'Refunded Order' # note: klaviyo only tracks FULL refunds (not partial)
       - 'Cancelled Order'
       - 'Fulfilled Order'
-      - 'received email' # default email and sms conversion metrics in Klaviyo
       - 'Clicked Email'
       - 'Opened Email'
       - 'Bounced Email'
@@ -68,7 +66,6 @@ vars:
       - 'Ordered Product'
       - 'checkout started'
       - 'cancelled order'
-      - 'received email'
 
 seeds:
   klaviyo_integration_tests:
@@ -78,6 +75,3 @@ seeds:
         PHONE_NUMBER: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
     flow:
       +quote_columns: "{{ true if target.type == 'redshift' else false }}"
-    event:
-      +column_types:
-        property_value: 'varchar'
