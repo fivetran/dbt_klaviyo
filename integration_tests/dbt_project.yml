@@ -8,7 +8,7 @@ dispatch:
     search_order: ['spark_utils', 'dbt_utils']
 
 vars:
-  klaviyo_schema: klaviyo_integrations_tests
+  klaviyo_schema: klaviyo_avinash_integrations_tests
   klaviyo_source:
     klaviyo_campaign_identifier: "campaign"
     klaviyo_event_identifier: "event"
@@ -43,7 +43,7 @@ vars:
       - 'Refunded Order' # note: klaviyo only tracks FULL refunds (not partial)
       - 'Cancelled Order'
       - 'Fulfilled Order'
-      - 'Received Email' # default email and sms conversion metrics in Klaviyo
+      - 'received email' # default email and sms conversion metrics in Klaviyo
       - 'Clicked Email'
       - 'Opened Email'
       - 'Bounced Email'
@@ -80,4 +80,4 @@ seeds:
       +quote_columns: "{{ true if target.type == 'redshift' else false }}"
     event:
       +column_types:
-        property_value: float
+        property_value: 'varchar'

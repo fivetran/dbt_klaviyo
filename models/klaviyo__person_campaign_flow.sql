@@ -19,8 +19,8 @@ pivot_out_events as (
     -- sum up the numeric value associated with events (most likely will mean revenue)
     {% for rm in var('klaviyo__sum_revenue_metrics') %}
     , sum(case when lower(type) = '{{ rm | lower }}' then 
-            coalesce(numeric_value, 0)
-            else 0 end) 
+            coalesce({{ fivetran_utils.try_cast("numeric_value", "numeric") }}, 0)
+            else 0 end)
         as {{ 'sum_revenue_' ~ rm | replace(' ', '_') | replace('(', '') | replace(')', '') | lower }} -- removing special characters that I have seen in different integration events
     {% endfor %}
 
