@@ -42,6 +42,7 @@ vars:
       - 'Refunded Order' # note: klaviyo only tracks FULL refunds (not partial)
       - 'Cancelled Order'
       - 'Fulfilled Order'
+      - 'Received Email'
       - 'Clicked Email'
       - 'Opened Email'
       - 'Bounced Email'
