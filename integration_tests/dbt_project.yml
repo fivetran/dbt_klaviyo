@@ -76,3 +76,7 @@ seeds:
         PHONE_NUMBER: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
     flow:
       +quote_columns: "{{ true if target.type == 'redshift' else false }}"
+    event:
+      +column_types:
+        PROPERTY_VALUE: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
+ 
