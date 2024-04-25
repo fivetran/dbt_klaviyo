@@ -8,7 +8,7 @@ dispatch:
     search_order: ['spark_utils', 'dbt_utils']
 
 vars:
-  klaviyo_schema: klaviyo_integrations_tests
+  klaviyo_schema: klaviyo_integrations_tests_1
   klaviyo_source:
     klaviyo_campaign_identifier: "campaign"
     klaviyo_event_identifier: "event"
@@ -67,7 +67,6 @@ vars:
       - 'Ordered Product'
       - 'checkout started'
       - 'cancelled order'
-      - 'Received Email'
 
 seeds:
   klaviyo_integration_tests:
