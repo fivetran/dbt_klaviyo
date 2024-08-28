@@ -19,15 +19,15 @@
 - Produces modeled tables that leverage Klaviyo data from [Fivetran's connector](https://fivetran.com/docs/applications/klaviyo) in the format described by [this ERD](https://fivetran.com/docs/applications/klaviyo#schemainformation) and builds off the output of our [Klaviyo source package](https://github.com/fivetran/dbt_klaviyo_source).
 
 - Enables you to better understand the efficacy of your email and SMS marketing efforts. It achieves this by:
-- Performing last-touch attribution on events in order to properly credit campaigns and flows with conversions
-- Enriching the core event table with data regarding associated users, flows, and campaigns
-- Aggregating key metrics, such as associated revenue, related to each user's interactions with individual campaigns and flows (and organic actions)
-- Aggregating these metrics further, to the grain of campaigns, flows, and individual users
+  - Performing last-touch attribution on events in order to properly credit campaigns and flows with conversions
+  - Enriching the core event table with data regarding associated users, flows, and campaigns
+  - Aggregating key metrics, such as associated revenue, related to each user's interactions with individual campaigns and flows (and organic actions)
+  - Aggregating these metrics further, to the grain of campaigns, flows, and individual users
 
 <!--section="klaviyo_transformation_model-->
-The following table provides a detailed list of all models materialized within this package by default.
+The following table provides a detailed list of all tables materialized within this package by default.
 
-| **Model**                | **Description**                                                                                                                                |
+| **Table**                | **Description**                                                                                                                                |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | [klaviyo__events](https://github.com/fivetran/dbt_klaviyo/blob/main/models/klaviyo__events.sql)             | Each record represents a unique event in Klaviyo, enhanced with a customizable last-touch attribution model associating events with flows and campaigns. Also includes information about the user who triggered the event. Materialized incrementally by default. |
 | [klaviyo__person_campaign_flow](https://github.com/fivetran/dbt_klaviyo/blob/main/models/klaviyo__person_campaign_flow.sql)             | Each record represents a unique person-campaign or person-flow combination, enriched with sums of the numeric values (i.e. revenue) associated with each kind of conversion, and counts of the number of triggered conversion events. |
