@@ -3,7 +3,6 @@
     enabled=var('fivetran_validation_tests_enabled', false)
 ) }}
 
--- this test ensures the daily_activity end model matches the prior version
 with prod as (
     select *
     from {{ target.schema }}_klaviyo_prod.klaviyo__events
