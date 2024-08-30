@@ -1,5 +1,5 @@
 # dbt_klaviyo v0.8.0
-[PR #](https://github.com/fivetran/dbt_klaviyo/pull/) includes the following updates:
+[PR #41](https://github.com/fivetran/dbt_klaviyo/pull/41) includes the following updates:
 
 ## Breaking Changes (Full refresh required after upgrading)
 - Incremental models running on BigQuery have had the `partition_by` logic adjusted to include a granularity of a month. This change only impacts BigQuery warehouses and was applied to avoid the common `too many partitions` error some users have experienced when partitioning by day. Therefore, adjusting the partition to a month granularity will decrease the number of partitions created and allow for more performant querying and incremental loads. This change was applied to the following models:
