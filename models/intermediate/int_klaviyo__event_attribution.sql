@@ -2,10 +2,7 @@
     config(
         materialized='incremental',
         unique_key='unique_event_id',
-        partition_by={
-            "field": "occurred_on",
-            "data_type": "date"
-        } if target.type == 'bigquery' else none,
+        partition_by={"field": "occurred_on", "data_type": "date", 'granularity': 'month'} if target.type == 'bigquery' else none,
         incremental_strategy = 'merge' if target.type not in ('postgres', 'redshift') else 'delete+insert',
         file_format = 'delta'
     )
