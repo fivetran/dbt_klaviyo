@@ -15,7 +15,7 @@
 
 
 # Klaviyo Transformation dbt Package ([Docs](https://fivetran.github.io/dbt_klaviyo/))
-# 📣 What does this dbt package do?
+## What does this dbt package do?
 - Produces modeled tables that leverage Klaviyo data from [Fivetran's connector](https://fivetran.com/docs/applications/klaviyo) in the format described by [this ERD](https://fivetran.com/docs/applications/klaviyo#schemainformation) and builds off the output of our [Klaviyo source package](https://github.com/fivetran/dbt_klaviyo_source).
 
 - Enables you to better understand the efficacy of your email and SMS marketing efforts. It achieves this by:
@@ -25,9 +25,9 @@
   - Aggregating these metrics further, to the grain of campaigns, flows, and individual users
 
 <!--section="klaviyo_transformation_model-->
-The following table provides a detailed list of all models materialized within this package by default. 
+The following table provides a detailed list of all tables materialized within this package by default.
 
-| **Model**                | **Description**                                                                                                                                |
+| **Table**                | **Description**                                                                                                                                |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | [klaviyo__events](https://github.com/fivetran/dbt_klaviyo/blob/main/models/klaviyo__events.sql)             | Each record represents a unique event in Klaviyo, enhanced with a customizable last-touch attribution model associating events with flows and campaigns. Also includes information about the user who triggered the event. Materialized incrementally by default. |
 | [klaviyo__person_campaign_flow](https://github.com/fivetran/dbt_klaviyo/blob/main/models/klaviyo__person_campaign_flow.sql)             | Each record represents a unique person-campaign or person-flow combination, enriched with sums of the numeric values (i.e. revenue) associated with each kind of conversion, and counts of the number of triggered conversion events. |
@@ -37,15 +37,15 @@ The following table provides a detailed list of all models materialized within t
 
 <!--section-end-->
 
-# 🎯 How do I use the dbt package?
+## How do I use the dbt package?
 
-## Step 1: Prerequisites
+### Step 1: Prerequisites
 To use this dbt package, you must have the following:
 
 - At least one Fivetran Klaviyo connector syncing data into your destination.
 - A **BigQuery**, **Snowflake**, **Redshift**, **PostgreSQL**, or **Databricks** destination.
 
-### Databricks Dispatch Configuration
+#### Databricks Dispatch Configuration
 If you are using a Databricks destination with this package you will need to add the below (or a variation of the below) dispatch configuration within your `dbt_project.yml`. This is required in order for the package to accurately search for macros within the `dbt-labs/spark_utils` then the `dbt-labs/dbt_utils` packages respectively.
 ```yml
 dispatch:
@@ -54,7 +54,7 @@ dispatch:
 ```
 
 
-## Step 2: Install the package
+### Step 2: Install the package
 Include the following klaviyo package version in your `packages.yml` file:
 > TIP: Check [dbt Hub](https://hub.getdbt.com/) for the latest installation instructions or [read the dbt docs](https://docs.getdbt.com/docs/package-management) for more information on installing packages.
 ```yaml
@@ -62,7 +62,7 @@ packages:
   - package: fivetran/klaviyo
     version: [">=0.7.0", "<0.8.0"]
 ```
-## Step 3: Define database and schema variables
+### Step 3: Define database and schema variables
 By default, this package runs using your destination and the `klaviyo` schema. If this is not where your Klaviyo data is (for example, if your Klaviyo schema is named `klaviyo_fivetran`), add the following configuration to your root `dbt_project.yml` file:
 
 ```yml
@@ -70,11 +70,11 @@ vars:
   klaviyo_database: your_database_name
   klaviyo_schema: your_schema_name
 ```
-## (Optional) Step 4: Additional configurations
+### (Optional) Step 4: Additional configurations
 
 <details><summary>Expand for configurations</summary>
 
-### Unioning Multiple Klaviyo Connectors
+#### Unioning Multiple Klaviyo Connectors
 If you have multiple Klaviyo connectors in Fivetran and would like to use this package on all of them simultaneously, we have provided functionality to do so. The package will union all of the data together and pass the unioned table into the transformations. You will be able to see which source it came from in the `source_relation` column of each model. To use this functionality, you will need to set either (**note that you cannot use both**) the `klaviyo_union_schemas` or `klaviyo_union_databases` variables:
 
 ```yml
@@ -87,7 +87,7 @@ vars:
     klaviyo_union_databases: ['klaviyo_usa','klaviyo_canada'] # use this if the data is in different databases/projects but uses the same schema name
 ```
 
-### Attribution Lookback Window
+#### Attribution Lookback Window
 
 This package attributes events to campaigns and flows via a last-touch attribution model in line with Klaviyo's internal [attribution](https://help.klaviyo.com/hc/en-us/articles/115005248128). This is necessary to perform, as Klaviyo does not automatically send attribution data for certain metrics. Read more about how the package's attribution works [here](https://github.com/fivetran/dbt_klaviyo/blob/main/models/intermediate/int_klaviyo.yml#L4) and see the source code [here](https://github.com/fivetran/dbt_klaviyo/blob/main/models/intermediate/int_klaviyo__event_attribution.sql).
 
@@ -111,7 +111,7 @@ vars:
 
 > Note that events already associated with campaigns or flows in Klaviyo will never have their source attribution data overwritten by the package modeling.
 
-### Attribution-Eligible Event Types
+#### Attribution-Eligible Event Types
 
 By default, this package will only credit email opens, email clicks, and SMS opens with conversions. That is, only flows and campaigns attached to these kinds of events will qualify for attribution in our package. This is aligned with Klaviyo's internal [attribution model](https://help.klaviyo.com/hc/en-us/articles/115005248128).
 
@@ -128,7 +128,7 @@ vars:
     klaviyo__eligible_attribution_events: ['types', 'of', 'events', 'to', 'attribute', 'conversions', 'to'] # this is case-SENSITIVE and should be in all lower-case!!
 ```
 
-### Filtering Conversion Metrics to Pivot Out
+#### Filtering Conversion Metrics to Pivot Out
 
 The Klaviyo dbt package pivots relevant conversion events out into metric columns in the `klaviyo__person_campaign_flow`, `klaviyo__campaigns`, `klaviyo__flows`, and `klaviyo__persons` models. The package will sum up revenue attributed to each person's interactions with flows and campaigns (plus organic actions), count the instances of each kind of triggered conversion, and, at the flow and campaign grain, count the number of unique people who converted. The package splits up events to pivot out into two variables, `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`, which will record the count of events/users and their associated revenue values, respectively.
 
@@ -166,7 +166,7 @@ vars:
       - 'cancelled order'
 ```
 
-### Passthrough Columns
+#### Passthrough Columns
 
 Additionally, the Klaviyo package includes all source columns defined in the [macros folder](https://github.com/fivetran/dbt_klaviyo_source/tree/main/macros) of the source package. We highly recommend including custom fields in this package as models now only bring in the standard fields for the `EVENT` and `PERSON` tables.
 
@@ -190,7 +190,7 @@ vars:
       alias:          "normal_field_name"
 ```
 
-### Changing the Build Schema
+#### Changing the Build Schema
 
 By default, this package will build the Klaviyo final models within a schema titled (`<target_schema>` + `_klaviyo`), intermediate models in (`<target_schema>` + `_int_klaviyo`), and staging models within a schema titled (`<target_schema>` + `_stg_klaviyo`) in your target database. If this is not where you would like your modeled Klaviyo data to be written to, add the following configuration to your `dbt_project.yml` file:
 
@@ -209,7 +209,7 @@ models:
 
 > Note that if your profile does not have permissions to create schemas in your warehouse, you can set each `+schema` to blank. The package will then write all tables to your pre-existing target schema.
 
-### Change the source table references
+#### Change the source table references
 If an individual source table has a different name than the package expects, add the table name as it appears in your destination to the respective variable:
 
 > IMPORTANT: See this project's [`dbt_project.yml`](https://github.com/fivetran/dbt_klaviyo/blob/main/dbt_project.yml) variable declarations to see the expected names.
@@ -221,15 +221,15 @@ vars:
 
 </details>
 
-## (Optional) Step 5: Orchestrate your models with Fivetran Transformations for dbt Core™  
+### (Optional) Step 5: Orchestrate your models with Fivetran Transformations for dbt Core™
 <details><summary>Expand for more details</summary>
 
 Fivetran offers the ability for you to orchestrate your dbt project through [Fivetran Transformations for dbt Core™](https://fivetran.com/docs/transformations/dbt). Learn how to set up your project for orchestration through Fivetran in our [Transformations for dbt Core setup guides](https://fivetran.com/docs/transformations/dbt#setupguide).
 
 </details>
 
-# 🔍 Does this package have dependencies?
-This dbt package is dependent on the following dbt packages. Please be aware that these dependencies are installed by default within this package. For more information on the following packages, refer to the [dbt hub](https://hub.getdbt.com/) site.
+## Does this package have dependencies?
+This dbt package is dependent on the following dbt packages. These dependencies are installed by default within this package. For more information on the following packages, refer to the [dbt hub](https://hub.getdbt.com/) site.
 > IMPORTANT: If you have any of these dependent packages in your own `packages.yml` file, we highly recommend that you remove them from your root `packages.yml` to avoid package version conflicts.
     
 ```yml
@@ -246,16 +246,15 @@ packages:
     - package: dbt-labs/spark_utils
       version: [">=0.3.0", "<0.4.0"]
 ```
-# 🙌 How is this package maintained and can I contribute?
-## Package Maintenance
+## How is this package maintained and can I contribute?
+### Package Maintenance
 The Fivetran team maintaining this package _only_ maintains the latest version of the package. We highly recommend you stay consistent with the [latest version](https://hub.getdbt.com/fivetran/klaviyo/latest/) of the package and refer to the [CHANGELOG](https://github.com/fivetran/dbt_klaviyo/blob/main/CHANGELOG.md) and release notes for more information on changes across versions.
 
-## Contributions
-A small team of analytics engineers at Fivetran develops these dbt packages. However, the packages are made better by community contributions! 
+### Contributions
+A small team of analytics engineers at Fivetran develops these dbt packages. However, the packages are made better by community contributions.
 
-We highly encourage and welcome contributions to this package. Check out [this dbt Discourse article](https://discourse.getdbt.com/t/contributing-to-a-dbt-package/657) on the best workflow for contributing to a package!
+We highly encourage and welcome contributions to this package. Check out [this dbt Discourse article](https://discourse.getdbt.com/t/contributing-to-a-dbt-package/657) on the best workflow for contributing to a package.
 
-# 🏪 Are there any resources available?
-- If you have questions or want to reach out for help, please refer to the [GitHub Issue](https://github.com/fivetran/dbt_klaviyo/issues/new/choose) section to find the right avenue of support for you.
+## Are there any resources available?
+- If you have questions or want to reach out for help, see the [GitHub Issue](https://github.com/fivetran/dbt_klaviyo/issues/new/choose) section to find the right avenue of support for you.
 - If you would like to provide feedback to the dbt package team at Fivetran or would like to request a new dbt package, fill out our [Feedback Form](https://www.surveymonkey.com/r/DQ7K7WW).
-- Have questions or want to just say hi? Book a time during our office hours [on Calendly](https://calendly.com/fivetran-solutions-team/fivetran-solutions-team-office-hours) or email us at solutions@fivetran.com.
