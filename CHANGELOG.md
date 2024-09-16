@@ -1,3 +1,15 @@
+# dbt_klaviyo v0.8.0
+[PR #41](https://github.com/fivetran/dbt_klaviyo/pull/41) includes the following updates:
+
+## Breaking Changes (Full refresh required after upgrading)
+- Removed the `partition_by` logic from incremental models running on BigQuery. This change affects only BigQuery warehouses and resolves the `too many partitions` error that some users encountered. The partitioning was also deemed unnecessary for the mentioned models and their downstream references, offering no performance benefit. By removing it, we eliminate both the error risk and an unneeded configuration. This change applies to the following models:
+  - `int_klaviyo__event_attribution`
+  - `klaviyo__events`
+
+## Under the Hood
+- Added consistency and integrity validation tests for the `klaviyo__events` model.
+- Cleaned up unnecessary variable configuration within the `integration_tests/dbt_project.yml` file.
+
 # dbt_klaviyo v0.7.2
 [PR #38](https://github.com/fivetran/dbt_klaviyo/pull/38) includes the following updates:
 
