@@ -10,6 +10,14 @@ vars:
     integration: "{{ ref( 'stg_klaviyo__integration') }}"
     person: "{{ ref( 'stg_klaviyo__person') }}"
     metric: "{{ ref( 'stg_klaviyo__metric') }}"
+
+    klaviyo__attribution_event_funnel:
+      timeframe: 72 # hours
+      events: # in order
+      - 'received email'
+      # - 'opened email'
+      - 'clicked email'
+
     klaviyo__email_attribution_lookback: 120
     klaviyo__sms_attribution_lookback: 24
     klaviyo__eligible_attribution_events: # default in klaviyo -> https://help.klaviyo.com/hc/en-us/articles/115005248128 

@@ -40,6 +40,23 @@ with events as (
     {% endif %}
 ),
 
+funnel_events as (
+    select 
+        *
+        {% if var('klaviyo__attribution_event_funnel') %}
+            {%- for event in var('klaviyo__attribution_event_funnel').events %}
+                {%- if not loop.first %}
+                {# Find out if the following events are occurring within the conversion timeframe #}
+                    , min(case when lower(type) = '{{ event }}' then occurred_at else cast('2099-01-01' as {{ dbt.type_timestamp() }}) end) over (partition by person_id, source_relation order by occurred_at rows between current row and unbounded following) as next_{{ dbt_utils.slugify(event) }}
+                {%- endif %}
+            {%- endfor %}
+        {%- endif %}
+    from events
+),
+
+{# What will kick off the session funnel #}
+{% set first_event = var('klaviyo__attribution_event_funnel')['events'][0] %}
+
 -- sessionize events based on attribution eligibility -- is it the right kind of event, and does it have a campaign or flow?
 create_sessions as (
     select
@@ -49,14 +66,26 @@ create_sessions as (
 
         -- events that come with flow/campaign attributions (and are eligible event types) will create new sessions.
         -- non-attributed events that come in afterward will be batched into the same attribution-session
-        sum(case when touch_id is not null
+        {# sum(case when touch_id is not null
         {% if var('klaviyo__eligible_attribution_events') != [] %}
             and lower(type) in {{ "('" ~ (var('klaviyo__eligible_attribution_events') | join("', '")) ~ "')" }}
         {% endif %}
             then 1 else 0 end) over (
+                partition by person_id, source_relation order by occurred_at asc rows between unbounded preceding and current row) as touch_session  #}
+
+        sum(case when touch_id is not null
+        {% if var('klaviyo__attribution_event_funnel') %}
+            and lower(type) = '{{ first_event|lower }}' 
+            {%- for event in var('klaviyo__attribution_event_funnel').events %}
+                {%- if not loop.first %}
+                    and {{ dbt.datediff("occurred_at", "next_" ~ dbt_utils.slugify(event) , "hour") }} <= {{ var('klaviyo__attribution_event_funnel').timeframe }}
+                {%- endif %}
+            {%- endfor %}
+        {% endif %}
+            then 1 else 0 end) over (
                 partition by person_id, source_relation order by occurred_at asc rows between unbounded preceding and current row) as touch_session 
 
-    from events
+    from funnel_events
 
 ),
 
@@ -84,7 +113,7 @@ attribute as (
         *,
         -- klaviyo uses different lookback windows for email and sms events
         -- default email lookback = 5 days (120 hours) -> https://help.klaviyo.com/hc/en-us/articles/115005248128#conversion-tracking1
-        -- default sms lookback: 1 day (24 hours -> https://help.klaviyo.com/hc/en-us/articles/115005248128#sms-conversion-tracking7
+        -- default sms lookback = 1 day (24 hours -> https://help.klaviyo.com/hc/en-us/articles/115005248128#sms-conversion-tracking7
 
         coalesce(touch_id, -- use pre-attributed flow/campaign if provided
             case 
