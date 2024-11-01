@@ -66,12 +66,6 @@ create_sessions as (
 
         -- events that come with flow/campaign attributions (and are eligible event types) will create new sessions.
         -- non-attributed events that come in afterward will be batched into the same attribution-session
-        {# sum(case when touch_id is not null
-        {% if var('klaviyo__eligible_attribution_events') != [] %}
-            and lower(type) in {{ "('" ~ (var('klaviyo__eligible_attribution_events') | join("', '")) ~ "')" }}
-        {% endif %}
-            then 1 else 0 end) over (
-                partition by person_id, source_relation order by occurred_at asc rows between unbounded preceding and current row) as touch_session  #}
 
         sum(case when touch_id is not null
         {% if var('klaviyo__attribution_event_funnel') %}
