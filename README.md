@@ -76,7 +76,7 @@ vars:
 
 <details><summary>Expand for configurations</summary>
 
-#### Unioning Multiple Klaviyo Connectors
+#### Unioning Multiple Klaviyo Connections
 If you have multiple Klaviyo connections in Fivetran and would like to use this package on all of them simultaneously, we have provided functionality to do so. The package will union all of the data together and pass the unioned table into the transformations. You will be able to see which source it came from in the `source_relation` column of each model. To use this functionality, you will need to set either (**note that you cannot use both**) the `klaviyo_union_schemas` or `klaviyo_union_databases` variables:
 
 ```yml
