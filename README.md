@@ -35,6 +35,8 @@ The following table provides a detailed list of all tables materialized within t
 | [klaviyo__flows](https://github.com/fivetran/dbt_klaviyo/blob/main/models/klaviyo__flows.sql)             | Each record represents a unique flow, enriched with user interaction metrics, any revenue attributed to the flow, and other conversions. |
 | [klaviyo__persons](https://github.com/fivetran/dbt_klaviyo/blob/main/models/klaviyo__persons.sql)             | Each record represents a unique user, enriched with metrics around the campaigns and flows they have interacted with, any associated revenue (organic as well as attributed to flows/campaigns), and their recent activity. |
 
+### Materialized Models
+Each Quickstart transformation job run materializes 18 models if all components of this data model are enabled. This count includes all staging, intermediate, and final models materialized as `view`, `table`, or `incremental`.
 <!--section-end-->
 
 ## How do I use the dbt package?
@@ -42,7 +44,7 @@ The following table provides a detailed list of all tables materialized within t
 ### Step 1: Prerequisites
 To use this dbt package, you must have the following:
 
-- At least one Fivetran Klaviyo connector syncing data into your destination.
+- At least one Fivetran Klaviyo connection syncing data into your destination.
 - A **BigQuery**, **Snowflake**, **Redshift**, **PostgreSQL**, or **Databricks** destination.
 
 #### Databricks Dispatch Configuration
@@ -74,8 +76,8 @@ vars:
 
 <details><summary>Expand for configurations</summary>
 
-#### Unioning Multiple Klaviyo Connectors
-If you have multiple Klaviyo connectors in Fivetran and would like to use this package on all of them simultaneously, we have provided functionality to do so. The package will union all of the data together and pass the unioned table into the transformations. You will be able to see which source it came from in the `source_relation` column of each model. To use this functionality, you will need to set either (**note that you cannot use both**) the `klaviyo_union_schemas` or `klaviyo_union_databases` variables:
+#### Unioning Multiple Klaviyo Connections
+If you have multiple Klaviyo connections in Fivetran and would like to use this package on all of them simultaneously, we have provided functionality to do so. The package will union all of the data together and pass the unioned table into the transformations. You will be able to see which source it came from in the `source_relation` column of each model. To use this functionality, you will need to set either (**note that you cannot use both**) the `klaviyo_union_schemas` or `klaviyo_union_databases` variables:
 
 ```yml
 # dbt_project.yml

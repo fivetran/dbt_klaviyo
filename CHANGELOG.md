@@ -1,3 +1,9 @@
+# dbt_klaviyo version.version
+
+## Documentation
+- Added Quickstart model counts to README. ([#45](https://github.com/fivetran/dbt_klaviyo/pull/45))
+- Corrected references to connectors and connections in the README. ([#45](https://github.com/fivetran/dbt_klaviyo/pull/45))
+
 # dbt_klaviyo v0.8.0
 [PR #41](https://github.com/fivetran/dbt_klaviyo/pull/41) includes the following updates:
 
