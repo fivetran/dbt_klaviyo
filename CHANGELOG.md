@@ -1,6 +1,6 @@
 # dbt_klaviyo v0.9.0
 
-[PR #46](https://github.com/fivetran/dbt_klaviyo/pull/46) includes the following updates:
+[PR #47](https://github.com/fivetran/dbt_klaviyo/pull/47) includes the following updates:
 
 ## Breaking Change for dbt Core < 1.9.6
 
@@ -19,7 +19,7 @@ into the `config` of `klaviyo`.
 
 If you are using dbt Core < 1.9.6 and want to continue running Klaviyo freshness tests, please elect **one** of the following options:
   1. (Recommended) Upgrade to dbt Core >= 1.9.6
-  2. Do not upgrade your installed version of the `klaviyo_source` package. Pin your dependency on v0.7.1 in your `packages.yml` file.
+  2. Do not upgrade your installed version of the `klaviyo` package. Pin your dependency on v0.8.0 in your `packages.yml` file.
   3. Utilize a dbt [override](https://docs.getdbt.com/reference/resource-properties/overrides) to overwrite the package's `klaviyo` source and apply freshness via the previous release top-level property route. This will require you to copy and paste the entirety of the previous release `src_klaviyo.yml` file and add an `overrides: klaviyo_source` property.
 
 ## Documentation
