@@ -1,5 +1,5 @@
 name: 'klaviyo_integration_tests'
-version: '0.8.0'
+version: '0.9.0'
 config-version: 2
 profile: 'integration_tests'
 
@@ -26,5 +26,8 @@ seeds:
     person:
       +column_types:
         PHONE_NUMBER: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
-    flow:
+  flow:
       +quote_columns: "{{ true if target.type == 'redshift' else false }}"
+
+flags:
+  send_anonymous_usage_stats: False
