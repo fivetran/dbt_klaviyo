@@ -1,7 +1,7 @@
 with person as (
 
     select *
-    from {{ var('person') }}
+    from {{ ref('stg_klaviyo__person') }}
 ),
 
 person_metrics as (
