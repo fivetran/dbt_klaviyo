@@ -18,14 +18,14 @@ with events as (
             when flow_id is not null then 'flow' 
         else null end as touch_type -- defintion: touch = interaction with campaign/flow
 
-    from {{ var('event_table') }}
+    from {{ ref('stg_klaviyo__event') }}
 
     {% if is_incremental() %}
     -- grab **ALL** events for users who have any events in this new increment
     where person_id in (
 
         select distinct person_id
-        from {{ var('event_table') }}
+        from {{ ref('stg_klaviyo__event') }}
 
         -- most events (from all kinds of integrations) at least once every hour
         -- https://help.klaviyo.com/hc/en-us/articles/115005253208

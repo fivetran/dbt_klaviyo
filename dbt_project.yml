@@ -1,15 +1,16 @@
 name: 'klaviyo'
-version: '0.9.0'
+version: '1.0.0'
 config-version: 2
 require-dbt-version: [">=1.3.0", "<2.0.0"]
+
 vars:
   klaviyo:
-    event_table: "{{ ref( 'stg_klaviyo__event') }}"
-    campaign: "{{ ref( 'stg_klaviyo__campaign') }}"
-    flow: "{{ ref( 'stg_klaviyo__flow') }}"
-    integration: "{{ ref( 'stg_klaviyo__integration') }}"
-    person: "{{ ref( 'stg_klaviyo__person') }}"
-    metric: "{{ ref( 'stg_klaviyo__metric') }}"
+    event_table: "{{ source('klaviyo', 'event') }}"
+    campaign: "{{ source('klaviyo', 'campaign') }}"
+    flow: "{{ source('klaviyo', 'flow') }}"
+    integration: "{{ source('klaviyo', 'integration') }}"
+    person: "{{ source('klaviyo', 'person') }}"
+    metric: "{{ source('klaviyo', 'metric') }}"
     klaviyo__email_attribution_lookback: 120
     klaviyo__sms_attribution_lookback: 24
     klaviyo__eligible_attribution_events: # default in klaviyo -> https://help.klaviyo.com/hc/en-us/articles/115005248128 
@@ -40,9 +41,12 @@ vars:
     - 'checkout started'
     - 'cancelled order'
 
-  klaviyo_source:
     klaviyo__event_pass_through_columns: []
     klaviyo__person_pass_through_columns: []
+
+  dbt_utils_dispatch_list: ['spark_utils', 'dbt_utils']
+  fivetran_utils_dispatch_list: [spark_utils]
+
 models:
   klaviyo:
     intermediate:
@@ -50,3 +54,8 @@ models:
       +materialized: view
     +materialized: table
     +schema: klaviyo
+    staging:
+      +materialized: table
+      +schema: stg_klaviyo
+      tmp:
+        +materialized: view

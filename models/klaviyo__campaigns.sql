@@ -1,7 +1,7 @@
 with campaign as (
 
     select *
-    from {{ var('campaign') }}
+    from {{ ref('stg_klaviyo__campaign') }}
 ),
 
 campaign_metrics as (

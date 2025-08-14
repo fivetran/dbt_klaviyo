@@ -65,26 +65,26 @@ event_fields as (
 campaign as (
 
     select *
-    from {{ var('campaign') }}
+    from {{ ref('stg_klaviyo__campaign') }}
 ),
 
 flow as (
 
     select *
-    from {{ var('flow') }}
+    from {{ ref('stg_klaviyo__flow') }}
 ),
 
 person as (
 
     select *
-    from {{ var('person') }}
+    from {{ ref('stg_klaviyo__person') }}
 ),
 
 -- just pulling this to join with INTEGRATION
 metric as (
 
     select *
-    from {{ var('metric') }}
+    from {{ ref('stg_klaviyo__metric') }}
 ),
 
 join_fields as (

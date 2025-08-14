@@ -1,5 +1,5 @@
 name: 'klaviyo_integration_tests'
-version: '0.9.0'
+version: '1.0.0'
 config-version: 2
 profile: 'integration_tests'
 
@@ -9,7 +9,7 @@ dispatch:
 
 vars:
   klaviyo_schema: klaviyo_integration_tests
-  klaviyo_source: 
+  klaviyo: 
     klaviyo_campaign_identifier: "campaign"
     klaviyo_event_identifier: "event"
     klaviyo_flow_identifier: "flow"
@@ -21,13 +21,16 @@ models:
   +schema: "klaviyo_{{ var('directed_schema','dev') }}"
 
 seeds:
+  +docs:
+    show: False
   klaviyo_integration_tests:
     +quote_columns: "{{ true if target.type == 'redshift' else false }}"
     person:
       +column_types:
         PHONE_NUMBER: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
-  flow:
+    flow:
       +quote_columns: "{{ true if target.type == 'redshift' else false }}"
 
 flags:
   send_anonymous_usage_stats: False
+  use_colors: True

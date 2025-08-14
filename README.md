@@ -1,4 +1,6 @@
-<p align="center">
+# Klaviyo dbt Package ([Docs](https://fivetran.github.io/dbt_klaviyo/))
+
+<p align="left">
     <a alt="License"
         href="https://github.com/fivetran/dbt_klaviyo/blob/main/LICENSE">
         <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" /></a>
@@ -13,10 +15,8 @@
         <img src="https://img.shields.io/badge/Fivetran_Quickstart_Compatible%3F-yes-green.svg" /></a>
 </p>
 
-
-# Klaviyo Transformation dbt Package ([Docs](https://fivetran.github.io/dbt_klaviyo/))
 ## What does this dbt package do?
-- Produces modeled tables that leverage Klaviyo data from [Fivetran's connector](https://fivetran.com/docs/applications/klaviyo) in the format described by [this ERD](https://fivetran.com/docs/applications/klaviyo#schemainformation) and builds off the output of our [Klaviyo source package](https://github.com/fivetran/dbt_klaviyo_source).
+- Produces modeled tables that leverage Klaviyo data from [Fivetran's connector](https://fivetran.com/docs/applications/klaviyo) in the format described by [this ERD](https://fivetran.com/docs/applications/klaviyo#schemainformation).
 
 - Enables you to better understand the efficacy of your email and SMS marketing efforts. It achieves this by:
   - Performing last-touch attribution on events in order to properly credit campaigns and flows with conversions
@@ -55,15 +55,17 @@ dispatch:
     search_order: ['spark_utils', 'dbt_utils']
 ```
 
-
 ### Step 2: Install the package
 Include the following klaviyo package version in your `packages.yml` file:
 > TIP: Check [dbt Hub](https://hub.getdbt.com/) for the latest installation instructions or [read the dbt docs](https://docs.getdbt.com/docs/package-management) for more information on installing packages.
 ```yaml
 packages:
   - package: fivetran/klaviyo
-    version: [">=0.9.0", "<0.10.0"]
+    version: [">=1.0.0", "<1.1.0"]
 ```
+
+> All required sources and staging models are now bundled into this transformation package. Do not include `fivetran/klaviyo_source` in your `packages.yml` since this package has been deprecated.
+
 ### Step 3: Define database and schema variables
 By default, this package runs using your destination and the `klaviyo` schema. If this is not where your Klaviyo data is (for example, if your Klaviyo schema is named `klaviyo_fivetran`), add the following configuration to your root `dbt_project.yml` file:
 
@@ -72,9 +74,9 @@ vars:
   klaviyo_database: your_database_name
   klaviyo_schema: your_schema_name
 ```
-### (Optional) Step 4: Additional configurations
 
-<details><summary>Expand for configurations</summary>
+### (Optional) Step 4: Additional configurations
+<details open><summary>Expand/Collapse details</summary>
 
 #### Unioning Multiple Klaviyo Connections
 If you have multiple Klaviyo connections in Fivetran and would like to use this package on all of them simultaneously, we have provided functionality to do so. The package will union all of the data together and pass the unioned table into the transformations. You will be able to see which source it came from in the `source_relation` column of each model. To use this functionality, you will need to set either (**note that you cannot use both**) the `klaviyo_union_schemas` or `klaviyo_union_databases` variables:
@@ -84,7 +86,7 @@ If you have multiple Klaviyo connections in Fivetran and would like to use this 
 ...
 config-version: 2
 vars:
-  klaviyo_source:
+  klaviyo:
     klaviyo_union_schemas: ['klaviyo_usa','klaviyo_canada'] # use this if the data is in different schemas/datasets of the same database/project
     klaviyo_union_databases: ['klaviyo_usa','klaviyo_canada'] # use this if the data is in different databases/projects but uses the same schema name
 ```
@@ -170,7 +172,7 @@ vars:
 
 #### Passthrough Columns
 
-Additionally, the Klaviyo package includes all source columns defined in the [macros folder](https://github.com/fivetran/dbt_klaviyo_source/tree/main/macros) of the source package. We highly recommend including custom fields in this package as models now only bring in the standard fields for the `EVENT` and `PERSON` tables.
+Additionally, the Klaviyo package includes all source columns defined in the [macros folder](https://github.com/fivetran/dbt_klaviyo/tree/main/macros) of the source package. We highly recommend including custom fields in this package as models now only bring in the standard fields for the `EVENT` and `PERSON` tables.
 
 You can add more columns using our passthrough column variables. These variables allow for the passthrough fields to be aliased (`alias`) and casted (`transform_sql`) if desired, although it is not required. Datatype casting is configured via a SQL snippet within the `transform_sql` key. You may add the desired SQL snippet while omitting the `as field_name` part of the casting statement - this will be dealt with by the alias attribute - and your custom passthrough fields will be casted accordingly.
 
@@ -201,12 +203,10 @@ By default, this package will build the Klaviyo final models within a schema tit
 
 ...
 models:
-  klaviyo:
-    +schema: my_new_schema_name # leave blank for just the target_schema
-    intermediate:
-      +schema: my_new_schema_name # leave blank for just the target_schema
-  klaviyo_source:
-    +schema: my_new_schema_name # leave blank for just the target_schema
+    klaviyo:
+      +schema: my_new_schema_name # Leave +schema: blank to use the default target_schema.
+      staging:
+        +schema: my_new_schema_name # Leave +schema: blank to use the default target_schema.
 ```
 
 > Note that if your profile does not have permissions to create schemas in your warehouse, you can set each `+schema` to blank. The package will then write all tables to your pre-existing target schema.
@@ -233,12 +233,9 @@ Fivetran offers the ability for you to orchestrate your dbt project through [Fiv
 ## Does this package have dependencies?
 This dbt package is dependent on the following dbt packages. These dependencies are installed by default within this package. For more information on the following packages, refer to the [dbt hub](https://hub.getdbt.com/) site.
 > IMPORTANT: If you have any of these dependent packages in your own `packages.yml` file, we highly recommend that you remove them from your root `packages.yml` to avoid package version conflicts.
-    
+
 ```yml
 packages:
-    - package: fivetran/klaviyo_source
-      version: [">=0.8.0", "<0.9.0"]
-
     - package: fivetran/fivetran_utils
       version: [">=0.4.0", "<0.5.0"]
 
