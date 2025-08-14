@@ -1,7 +1,7 @@
 with flow as (
 
     select *
-    from {{ var('flow') }}
+    from {{ ref('stg_klaviyo__flow') }}
 ),
 
 flow_metrics as (

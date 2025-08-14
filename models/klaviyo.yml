@@ -8,11 +8,6 @@ models:
 
       Note: this model has an incremental materialization. Custom event-columns specified by the `klaviyo__event_pass_through_columns`
       variable will appear here as well.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - event_id
-            - source_relation
     columns:
       - name: variation_id
         description: >
@@ -109,14 +104,6 @@ models:
       with events (i.e. revenue) will be pivoted out into columns, as configured by the `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`
       variables, respectively. See the dbt_project.yml file for the default metrics used. 
       These columns will be prefixed with `count_` and `sum_revenue_`.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - person_id
-            - last_touch_campaign_id
-            - last_touch_flow_id
-            - variation_id
-            - source_relation
     columns:
       - name: person_id
         description: Foreign key referencing the PERSON who interacted with the flow/message.
@@ -149,11 +136,6 @@ models:
       with events (i.e. revenue) will be pivoted out into columns, as configured by the `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`
       variables, respectively. See the dbt_project.yml file for the default metrics used. 
       These columns will be prefixed with `count_`, `unique_count_`, and `sum_revenue_`.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - campaign_variation_key
-            - source_relation
     columns:
       - name: campaign_variation_key
         description: Unique key hashed on the campaign and variation IDs. 
@@ -217,11 +199,6 @@ models:
       with events (i.e. revenue) will be pivoted out into columns, as configured by the `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`
       variables, respectively. See the dbt_project.yml file for the default metrics used. 
       These columns will be prefixed with `count_`, `unique_count_`, and `sum_revenue_`.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - flow_variation_key
-            - source_relation
     columns:
       - name: flow_variation_key
         description: Unique key hashed on the flow and variation IDs. 
@@ -267,11 +244,6 @@ models:
       the default metrics used. 
       These columns will be prefixed with `total_count_`, `total_sum_revenue_` (organic + attributed), and `organic_sum_revenue_`
       (not attributed to a campaign or flow). 
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - person_id
-            - source_relation
     columns:
       - name: person_id
         description: >

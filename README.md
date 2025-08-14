@@ -17,7 +17,7 @@
 </p>
 
 ## What does this dbt package do?
-- Produces modeled tables that leverage Klaviyo data from [Fivetran's connector](https://fivetran.com/docs/applications/klaviyo) in the format described by [this ERD](https://fivetran.com/docs/applications/klaviyo#schemainformation) and builds off the output of our [Klaviyo source package](https://github.com/fivetran/dbt_klaviyo_source).
+- Produces modeled tables that leverage Klaviyo data from [Fivetran's connector](https://fivetran.com/docs/applications/klaviyo) in the format described by [this ERD](https://fivetran.com/docs/applications/klaviyo#schemainformation).
 
 - Enables you to better understand the efficacy of your email and SMS marketing efforts. It achieves this by:
   - Performing last-touch attribution on events in order to properly credit campaigns and flows with conversions
@@ -62,7 +62,7 @@ Include the following klaviyo package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/klaviyo
-    version: [">=0.9.0", "<0.10.0"]
+    version: [">=1.0.0", "<1.1.0"]
 ```
 ### Step 3: Define database and schema variables
 By default, this package runs using your destination and the `klaviyo` schema. If this is not where your Klaviyo data is (for example, if your Klaviyo schema is named `klaviyo_fivetran`), add the following configuration to your root `dbt_project.yml` file:
@@ -73,8 +73,7 @@ vars:
   klaviyo_schema: your_schema_name
 ```
 ### (Optional) Step 4: Additional configurations
-
-<details><summary>Expand for configurations</summary>
+<details open><summary>Expand/Collapse details</summary>
 
 #### Unioning Multiple Klaviyo Connections
 If you have multiple Klaviyo connections in Fivetran and would like to use this package on all of them simultaneously, we have provided functionality to do so. The package will union all of the data together and pass the unioned table into the transformations. You will be able to see which source it came from in the `source_relation` column of each model. To use this functionality, you will need to set either (**note that you cannot use both**) the `klaviyo_union_schemas` or `klaviyo_union_databases` variables:
@@ -84,7 +83,7 @@ If you have multiple Klaviyo connections in Fivetran and would like to use this 
 ...
 config-version: 2
 vars:
-  klaviyo_source:
+  klaviyo:
     klaviyo_union_schemas: ['klaviyo_usa','klaviyo_canada'] # use this if the data is in different schemas/datasets of the same database/project
     klaviyo_union_databases: ['klaviyo_usa','klaviyo_canada'] # use this if the data is in different databases/projects but uses the same schema name
 ```
@@ -201,12 +200,10 @@ By default, this package will build the Klaviyo final models within a schema tit
 
 ...
 models:
-  klaviyo:
-    +schema: my_new_schema_name # leave blank for just the target_schema
-    intermediate:
-      +schema: my_new_schema_name # leave blank for just the target_schema
-  klaviyo_source:
-    +schema: my_new_schema_name # leave blank for just the target_schema
+    klaviyo:
+      +schema: my_new_schema_name # Leave +schema: blank to use the default target_schema.
+      staging:
+        +schema: my_new_schema_name # Leave +schema: blank to use the default target_schema.
 ```
 
 > Note that if your profile does not have permissions to create schemas in your warehouse, you can set each `+schema` to blank. The package will then write all tables to your pre-existing target schema.
@@ -236,9 +233,6 @@ This dbt package is dependent on the following dbt packages. These dependencies 
 
 ```yml
 packages:
-    - package: fivetran/klaviyo_source
-      version: [">=0.8.0", "<0.9.0"]
-
     - package: fivetran/fivetran_utils
       version: [">=0.4.0", "<0.5.0"]
 
