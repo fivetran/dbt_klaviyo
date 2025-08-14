@@ -9,7 +9,7 @@ dispatch:
 
 vars:
   klaviyo_schema: klaviyo_integration_tests
-  klaviyo_source: 
+  klaviyo: 
     klaviyo_campaign_identifier: "campaign"
     klaviyo_event_identifier: "event"
     klaviyo_flow_identifier: "flow"
@@ -33,5 +33,4 @@ seeds:
 
 flags:
   send_anonymous_usage_stats: False
-
   use_colors: True

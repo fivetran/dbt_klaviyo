@@ -1,5 +1,5 @@
 
-# Klaviyo Transformation dbt Package ([Docs](https://fivetran.github.io/dbt_klaviyo/))
+# Klaviyo dbt Package ([Docs](https://fivetran.github.io/dbt_klaviyo/))
 
 <p align="left">
     <a alt="License"
