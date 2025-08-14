@@ -1,4 +1,3 @@
-
 # Klaviyo dbt Package ([Docs](https://fivetran.github.io/dbt_klaviyo/))
 
 <p align="left">
@@ -64,6 +63,9 @@ packages:
   - package: fivetran/klaviyo
     version: [">=1.0.0", "<1.1.0"]
 ```
+
+> All required sources and staging models are now bundled into this transformation package. Do not include `fivetran/klaviyo_source` in your `packages.yml` since this package has been deprecated.
+
 ### Step 3: Define database and schema variables
 By default, this package runs using your destination and the `klaviyo` schema. If this is not where your Klaviyo data is (for example, if your Klaviyo schema is named `klaviyo_fivetran`), add the following configuration to your root `dbt_project.yml` file:
 
@@ -72,6 +74,7 @@ vars:
   klaviyo_database: your_database_name
   klaviyo_schema: your_schema_name
 ```
+
 ### (Optional) Step 4: Additional configurations
 <details open><summary>Expand/Collapse details</summary>
 
