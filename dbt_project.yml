@@ -3,10 +3,6 @@ version: '1.0.0'
 config-version: 2
 require-dbt-version: [">=1.3.0", "<2.0.0"]
 
-dispatch:
-  - macro_namespace: dbt_utils
-    search_order: ['spark_utils', 'dbt_utils']
-
 vars:
   klaviyo:
     event_table: "{{ source('klaviyo', 'event') }}"
@@ -47,6 +43,9 @@ vars:
 
     klaviyo__event_pass_through_columns: []
     klaviyo__person_pass_through_columns: []
+
+  dbt_utils_dispatch_list: ['spark_utils', 'dbt_utils']
+  fivetran_utils_dispatch_list: [spark_utils]
 
 models:
   klaviyo:
