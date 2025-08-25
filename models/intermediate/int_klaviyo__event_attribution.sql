@@ -100,18 +100,70 @@ attribute as (
     from last_touches 
 ),
 
-final as (
-
+order_seq as (
     select
-        *,
+        attribute.*,
+        -- stable ordering in case of same-time events
+        sum(case when lower(attribute.type) = 'placed order' then 1 else 0 end) over (
+        partition by attribute.person_id, attribute.source_relation
+        order by attribute.occurred_at, attribute.unique_event_id
+        rows between unbounded preceding and current row
+        ) as placed_order_n
+    from attribute
+),
 
-        -- get whether the event is attributed to a flow or campaign
-        coalesce(touch_type, first_value(touch_type) over(
-            partition by person_id, source_relation, touch_session order by occurred_at asc rows between unbounded preceding and current row)) 
+placed_index as (
+    -- one row per Placed Order carrying the touch to copy
+    select
+        order_seq.person_id,
+        order_seq.source_relation,
+        order_seq.placed_order_n,
+        order_seq.last_touch_id as placed_order_touch_id
+    from order_seq
+    where lower(order_seq.type) = 'placed order'
+    ),
 
-            as session_touch_type -- if the session events qualified for attribution, extract the type of touch they are attributed to
+adjust_orders as (
+    select
+        order_seq.*,
+        case
+            when 
+                lower(order_seq.type) in ('fulfilled order', 'fulfilled partial order', 'delivered shipment', 'marked out for delivery', 'confirmed shipment', 'refunded order') 
+                and order_seq.placed_order_n > 0
+            then placed_index.placed_order_touch_id
+            else order_seq.last_touch_id
+            end as adjusted_last_touch_id
+    from order_seq
+    left join placed_index
+        on placed_index.person_id = order_seq.person_id
+    and placed_index.source_relation = order_seq.source_relation
+    and placed_index.placed_order_n = order_seq.placed_order_n
+),
 
-    from attribute 
+final as (
+    select
+        -- pull the base event columns so we can avoid '*' and drop only the old last_touch_id
+        {{ dbt_utils.star(from=ref('stg_klaviyo__event')) }},
+        -- derived columns from earlier CTEs (excluding the old last_touch_id)
+        adjust_orders.touch_id,
+        adjust_orders.touch_type,
+        adjust_orders.touch_session,
+        adjust_orders.session_start_at,
+        adjust_orders.session_event_type,
+
+        -- expose the fixed attribution ONCE, under the canonical name
+        adjust_orders.adjusted_last_touch_id as last_touch_id,
+
+        -- session-level touch type (unchanged)
+        coalesce(
+        adjust_orders.touch_type,
+        first_value(adjust_orders.touch_type) over (
+            partition by adjust_orders.person_id, adjust_orders.source_relation, adjust_orders.touch_session
+            order by adjust_orders.occurred_at asc
+            rows between unbounded preceding and current row
+        )
+        ) as session_touch_type
+    from adjust_orders
 )
 
 select * from final

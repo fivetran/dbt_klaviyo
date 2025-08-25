@@ -1,3 +1,9 @@
+# dbt_klaviyo v1.0.1-a1
+[PR #53](https://github.com/fivetran/dbt_klaviyo/pull/53) includes the following updates:
+
+## Bug Fixes
+- Updated attribution for order lifecycle events. `Fulfilled Order` and similar order-related events now inherit the touch from their corresponding `Placed Order`, rather than the nearest intervening event.
+
 # dbt_klaviyo v1.0.0
 
 [PR #51](https://github.com/fivetran/dbt_klaviyo/pull/51) includes the following updates:
