@@ -2,7 +2,7 @@
 [PR #53](https://github.com/fivetran/dbt_klaviyo/pull/53) includes the following updates:
 
 ## Bug Fixes
-- Updated attribution for Shopify order lifecycle events. The following event types now inherit the touch from their corresponding `Placed Order` event, rather than the nearest intervening event.
+- Updated attribution logic for Shopify order lifecycle events. These events now inherit attribution from their associated `Placed Order` event rather than the nearest intervening event. If no `Placed Order` is found within 3 months, the default attribution behavior is applied.
   - `Cancelled Order`
   - `Confirmed Shipment`
   - `Delivered Shipment`

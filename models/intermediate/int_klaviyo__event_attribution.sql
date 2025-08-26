@@ -132,7 +132,7 @@ adjust_orders as (
                 -- list of possible Shopify order events --> https://help.klaviyo.com/hc/en-us/articles/115005080447
                 lower(order_seq.type) in ('fulfilled order', 'fulfilled partial order', 'delivered shipment', 'marked out for delivery', 'confirmed shipment', 'cancelled order', 'refunded order') 
                 and order_seq.placed_order_group > 0
-                and {{ dbt.datediff('placed_order_index.placed_order_occurred_at', 'order_seq.occurred_at', 'month') }} <= 3
+                and coalesce({{ dbt.datediff('placed_order_index.placed_order_occurred_at', 'order_seq.occurred_at', 'month') }}, 100) <= 3
             then placed_order_index.placed_order_touch_id
             else order_seq.last_touch_id
         end as adjusted_last_touch_id
