@@ -112,12 +112,13 @@ order_seq as (
     from attribute
 ),
 
-placed_index as (
+placed_order_index as (
     -- one row per Placed Order carrying the touch to copy
     select
         order_seq.person_id,
         order_seq.source_relation,
         order_seq.placed_order_group,
+        order_seq.occurred_at as placed_order_occurred_at,
         order_seq.last_touch_id as placed_order_touch_id
     from order_seq
     where lower(order_seq.type) = 'placed order'
@@ -127,17 +128,19 @@ adjust_orders as (
     select
         order_seq.*,
         case
-            when 
-                lower(order_seq.type) in ('fulfilled order', 'fulfilled partial order', 'delivered shipment', 'marked out for delivery', 'confirmed shipment', 'refunded order') 
+            when
+                -- list of possible Shopify order events --> https://help.klaviyo.com/hc/en-us/articles/115005080447
+                lower(order_seq.type) in ('fulfilled order', 'fulfilled partial order', 'delivered shipment', 'marked out for delivery', 'confirmed shipment', 'cancelled order', 'refunded order') 
                 and order_seq.placed_order_group > 0
-            then placed_index.placed_order_touch_id
+                and {{ dbt.datediff('placed_order_index.placed_order_occurred_at', 'order_seq.occurred_at', 'month') }} <= 3
+            then placed_order_index.placed_order_touch_id
             else order_seq.last_touch_id
         end as adjusted_last_touch_id
     from order_seq
-    left join placed_index
-        on placed_index.person_id = order_seq.person_id
-    and placed_index.source_relation = order_seq.source_relation
-    and placed_index.placed_order_group = order_seq.placed_order_group
+    left join placed_order_index
+        on placed_order_index.person_id = order_seq.person_id
+    and placed_order_index.source_relation = order_seq.source_relation
+    and placed_order_index.placed_order_group = order_seq.placed_order_group
 ),
 
 final as (

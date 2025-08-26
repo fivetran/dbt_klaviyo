@@ -2,7 +2,14 @@
 [PR #53](https://github.com/fivetran/dbt_klaviyo/pull/53) includes the following updates:
 
 ## Bug Fixes
-- Updated attribution for order lifecycle events. `Fulfilled Order` and similar order-related events now inherit the touch from their corresponding `Placed Order`, rather than the nearest intervening event.
+- Updated attribution for Shopify order lifecycle events. The following event types now inherit the touch from their corresponding `Placed Order` event, rather than the nearest intervening event.
+  - `Cancelled Order`
+  - `Confirmed Shipment`
+  - `Delivered Shipment`
+  - `Fulfilled Order`
+  - `Fulfilled Partial Order`
+  - `Marked Out for Delivery`
+  - `Refunded Order`
 
 # dbt_klaviyo v1.0.0
 
