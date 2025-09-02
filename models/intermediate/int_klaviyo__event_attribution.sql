@@ -91,6 +91,7 @@ inherited as (
     from normalized_children
     left join extracted_touch
         on normalized_children.extracted_event_id = extracted_touch.extracted_event_id
+    where normalized_children.extracted_event_id is not null 
 ),
 
 {% if using_session_fallback %}
