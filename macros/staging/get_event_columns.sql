@@ -14,7 +14,8 @@
     {"name": "timestamp", "datatype": dbt.type_timestamp()},
     {"name": "type", "datatype": dbt.type_string()},
     {"name": "uuid", "datatype": dbt.type_string()},
-    {"name": "property_value", "datatype": dbt.type_string()}
+    {"name": "property_value", "datatype": dbt.type_string()},
+    {"name": "property_attribution", "datatype": dbt.type_string()}
 ] %}
 
 {{ fivetran_utils.add_pass_through_columns(columns, var('klaviyo__event_pass_through_columns')) }}

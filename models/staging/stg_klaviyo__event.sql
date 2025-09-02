@@ -36,6 +36,7 @@ rename as (
         type,
         uuid,
         {{ klaviyo.remove_string_from_numeric('property_value') }} as numeric_value,
+        property_attribution as event_attribution,
         cast(_fivetran_synced as {{ dbt.type_timestamp() }} ) as _fivetran_synced,
         source_relation
         {{ fivetran_utils.fill_pass_through_columns('klaviyo__event_pass_through_columns') }}
