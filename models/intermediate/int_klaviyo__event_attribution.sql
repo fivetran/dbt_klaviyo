@@ -113,18 +113,21 @@ create_sessions as (
     from events
 ),
 
+-- "session start" refers to the event in a "touch session" that is already attributed with a campaign or flow by Klaviyo
+-- a new event that is attributed with a campaign/flow will trigger a new session, so there will only be one already-attributed event per each session 
+-- events that are missing attributions will borrow data from the event that triggered the session, if they are in the lookback window (see `attribute` CTE)
 session_boundaries as (
 
-    select
+    select 
         *,
-        min(occurred_at) over(
-            partition by person_id, source_relation, touch_session
-        ) as session_start_at,
+        -- when did the touch session begin?
+        min(occurred_at) over(partition by person_id, source_relation, touch_session) as session_start_at,
+
+        -- get the kind of metric/event that triggered the attribution session, in order to decide 
+        -- to use the sms or email lookback value. 
         first_value(type) over(
-            partition by person_id, source_relation, touch_session
-            order by occurred_at asc
-            rows between unbounded preceding and current row
-        ) as session_event_type
+            partition by person_id, source_relation, touch_session order by occurred_at asc rows between unbounded preceding and current row) as session_event_type
+
     from create_sessions
 ),
 
