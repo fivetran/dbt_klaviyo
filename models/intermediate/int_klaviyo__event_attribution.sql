@@ -44,7 +44,9 @@ with events as (
 
 children as (
 
-    select *
+    select
+        *,
+        replace(event_attribution, '$', '') as cleaned_event_attribution -- bigquery doesn't allow the '$'
     from events
     where event_attribution is not null
         and touch_id is null
@@ -54,7 +56,8 @@ parse_children as (
 
     select
         *,
-        {{ fivetran_utils.json_parse('event_attribution', ['$attributed_event_id']) }} as extracted_id_raw
+        {{ fivetran_utils.json_parse('cleaned_event_attribution', ['attributed_event_id']) }} as extracted_id_raw
+
     from children
 ),
 
