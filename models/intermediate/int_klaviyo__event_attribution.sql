@@ -13,7 +13,7 @@ with events as (
         *,
         -- no event will be attributed to both a campaign and flow
         coalesce(campaign_id, flow_id) as touch_id,
-        case 
+        case
             when campaign_id is not null then 'campaign' 
             when flow_id is not null then 'flow' 
         else null end as touch_type -- definition: touch = interaction with campaign/flow
@@ -60,7 +60,7 @@ normalized_children as (
 
     select
         *,
-        nullif(replace(replace(extracted_id_raw, '"', ''), "''", ''), '') as extracted_event_id
+        nullif(replace(extracted_id_raw, '"', ''), '') as extracted_event_id
     from parse_children
 ),
 
@@ -68,12 +68,8 @@ extracted_touch as (
 
     select
         event_id as extracted_event_id,
-        coalesce(campaign_id, flow_id) as extracted_touch_id,
-        case 
-            when campaign_id is not null then 'campaign'
-            when flow_id is not null then 'flow'
-            else null
-        end as extracted_touch_type,
+        touch_id as extracted_touch_id,
+        touch_type as extracted_touch_type,
         type as extracted_event_type
     from events
 ),
@@ -90,23 +86,22 @@ inherited as (
         on normalized_children.extracted_event_id = extracted_touch.extracted_event_id
 ),
 
-eligible_tagged as (
-
+-- sessionize events based on attribution eligibility -- is it the right kind of event, and does it have a campaign or flow?
+create_sessions as (
     select
         *,
-        sum(
-            case 
-                when touch_id is not null
-                {% if var('klaviyo__eligible_attribution_events') != [] %}
-                    and lower(type) in {{ "('" ~ (var('klaviyo__eligible_attribution_events') | join("', '")) ~ "')" }}
-                {% endif %}
-                then 1 else 0
-            end
-        ) over (
-            partition by person_id, source_relation
-            order by occurred_at asc
-            rows between unbounded preceding and current row
-        ) as touch_session
+        -- default klaviyo__event_attribution_filter limits attribution-eligible events to to email opens, email clicks, and sms opens
+        -- https://help.klaviyo.com/hc/en-us/articles/115005248128
+
+        -- events that come with flow/campaign attributions (and are eligible event types) will create new sessions.
+        -- non-attributed events that come in afterward will be batched into the same attribution-session
+        sum(case when touch_id is not null
+        {% if var('klaviyo__eligible_attribution_events') != [] %}
+            and lower(type) in {{ "('" ~ (var('klaviyo__eligible_attribution_events') | join("', '")) ~ "')" }}
+        {% endif %}
+            then 1 else 0 end) over (
+                partition by person_id, source_relation order by occurred_at asc rows between unbounded preceding and current row) as touch_session 
+
     from events
 ),
 
@@ -122,7 +117,7 @@ session_boundaries as (
             order by occurred_at asc
             rows between unbounded preceding and current row
         ) as session_event_type
-    from eligible_tagged
+    from create_sessions
 ),
 
 session_calculated as (

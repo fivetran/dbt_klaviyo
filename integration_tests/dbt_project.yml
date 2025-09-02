@@ -8,7 +8,7 @@ dispatch:
     search_order: ['spark_utils', 'dbt_utils']
 
 vars:
-  klaviyo_schema: klaviyo_integration_tests
+  klaviyo_schema: zz_klaviyo #klaviyo_integration_tests
   klaviyo: 
     klaviyo_campaign_identifier: "campaign"
     klaviyo_event_identifier: "event"
@@ -30,6 +30,9 @@ seeds:
         PHONE_NUMBER: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
     flow:
       +quote_columns: "{{ true if target.type == 'redshift' else false }}"
+    event:
+      +column_types:
+        EVENT_ATTRIBUTION: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
 
 flags:
   send_anonymous_usage_stats: False
