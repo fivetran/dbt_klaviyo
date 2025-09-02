@@ -1,4 +1,4 @@
-# dbt_klaviyo v1.1.0-a1
+# dbt_klaviyo v1.1.0-a2
 [PR #53](https://github.com/fivetran/dbt_klaviyo/pull/53) includes the following updates:
 
 ## Breaking Change
@@ -7,6 +7,21 @@
 - Updated attribution logic in `int_klaviyo__event_attribution` to use the `property_attribution` field from the `EVENT` source.  
   - This replaces the previous calculation method.  
   - If the `property_attribution` field is not available or you want a fallback for when it is null, set the variable `using_session_fallback: true` in your `dbt_project.yml` to coalesce the `last_touch_*` fields back to the prior method.
+- Rolled back the updates from v1.1.0-a1.
+
+# dbt_klaviyo v1.1.0-a1
+[PR #53](https://github.com/fivetran/dbt_klaviyo/pull/53) includes the following updates:
+
+## Breaking Change
+> A `--full-refresh` is required when upgrading to ensure the updates are retroactively applied.
+- Updated attribution logic for Shopify order lifecycle events. These events now inherit attribution from their associated `Placed Order` event rather than the nearest intervening event. If no `Placed Order` is found within 3 months, the default attribution behavior is applied.
+  - `Cancelled Order`
+  - `Confirmed Shipment`
+  - `Delivered Shipment`
+  - `Fulfilled Order`
+  - `Fulfilled Partial Order`
+  - `Marked Out for Delivery`
+  - `Refunded Order`
 
 # dbt_klaviyo v1.0.0
 
