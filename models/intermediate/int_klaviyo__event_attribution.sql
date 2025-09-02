@@ -7,6 +7,8 @@
     )
 }}
 
+{% set using_session_fallback = var('using_session_fallback', false) %}
+
 with events as (
 
     select 
@@ -52,7 +54,7 @@ parse_children as (
 
     select
         *,
-        {{ fivetran_utils.json_extract('event_attribution', 'attributed_event_id') }} as extracted_id_raw
+        {{ fivetran_utils.json_parse('event_attribution', ['$attributed_event_id']) }} as extracted_id_raw
     from children
 ),
 
@@ -78,6 +80,8 @@ inherited as (
 
     select
         normalized_children.unique_event_id,
+        normalized_children.occurred_at,
+        normalized_children.type as event_type,
         extracted_touch.extracted_touch_id,
         extracted_touch.extracted_touch_type,
         extracted_touch.extracted_event_type
@@ -86,6 +90,7 @@ inherited as (
         on normalized_children.extracted_event_id = extracted_touch.extracted_event_id
 ),
 
+{% if using_session_fallback %}
 -- sessionize events based on attribution eligibility -- is it the right kind of event, and does it have a campaign or flow?
 create_sessions as (
     select
@@ -160,28 +165,33 @@ session_calculated as (
         ) as calculated_touch_type
     from session_boundaries
 ),
+{% endif %}
 
 final as (
     select
         events.*,
-        session_calculated.session_start_at,
-        session_calculated.session_event_type,
 
-        nullif(coalesce(
-            inherited.extracted_touch_id,
-            session_calculated.calculated_touch_id
-        ), '') as last_touch_id,
-        nullif(coalesce(
-            inherited.extracted_touch_type,
-            session_calculated.calculated_touch_type
-        ), '') as session_touch_type
+        {% if using_session_fallback %}
+        coalesce(inherited.occurred_at, session_calculated.session_start_at) as session_start_at,
+        coalesce(inherited.event_type, session_calculated.session_event_type) as session_event_type,
+        coalesce(inherited.extracted_touch_id, session_calculated.calculated_touch_id) as last_touch_id,
+        coalesce(inherited.extracted_touch_type, session_calculated.calculated_touch_type) as session_touch_type
+        {% else %}
+        inherited.occurred_at as session_start_at,
+        inherited.event_type as session_event_type,
+        inherited.extracted_touch_id as last_touch_id,
+        inherited.extracted_touch_type as session_touch_type
+        {% endif %}
+
     from events
 
     left join inherited
         on events.unique_event_id = inherited.unique_event_id
 
+    {% if using_session_fallback %}
     left join session_calculated
         on events.unique_event_id = session_calculated.unique_event_id
+    {% endif %}
 )
 
 select *
