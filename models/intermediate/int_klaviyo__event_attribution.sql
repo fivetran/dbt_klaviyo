@@ -147,40 +147,21 @@ session_calculated as (
 
     select
         *,
-        coalesce(
-            touch_id,
+        -- klaviyo uses different lookback windows for email and sms events
+        -- default email lookback = 5 days (120 hours) -> https://help.klaviyo.com/hc/en-us/articles/115005248128#conversion-tracking1
+        -- default sms lookback: 1 day (24 hours -> https://help.klaviyo.com/hc/en-us/articles/115005248128#sms-conversion-tracking7
+
+        coalesce(touch_id, -- use pre-attributed flow/campaign if provided
             case 
-                when {{ dbt.datediff('session_start_at', 'occurred_at', 'hour') }} <= (
-                    case
-                        when lower(session_event_type) like '%sms%' then {{ var('klaviyo__sms_attribution_lookback', 24) }}
-                        else {{ var('klaviyo__email_attribution_lookback', 120) }}
-                    end
-                )
-                then first_value(touch_id) over (
-                    partition by person_id, source_relation, touch_session
-                    order by occurred_at asc
-                    rows between unbounded preceding and current row
-                )
-                else null
-            end
-        ) as calculated_touch_id,
-        coalesce(
-            touch_type,
-            case 
-                when {{ dbt.datediff('session_start_at', 'occurred_at', 'hour') }} <= (
-                    case
-                        when lower(session_event_type) like '%sms%' then {{ var('klaviyo__sms_attribution_lookback', 24) }}
-                        else {{ var('klaviyo__email_attribution_lookback', 120) }}
-                    end
-                )
-                then first_value(touch_type) over (
-                    partition by person_id, source_relation, touch_session
-                    order by occurred_at asc
-                    rows between unbounded preceding and current row
-                )
-                else null
-            end
-        ) as calculated_touch_type
+            when {{ dbt.datediff('session_start_at', 'occurred_at', 'hour') }} <= (
+                case 
+                when lower(session_event_type) like '%sms%' then {{ var('klaviyo__sms_attribution_lookback') }}
+                else {{ var('klaviyo__email_attribution_lookback') }} end
+            ) -- if the events fall within the lookback window, attribute
+            then first_value(touch_id) over (
+                partition by person_id, source_relation, touch_session order by occurred_at asc rows between unbounded preceding and current row)
+            else null end) as calculated_last_touch_id -- session qualified for attribution -> we will call this "last touch"
+
     from session_boundaries
 ),
 {% endif %}
@@ -197,8 +178,12 @@ final as (
         {% else %}
         session_calculated.session_start_at as session_start_at,
         session_calculated.session_event_type as session_event_type,
-        session_calculated.calculated_touch_id as last_touch_id,
-        session_calculated.calculated_touch_type as session_touch_type
+        session_calculated.calculated_last_touch_id as last_touch_id,
+        -- get whether the event is attributed to a flow or campaign
+        coalesce(session_calculated.touch_type, first_value(session_calculated.touch_type) over(
+            partition by session_calculated.person_id, session_calculated.source_relation, session_calculated.touch_session
+            order by session_calculated.occurred_at asc rows between unbounded preceding and current row)) 
+            as session_touch_type
         {% endif %}
 
     from events
