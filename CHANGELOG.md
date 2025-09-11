@@ -6,15 +6,15 @@
   - Provides better accuracy and consistency with Klaviyo’s platform reporting
   - Eliminates discrepancies between package results and Klaviyo UI metrics
   - Leverages Klaviyo’s sophisticated internal attribution logic
-  - No configuration required—works out of the box  
+  - No configuration required
   - For background on why this method was chosen, see the [DECISIONLOG.md](https://github.com/fivetran/dbt_klaviyo/blob/main/DECISIONLOG.md).
 
 ## Breaking Changes
-- **Session-based attribution is now disabled by default**
+- **Native attribution is now enabled by default** (`using_native_attribution: true`)
   - Previous versions used custom session-based calculations as the primary method
-  - This approach sometimes produced results that differed from Klaviyo’s platform
+  - This approach sometimes produced results that differed from Klaviyo's platform
   - The session-based method remains available as an optional fallback for users who need custom attribution logic or are migrating from older package versions
-  - To continue using session-based attribution, set `using_event_sessions: true` in your `dbt_project.yml`  
+  - To continue using session-based attribution, set `using_native_attribution: false` in your `dbt_project.yml`  
   - See the [README.md](https://github.com/fivetran/dbt_klaviyo/blob/main/README.md#event-attribution) for configuration details and examples, and the [DECISIONLOG.md](https://github.com/fivetran/dbt_klaviyo/blob/main/DECISIONLOG.md) for context behind this change.
 
 ## Documentation Updates
@@ -31,7 +31,7 @@
 
 - Updated attribution logic in `int_klaviyo__event_attribution` to use the `property_attribution` field from the `EVENT` source.  
   - This replaces the previous calculation method.  
-  - If the `property_attribution` field is not available or you want a fallback for when it is null, set the variable `using_event_sessions: true` in your `dbt_project.yml` to coalesce the `last_touch_*` fields back with the previous package-calculated attribution method.
+  - If the `property_attribution` field is not available or you want a fallback for when it is null, set the variable `using_native_attribution: false` in your `dbt_project.yml` to coalesce the `last_touch_*` fields back with the previous package-calculated attribution method.
 - Rolled back the updates from v1.1.0-a1.
 
 # dbt_klaviyo v1.1.0-a1

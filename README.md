@@ -102,7 +102,7 @@ This package primarily uses Klaviyo's native `property_attribution` (renamed to 
 - No additional configuration required
 
 **Session-Based Attribution Fallback:**
-For users who need custom attribution logic or are migrating from older package versions, an optional session-based attribution method is available. This method is **disabled by default** but can be enabled by setting `using_event_sessions: true`.
+For users who need custom attribution logic or are migrating from older package versions, an optional session-based attribution method is available. This method is disabled by default if your EVENT source contains the `property_attribution` field but can be enabled by setting `using_native_attribution: false`. If you do not have the `property_attribution` field, this method will be used by default.
 
 When enabled, this method uses configurable lookback windows:
 - **120 hours (5 days)** for email events  
@@ -112,7 +112,7 @@ When enabled, this method uses configurable lookback windows:
 # dbt_project.yml
 vars:
   klaviyo:
-    using_event_sessions: true # Enable session-based attribution fallback
+    using_native_attribution: false # Disable native attribution to use session-based fallback
     klaviyo__email_attribution_lookback: 120 # Hours for email attribution
     klaviyo__sms_attribution_lookback: 24 # Hours for SMS attribution
 ```
@@ -123,7 +123,7 @@ vars:
 
 #### Attribution-Eligible Event Types (Session-Based Fallback Only)
 
-> **Note:** This configuration only applies when `using_event_sessions: true` is enabled. The primary attribution method uses Klaviyo's native attribution without additional filtering.
+> **Note:** This configuration only applies when session-based attribution is used. The primary attribution method uses Klaviyo's native attribution without additional filtering.
 
 When using the session-based attribution fallback, the package will only credit email opens, email clicks, and SMS opens with conversions by default. This filter determines which event types can trigger new attribution sessions and is aligned with Klaviyo's internal [attribution model](https://help.klaviyo.com/hc/en-us/articles/115005248128).
 
