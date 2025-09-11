@@ -7,7 +7,17 @@
     )
 }}
 
-{% set using_session_fallback = var('using_session_fallback', false) %}
+-- Use var('using_native_attribution') if it exists, otherwise determine if we can use native attribution.
+{% if execute and flags.WHICH in ('run', 'build') and var('using_native_attribution', none) is none %}
+    {% set event_columns = adapter.get_columns_in_relation(source('klaviyo', 'event')) %}
+    {% set event_column_names = event_columns | map(attribute='name') | map('lower') | list %}
+    {% set using_native_attribution = 'property_attribution' in event_column_names %}
+{% else %}
+    {% set using_native_attribution = var('using_native_attribution', true) %}
+{% endif %}
+
+-- For debugging. Remove before merge.
+{{ print('***************** using_native_attribution: ' ~using_native_attribution) }}
 
 with events as (
 
@@ -42,6 +52,7 @@ with events as (
     {% endif %}
 ),
 
+{% if using_native_attribution %}
 children as (
 
     select
@@ -94,7 +105,7 @@ inherited as (
     where normalized_children.extracted_event_id is not null 
 ),
 
-{% if using_session_fallback %}
+{% else %} -- using_native_attribution = false
 -- sessionize events based on attribution eligibility -- is it the right kind of event, and does it have a campaign or flow?
 create_sessions as (
     select
@@ -178,24 +189,24 @@ final as (
     select
         events.*,
 
-        {% if using_session_fallback %}
-        coalesce(inherited.occurred_at, session_calculated.session_start_at) as session_start_at,
-        coalesce(inherited.event_type, session_calculated.session_event_type) as session_event_type,
-        coalesce(inherited.extracted_touch_id, session_calculated.calculated_touch_id) as last_touch_id,
-        coalesce(inherited.extracted_touch_type, session_calculated.calculated_touch_type) as session_touch_type
-        {% else %}
+        {% if using_native_attribution %}
         inherited.occurred_at as session_start_at,
         inherited.event_type as session_event_type,
         inherited.extracted_touch_id as last_touch_id,
         inherited.extracted_touch_type as session_touch_type
+        {% else %}
+        session_calculated.session_start_at as session_start_at,
+        session_calculated.session_event_type as session_event_type,
+        session_calculated.calculated_touch_id as last_touch_id,
+        session_calculated.calculated_touch_type as session_touch_type
         {% endif %}
 
     from events
 
+    {% if using_native_attribution %}
     left join inherited
         on events.unique_event_id = inherited.unique_event_id
-
-    {% if using_session_fallback %}
+    {% else %}
     left join session_calculated
         on events.unique_event_id = session_calculated.unique_event_id
     {% endif %}

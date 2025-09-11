@@ -91,35 +91,43 @@ vars:
     klaviyo_union_databases: ['klaviyo_usa','klaviyo_canada'] # use this if the data is in different databases/projects but uses the same schema name
 ```
 
-#### Attribution Lookback Window
+#### Event Attribution
 
-This package attributes events to campaigns and flows via a last-touch attribution model in line with Klaviyo's internal [attribution](https://help.klaviyo.com/hc/en-us/articles/115005248128). This is necessary to perform, as Klaviyo does not automatically send attribution data for certain metrics. Read more about how the package's attribution works [here](https://github.com/fivetran/dbt_klaviyo/blob/main/models/intermediate/int_klaviyo.yml#L4) and see the source code [here](https://github.com/fivetran/dbt_klaviyo/blob/main/models/intermediate/int_klaviyo__event_attribution.sql).
+This package primarily uses Klaviyo's native `property_attribution` (renamed to `event_attribution`) field for attributing events to campaigns and flows. This approach ensures consistency with Klaviyo's platform and provides the most accurate attribution data.
 
-By default, the package will use a lookback window of **120 hours (5 days)** for email-events and a window of **24 hours** for SMS-events. For example, if an `'Ordered Product'` conversion is tracked on April 27th, and the customer clicked a campaign email on April 24th, their purchase order event will be attributed with the email they interacted with. If the campaign was sent and opened via SMS instead of email, the `'Ordered Product'` conversion would not be attributed to any campaign.
+**Primary Attribution Method:**
+- Uses Klaviyo's built-in `event_attribution` field when available
+- Events inherit attribution from parent events via `attributed_event_id` references
+- Aligns with Klaviyo's internal [attribution model](https://help.klaviyo.com/hc/en-us/articles/115005248128)
+- No additional configuration required
 
-To change either of these lookback windows, add the following configuration to your `dbt_project.yml` file:
+**Session-Based Attribution Fallback:**
+For users who need custom attribution logic or are migrating from older package versions, an optional session-based attribution method is available. This method is **disabled by default** but can be enabled by setting `using_event_sessions: true`.
 
-> If you would like to disable the package's attribution process completely, set these variables to `0`.
+When enabled, this method uses configurable lookback windows:
+- **120 hours (5 days)** for email events  
+- **24 hours** for SMS events
 
 ```yml
 # dbt_project.yml
-
-...
-config-version: 2
-
 vars:
   klaviyo:
-    klaviyo__email_attribution_lookback: x_number_of_hours # default = 120 hours = 5 days. MUST BE INTEGER.
-    klaviyo__sms_attribution_lookback: y_number_of_hours # default = 24 hours. MUST BE INTEGER.
+    using_event_sessions: true # Enable session-based attribution fallback
+    klaviyo__email_attribution_lookback: 120 # Hours for email attribution
+    klaviyo__sms_attribution_lookback: 24 # Hours for SMS attribution
 ```
 
-> Note that events already associated with campaigns or flows in Klaviyo will never have their source attribution data overwritten by the package modeling.
+> **Note:** For detailed information about attribution methods and when to use each approach, see the [DECISIONLOG.md](https://github.com/fivetran/dbt_klaviyo/blob/main/DECISIONLOG.md).
 
-#### Attribution-Eligible Event Types
+> Events already associated with campaigns or flows in Klaviyo will never have their source attribution data overwritten by the package modeling.
 
-By default, this package will only credit email opens, email clicks, and SMS opens with conversions. That is, only flows and campaigns attached to these kinds of events will qualify for attribution in our package. This is aligned with Klaviyo's internal [attribution model](https://help.klaviyo.com/hc/en-us/articles/115005248128).
+#### Attribution-Eligible Event Types (Session-Based Fallback Only)
 
-However, this package allows for the customization of which events can qualify for attribution. To expand or otherwise change this filter on attribution, add the following configuration to your `dbt_project.yml` file:
+> **Note:** This configuration only applies when `using_event_sessions: true` is enabled. The primary attribution method uses Klaviyo's native attribution without additional filtering.
+
+When using the session-based attribution fallback, the package will only credit email opens, email clicks, and SMS opens with conversions by default. This filter determines which event types can trigger new attribution sessions and is aligned with Klaviyo's internal [attribution model](https://help.klaviyo.com/hc/en-us/articles/115005248128).
+
+To customize which events can qualify for attribution in the session-based method, add the following configuration to your `dbt_project.yml` file:
 
 ```yml
 # dbt_project.yml
