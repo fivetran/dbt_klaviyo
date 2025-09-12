@@ -171,10 +171,10 @@ final as (
         events.*,
 
         {% if using_native_attribution %}
-        inherited.occurred_at as session_start_at,
-        inherited.event_type as session_event_type,
-        inherited.extracted_touch_id as last_touch_id,
-        inherited.extracted_touch_type as session_touch_type
+        coalesce(inherited.occurred_at, events.occurred_at) as session_start_at,
+        coalesce(inherited.event_type, events.type) as session_event_type,
+        coalesce(inherited.extracted_touch_id, events.touch_id) as last_touch_id,
+        coalesce(inherited.extracted_touch_type, events.touch_type) as session_touch_type
         {% else %}
         session_calculated.session_start_at as session_start_at,
         session_calculated.session_event_type as session_event_type,
