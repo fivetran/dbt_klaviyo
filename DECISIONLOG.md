@@ -6,7 +6,7 @@ This dbt Klaviyo package supports two attribution approaches: direct event attri
 
 ### Primary Attribution Method — Native attribution
 
-By default, the package uses Klaviyo’s native `property_attribution` field (renamed to `event_attribution`) from the EVENT source. This is the preferred method.
+If available the package uses Klaviyo’s native `property_attribution` field (renamed to `event_attribution` during staging) from the EVENT source. This is the preferred method.
 
 Why we prefer this option:
 - **Accuracy**: Reflects Klaviyo’s platform logic
@@ -52,7 +52,7 @@ When enabled, the session-based method:
 
 #### Use Direct Attribution (Default) When:
 - Consistency with Klaviyo’s platform is required
-- `event_attribution` data is present and reliable
+- `property_attribution` data is present and reliable
 - Performance and simplicity are priorities
 - Starting a new implementation
 

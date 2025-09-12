@@ -93,10 +93,10 @@ vars:
 
 #### Event Attribution
 
-This package primarily uses Klaviyo's native `property_attribution` (renamed to `event_attribution`) field for attributing events to campaigns and flows. This approach ensures consistency with Klaviyo's platform and provides the most accurate attribution data.
+If available, the package uses Klaviyo’s native `property_attribution` field from the EVENT source for attributing events to campaigns and flows. This approach ensures consistency with Klaviyo's platform and provides the most accurate attribution data.
 
 **Primary Attribution Method:**
-- Uses Klaviyo's built-in `event_attribution` field when available
+- Uses Klaviyo's built-in `property_attribution` field when available
 - Events inherit attribution from parent events via `attributed_event_id` references
 - Aligns with Klaviyo's internal [attribution model](https://help.klaviyo.com/hc/en-us/articles/115005248128)
 - No additional configuration required

@@ -97,6 +97,10 @@ sources:
             description: Universally Unique Identifier of the event. 
           - name: property_value
             description: Numeric value associated with the event (ie the dollars associated with a purchase).
+          - name: property_attribution
+            description: >
+              Attribution information for the event, indicating the marketing touchpoint or source 
+              (such as campaign or flow) that is credited with influencing or driving the event.
           - name: _fivetran_deleted
             description: Boolean that is true if the campaign has been soft-deleted. 
 

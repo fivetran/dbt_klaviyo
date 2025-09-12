@@ -1,6 +1,13 @@
 # dbt_klaviyo v1.1.0
 [PR #53](https://github.com/fivetran/dbt_klaviyo/pull/53) includes the following updates:
 
+## Schema/Data Change (--full-refresh required after upgrading)
+**3 total changes • 0 possible breaking change**
+
+| Data Model(s) | Change type | Old | New | Notes |
+| ---------- | ----------- | -------- | -------- | ----- |
+| `klaviyo__events`<br>`int_klaviyo__event_attribution`<br>`stg_klaviyo__event` | New column | | `event_attribution` | New field sourced from `property_attribution` in the `EVENT` source table. Contains Klaviyo's native attribution data for events. |
+
 ## Features
 - **Primary Attribution Method Change**: The package now uses Klaviyo’s native `property_attribution` field (renamed `event_attribution` in staging) as the default attribution method.
   - Provides better accuracy and consistency with Klaviyo’s platform reporting
@@ -20,8 +27,7 @@
 ## Documentation Updates
 - Added [DECISIONLOG.md](https://github.com/fivetran/dbt_klaviyo/blob/main/DECISIONLOG.md) explaining the rationale behind attribution methods and guidance on when to use each
 - Updated [README.md](https://github.com/fivetran/dbt_klaviyo/blob/main/README.md) to clarify that `event_attribution` is now the primary attribution method
-- Expanded guidance in the README to help users choose between attribution methods
-- Added migration instructions in the README for users upgrading from session-based attribution
+- Updated dbt documentation with newly added `property_attribution`/`event_attribution` field.
 
 # dbt_klaviyo v1.1.0-a2
 [PR #53](https://github.com/fivetran/dbt_klaviyo/pull/53) includes the following updates:

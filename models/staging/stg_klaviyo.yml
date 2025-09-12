@@ -22,8 +22,6 @@ models:
         description: Unique ID of the campaign. 
         tests:
           - not_null
-      - name: is_segmented
-        description: Boolean that is true if the campaign is directed at a Klaviyo segment (not a list).
       - name: campaign_name
         description: A name for this campaign. If not specified, this will default to the subject of the campaign.
       - name: scheduled_to_send_at
@@ -84,6 +82,10 @@ models:
         description: Universally Unique Identifier of the event. 
       - name: numeric_value
         description: Numeric value associated with the event (ie the dollars associated with a purchase).
+      - name: event_attribution
+        description: >
+          Attribution information for the event, indicating the marketing touchpoint or source 
+          (such as campaign or flow) that is credited with influencing or driving the event.
       - name: occurred_on
         description: Calendar date (UTC) on which the event occurred.
       - name: source_relation
@@ -93,6 +95,8 @@ models:
           sources, this will be an empty string.
       - name: unique_event_id
         description: The unique identifier for the combination of event_id and source_relation columns.
+      - name: _fivetran_synced
+        description: Timestamp of when Fivetran synced a record.
 
   - name: stg_klaviyo__flow
     description: Table of automated, triggered flow sequences in Klaviyo.

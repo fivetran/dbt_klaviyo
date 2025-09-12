@@ -18,6 +18,9 @@ cd integration_tests
 dbt deps
 dbt seed --target "$db" --full-refresh
 dbt run --target "$db" --full-refresh
+dbt run --target "$db"
+dbt test --target "$db"
+dbt run --vars '{using_native_attribution: false}' --target "$db" --full-refresh 
 dbt test --target "$db"
 dbt source freshness --target "$db" || echo "...Only verifying freshness runs…"
 

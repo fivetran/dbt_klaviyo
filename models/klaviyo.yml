@@ -37,6 +37,10 @@ models:
         description: Universally Unique Identifier of the event. 
       - name: numeric_value
         description: Numeric value associated with the event (ie the dollars associated with a purchase).
+      - name: event_attribution
+        description: >
+          Attribution information for the event, indicating the marketing touchpoint or source 
+          (such as campaign or flow) that is credited with influencing or driving the event.
       - name: touch_type
         description: >
           Type of touch/message that the event itself is already attributed to in Klaviyo. Either 'flow', 'campaign', or null.
