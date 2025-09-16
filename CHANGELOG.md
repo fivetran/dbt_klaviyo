@@ -14,7 +14,7 @@
   - Eliminates discrepancies between package results and Klaviyo UI metrics
   - Leverages Klaviyo’s sophisticated internal attribution logic
   - No configuration required
-  - For background on why this method was chosen, see the [DECISIONLOG.md](https://github.com/fivetran/dbt_klaviyo/blob/main/DECISIONLOG.md).
+  - For more background on why this method was chosen, see the [DECISIONLOG.md](https://github.com/fivetran/dbt_klaviyo/blob/main/DECISIONLOG.md).
 
 ## Breaking Changes
 - **Native attribution is now enabled by default** (`using_native_attribution: true`)

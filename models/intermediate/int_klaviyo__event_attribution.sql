@@ -86,7 +86,8 @@ extracted_touch as (
         event_id as extracted_event_id,
         touch_id as extracted_touch_id,
         touch_type as extracted_touch_type,
-        type as extracted_event_type
+        type as extracted_event_type,
+        source_relation
     from events
 ),
 
@@ -102,6 +103,7 @@ inherited as (
     from normalized_children
     left join extracted_touch
         on normalized_children.extracted_event_id = extracted_touch.extracted_event_id
+        and normalized_children.source_relation = extracted_touch.source_relation
     where normalized_children.extracted_event_id is not null 
 ),
 

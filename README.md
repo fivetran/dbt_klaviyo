@@ -102,7 +102,7 @@ If available, the package uses Klaviyo’s native `property_attribution` field f
 - No additional configuration required
 
 **Session-Based Attribution Fallback:**
-For users who need custom attribution logic or are migrating from older package versions, an optional session-based attribution method is available. This method is disabled by default if your EVENT source contains the `property_attribution` field but can be enabled by setting `using_native_attribution: false`. If you do not have the `property_attribution` field, this method will be used by default.
+For users who need custom attribution logic or are migrating from older package versions, an optional session-based attribution method is available. This method is disabled by default if your EVENT source contains the `property_attribution` field but can be enabled by setting `using_native_attribution: false`. **If you do not have the `property_attribution` field, this method will be used by default.**
 
 When enabled, this method uses configurable lookback windows:
 - **120 hours (5 days)** for email events  

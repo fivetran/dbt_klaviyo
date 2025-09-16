@@ -20,7 +20,7 @@ Why we prefer this option:
 
 ### Session-Based Attribution Fallback
 
-A session-based method can be enabled when `using_native_attribution: true` in `dbt_project.yml`, or if the package detects that `property_attribution` is unavailable.
+A session-based, package-calculated method can be enabled when `using_native_attribution: true` in `dbt_project.yml`, or if the package detects that `property_attribution` is unavailable.
 
 Why we provide this option: 
 - **Backward Compatibility**: Preserve compatibility with earlier package versions
