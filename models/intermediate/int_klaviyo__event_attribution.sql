@@ -9,7 +9,7 @@
 
 -- Use var('using_native_attribution') if it exists, otherwise determine if we can use native attribution.
 {% if execute and flags.WHICH in ('run', 'build') and var('using_native_attribution', none) is none %}
-    {% set event_columns = adapter.get_columns_in_relation(source('klaviyo', 'event')) %}
+    {% set event_columns = adapter.get_columns_in_relation(ref('stg_klaviyo__event_tmp')) %} -- use the tmp since this is post-unioning but pre filling missing columns
     {% set event_column_names = event_columns | map(attribute='name') | map('lower') | list %}
     {% set using_native_attribution = 'property_attribution' in event_column_names %}
 {% else %}
