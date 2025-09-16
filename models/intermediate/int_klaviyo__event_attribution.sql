@@ -95,12 +95,13 @@ extracted_touch as (
 inherited as (
 
     select
+        normalized_children.source_relation,
         normalized_children.unique_event_id,
         normalized_children.occurred_at,
         normalized_children.type as event_type,
         extracted_touch.extracted_touch_id,
         extracted_touch.extracted_touch_type,
-        extracted_touch.extracted_event_type
+        extracted_touch.extracted_event_type,
     from normalized_children
     left join extracted_touch
         on normalized_children.extracted_event_id = extracted_touch.extracted_event_id
