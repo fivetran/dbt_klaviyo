@@ -121,7 +121,7 @@ vars:
 
 > Events already associated with campaigns or flows in Klaviyo will never have their source attribution data overwritten by the package modeling.
 
-#### Attribution-Eligible Event Types (Session-Based Fallback Only)
+##### Attribution-Eligible Event Types (Session-Based Fallback Only)
 
 > **Note:** This configuration only applies when session-based attribution is used. The primary attribution method uses Klaviyo's native attribution without additional filtering.
 
