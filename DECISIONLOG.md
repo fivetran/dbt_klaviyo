@@ -16,7 +16,7 @@ Why we prefer this option:
 
 #### Implementation
 - Events with `property_attribution` are used directly
-- Events without it inherit from parent events via `attributed_event_id`
+- Events without it use the following session-based attribution
 
 ### Session-Based Attribution Fallback
 
@@ -44,9 +44,9 @@ When enabled, the session-based method:
 | Variable | Default | Purpose |
 |----------|---------|---------|
 | `using_native_attribution` | `true` | Enable native or session based attribution |
-| `klaviyo__email_attribution_lookback` | `120` | Lookback window (hours) for email attribution |
-| `klaviyo__sms_attribution_lookback` | `24` | Lookback window (hours) for SMS attribution |
-| `klaviyo__eligible_attribution_events` | `['email open', 'email click', 'sms open']` | Event types eligible for attribution |
+| `klaviyo__email_attribution_lookback` | `120` | Lookback window (hours) for email attribution. Applies only when `using_native_attribution` is false. |
+| `klaviyo__sms_attribution_lookback` | `24` | Lookback window (hours) for SMS attribution. Applies only when `using_native_attribution` is false. |
+| `klaviyo__eligible_attribution_events` | `['email open', 'email click', 'sms open']` | Event types eligible for attribution. Applies only when `using_native_attribution` is false. |
 
 ### Recommendations
 

@@ -6,23 +6,14 @@
 
 | Data Model(s) | Change type | Old | New | Notes |
 | ---------- | ----------- | -------- | -------- | ----- |
-| `klaviyo__events`<br>`int_klaviyo__event_attribution`<br>`stg_klaviyo__event` | New column | | `event_attribution` | New field sourced from `property_attribution` in the `EVENT` source table. Contains Klaviyo's native attribution data for events. |
-
-## Features
-- **Primary Attribution Method Change**: The package now uses Klaviyo’s native `property_attribution` field (renamed `event_attribution` in staging) as the default attribution method.
-  - Provides better accuracy and consistency with Klaviyo’s platform reporting
-  - Eliminates discrepancies between package results and Klaviyo UI metrics
-  - Leverages Klaviyo’s sophisticated internal attribution logic
-  - No configuration required
-  - For more background on why this method was chosen, see the [DECISIONLOG.md](https://github.com/fivetran/dbt_klaviyo/blob/main/DECISIONLOG.md).
+| `klaviyo__events`<br>`int_klaviyo__event_attribution`<br>`stg_klaviyo__event` | New column | | `event_attribution` | New field sourced from `property_attribution` in the `EVENT` source table. Contains Klaviyo's native attribution data for events, which is now used by default for attribution. |
 
 ## Breaking Changes
-- **Native attribution is now enabled by default** (`using_native_attribution: true`)
-  - Previous versions used custom session-based calculations as the primary method
-  - This approach sometimes produced results that differed from Klaviyo's platform
-  - The session-based method remains available as an optional fallback for users who need custom attribution logic or are migrating from older package versions
-  - To continue using session-based attribution, set `using_native_attribution: false` in your `dbt_project.yml`  
-  - See the [README.md](https://github.com/fivetran/dbt_klaviyo/blob/main/README.md#event-attribution) for configuration details and examples, and the [DECISIONLOG.md](https://github.com/fivetran/dbt_klaviyo/blob/main/DECISIONLOG.md) for context behind this change.
+- **Primary Attribution Method Update**: The package now uses Klaviyo’s native `property_attribution` field (renamed `event_attribution` in staging) as the primary attribution method.
+  - Ensures consistency with Klaviyo’s platform reporting and UI
+  - Leverages Klaviyo’s internal attribution logic with no extra configuration required
+  - The previous session-based attribution remains available as an optional fallback by setting `using_native_attribution: false` in `dbt_project.yml`
+  - See the [README](https://github.com/fivetran/dbt_klaviyo/blob/main/README.md#event-attribution) for configuration details and the [DECISIONLOG](https://github.com/fivetran/dbt_klaviyo/blob/main/DECISIONLOG.md) for background on this decision
 
 ## Documentation Updates
 - Added [DECISIONLOG.md](https://github.com/fivetran/dbt_klaviyo/blob/main/DECISIONLOG.md) explaining the rationale behind attribution methods and guidance on when to use each
