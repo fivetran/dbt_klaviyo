@@ -1,3 +1,4 @@
+-- depends_on: {{ ref('stg_klaviyo__event_tmp') }}
 {{
     config(
         materialized='incremental',
