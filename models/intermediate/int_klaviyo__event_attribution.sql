@@ -193,9 +193,11 @@ final as (
     {% if using_native_attribution %}
     left join inherited
         on events.unique_event_id = inherited.unique_event_id
+        on events.source_relation = inherited.source_relation
     {% else %}
     left join session_calculated
         on events.unique_event_id = session_calculated.unique_event_id
+        on events.source_relation = session_calculated.source_relation
     {% endif %}
 )
 
