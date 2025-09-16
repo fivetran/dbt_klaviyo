@@ -101,7 +101,7 @@ inherited as (
         normalized_children.type as event_type,
         extracted_touch.extracted_touch_id,
         extracted_touch.extracted_touch_type,
-        extracted_touch.extracted_event_type,
+        extracted_touch.extracted_event_type
     from normalized_children
     left join extracted_touch
         on normalized_children.extracted_event_id = extracted_touch.extracted_event_id
