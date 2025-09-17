@@ -16,10 +16,6 @@
 {% else %}
     {% set using_native_attribution = var('using_native_attribution', true) %}
 {% endif %}
-
--- For debugging. Remove before merge.
-{{ print('***************** using_native_attribution: ' ~using_native_attribution) }}
-
 with events as (
 
     select 
