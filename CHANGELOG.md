@@ -17,7 +17,7 @@
 
 ## Documentation Updates
 - Added [DECISIONLOG.md](https://github.com/fivetran/dbt_klaviyo/blob/main/DECISIONLOG.md) explaining the rationale behind attribution methods and guidance on when to use each
-- Updated [README.md](https://github.com/fivetran/dbt_klaviyo/blob/main/README.md) to clarify that `event_attribution` is now the primary attribution method
+- Updated [README.md](https://github.com/fivetran/dbt_klaviyo/blob/main/README.md#event-attribution) to clarify that `event_attribution` is now the primary attribution method
 - Updated dbt documentation with newly added `property_attribution`/`event_attribution` field.
 
 # dbt_klaviyo v1.1.0-a2

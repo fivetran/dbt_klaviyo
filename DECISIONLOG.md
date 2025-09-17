@@ -16,7 +16,7 @@ Why we prefer this option:
 
 #### Implementation
 - Events with `property_attribution` are used directly
-- Events without it use the following session-based attribution
+- If the `EVENT` table does not contain `property_attribution`, the following session-based attribution is used
 
 ### Session-Based Attribution Fallback
 
