@@ -2,12 +2,12 @@
 [PR #53](https://github.com/fivetran/dbt_klaviyo/pull/53) includes the following updates:
 
 ## Schema/Data Change (--full-refresh required after upgrading)
-**3 total changes • 0 possible breaking change**
+**4 total changes • 1 possible breaking change**
 
 | Data Model(s) | Change type | Old | New | Notes |
 | ---------- | ----------- | -------- | -------- | ----- |
 | `klaviyo__events`<br>`int_klaviyo__event_attribution`<br>`stg_klaviyo__event` | New column | | `event_attribution` | New field sourced from `property_attribution` in the `EVENT` source table. Contains Klaviyo's native attribution data for events, which is now used by default for attribution. |
-| `EVENT` (source) | New column | | `property_attribution` | If you are already including this field through the [passthrough columns](https://github.com/fivetran/dbt_klaviyo?tab=readme-ov-file#passthrough-columns) variable `klaviyo__event_pass_through_columns`, remove it from the list to avoid duplicate column errors. |
+| `EVENT` (source) | New column | | `property_attribution` | **Breaking change**: If you are already including this field through the [passthrough columns](https://github.com/fivetran/dbt_klaviyo?tab=readme-ov-file#passthrough-columns) variable `klaviyo__event_pass_through_columns`, remove it from the list to avoid duplicate column errors. |
 
 ## Breaking Changes
 - **Primary Attribution Method Update**: The package now uses Klaviyo’s native `property_attribution` field (renamed `event_attribution` in staging) as the primary attribution method.
