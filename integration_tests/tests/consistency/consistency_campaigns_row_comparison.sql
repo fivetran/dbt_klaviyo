@@ -4,13 +4,13 @@
 ) }}
 
 with prod as (
-    select {{ dbt_utils.star(from=ref('klaviyo__events'), except=var('event_exception_columns', '[]')) }}
-    from {{ target.schema }}_klaviyo_prod.klaviyo__events
+    select *
+    from {{ target.schema }}_klaviyo_prod.klaviyo__campaigns
 ),
 
 dev as (
-    select {{ dbt_utils.star(from=ref('klaviyo__events'), except=var('event_exception_columns', '[]')) }}
-    from {{ target.schema }}_klaviyo_dev.klaviyo__events
+    select *
+    from {{ target.schema }}_klaviyo_dev.klaviyo__campaigns
 ),
 
 prod_not_in_dev as (
@@ -43,3 +43,4 @@ final as (
 
 select *
 from final
+

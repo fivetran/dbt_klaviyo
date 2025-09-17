@@ -1,3 +1,51 @@
+# dbt_klaviyo v1.1.0
+[PR #53](https://github.com/fivetran/dbt_klaviyo/pull/53) includes the following updates:
+
+## Schema/Data Change (--full-refresh required after upgrading)
+**4 total changes • 1 possible breaking change**
+
+| Data Model(s) | Change type | Old | New | Notes |
+| ---------- | ----------- | -------- | -------- | ----- |
+| `klaviyo__events`<br>`int_klaviyo__event_attribution`<br>`stg_klaviyo__event` | New column | | `event_attribution` | New field sourced from `property_attribution` in the `EVENT` source table. Contains Klaviyo's native attribution data for events, which is now used by default for attribution. |
+| `EVENT` (source) | New column | | `property_attribution` | **Breaking change**: If you are already including this field through the [passthrough columns](https://github.com/fivetran/dbt_klaviyo?tab=readme-ov-file#passthrough-columns) variable `klaviyo__event_pass_through_columns`, remove it from the list to avoid duplicate column errors. |
+
+## Breaking Changes
+- **Primary Attribution Method Update**: The package now uses Klaviyo’s native `property_attribution` field (renamed `event_attribution` in staging) as the primary attribution method.
+  - Ensures consistency with Klaviyo’s platform reporting and UI
+  - Leverages Klaviyo’s internal attribution logic with no extra configuration required
+  - The previous session-based attribution remains available as an optional fallback by setting `using_native_attribution: false` in `dbt_project.yml`
+  - See the [README](https://github.com/fivetran/dbt_klaviyo/blob/main/README.md#event-attribution) for configuration details and the [DECISIONLOG](https://github.com/fivetran/dbt_klaviyo/blob/main/DECISIONLOG.md) for background on this decision
+
+## Documentation Updates
+- Added [DECISIONLOG.md](https://github.com/fivetran/dbt_klaviyo/blob/main/DECISIONLOG.md) explaining the rationale behind attribution methods and guidance on when to use each
+- Updated [README.md](https://github.com/fivetran/dbt_klaviyo/blob/main/README.md#event-attribution) to clarify that `event_attribution` is now the primary attribution method
+- Updated dbt documentation with newly added `property_attribution`/`event_attribution` field.
+
+# dbt_klaviyo v1.1.0-a2
+[PR #53](https://github.com/fivetran/dbt_klaviyo/pull/53) includes the following updates:
+
+## Breaking Change
+> A `--full-refresh` is required when upgrading to retroactively apply these updates.
+
+- Updated attribution logic in `int_klaviyo__event_attribution` to use the `property_attribution` field from the `EVENT` source.  
+  - This replaces the previous calculation method.  
+  - If the `property_attribution` field is not available or you want a fallback for when it is null, set the variable `using_native_attribution: false` in your `dbt_project.yml` to coalesce the `last_touch_*` fields back with the previous package-calculated attribution method.
+- Rolled back the updates from v1.1.0-a1.
+
+# dbt_klaviyo v1.1.0-a1
+[PR #53](https://github.com/fivetran/dbt_klaviyo/pull/53) includes the following updates:
+
+## Breaking Change
+> A `--full-refresh` is required when upgrading to ensure the updates are retroactively applied.
+- Updated attribution logic for Shopify order lifecycle events. These events now inherit attribution from their associated `Placed Order` event rather than the nearest intervening event. If no `Placed Order` is found within 3 months, the default attribution behavior is applied.
+  - `Cancelled Order`
+  - `Confirmed Shipment`
+  - `Delivered Shipment`
+  - `Fulfilled Order`
+  - `Fulfilled Partial Order`
+  - `Marked Out for Delivery`
+  - `Refunded Order`
+
 # dbt_klaviyo v1.0.0
 
 [PR #51](https://github.com/fivetran/dbt_klaviyo/pull/51) includes the following updates:
