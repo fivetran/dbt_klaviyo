@@ -1,3 +1,7 @@
+# dbt_klaviyo v1.1.1
+[PR #54](https://github.com/fivetran/dbt_klaviyo/pull/54) includes the following updates:
+
+
 # dbt_klaviyo v1.1.0
 [PR #53](https://github.com/fivetran/dbt_klaviyo/pull/53) includes the following updates:
 
