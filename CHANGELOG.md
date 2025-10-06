@@ -1,6 +1,9 @@
 # dbt_klaviyo v1.1.1
 [PR #54](https://github.com/fivetran/dbt_klaviyo/pull/54) includes the following updates:
 
+## Bug Fix
+- Fixed JSON field type parsing issue in BigQuery for the `property_attribution` field by implementing the `json_to_string` macro to properly handle JSON columns across different warehouses
+- Enhanced the `int_klaviyo__event_attribution` model to handle different JSON attribution formats by checking for both legacy and new attribution data structures
 
 # dbt_klaviyo v1.1.0
 [PR #53](https://github.com/fivetran/dbt_klaviyo/pull/53) includes the following updates:

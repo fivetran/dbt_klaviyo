@@ -67,7 +67,7 @@ parse_children as (
         coalesce(
             {{ fivetran_utils.json_parse('cleaned_event_attribution', ['relationships', 'attributed-event', 'data', 'id']) }},
             {{ fivetran_utils.json_parse('cleaned_event_attribution', ['attributed_event_id']) }}
-        )as extracted_id_raw
+        ) as extracted_id_raw
 
     from children
 ),
