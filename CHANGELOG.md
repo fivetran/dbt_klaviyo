@@ -2,8 +2,8 @@
 [PR #54](https://github.com/fivetran/dbt_klaviyo/pull/54) includes the following updates:
 
 ## Bug Fix
-- Fixed JSON field type parsing issue in BigQuery for the `property_attribution` field by implementing the `json_to_string` macro to properly handle JSON columns across different warehouses
-- Enhanced the `int_klaviyo__event_attribution` model to handle different JSON attribution formats by checking for both legacy and new attribution data structures
+- To handle changes to the `property_attribution` field JSON structure introduced in the [September 2025 Fivetran Klaviyo release](https://fivetran.com/docs/connectors/applications/klaviyo/changelog#september2025), updates the `int_klaviyo__event_attribution` model to handle both legacy and new structures
+- Ensures the `property_attribution` field is a string for parsing downstream by implementing the `json_to_string` macro to properly handle JSON columns across different warehouses
 
 # dbt_klaviyo v1.1.0
 [PR #53](https://github.com/fivetran/dbt_klaviyo/pull/53) includes the following updates:
