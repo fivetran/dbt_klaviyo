@@ -1,3 +1,4 @@
+{% set source_columns_in_relation = adapter.get_columns_in_relation(ref('stg_klaviyo__event_tmp')) %}
 
 with base as (
 
@@ -11,7 +12,7 @@ fields as (
     select
         {{
             fivetran_utils.fill_staging_columns(
-                source_columns=adapter.get_columns_in_relation(ref('stg_klaviyo__event_tmp')),
+                source_columns=source_columns_in_relation,
                 staging_columns=get_event_columns()
             )
         }}
@@ -36,7 +37,7 @@ rename as (
         type,
         uuid,
         {{ klaviyo.remove_string_from_numeric('property_value') }} as numeric_value,
-        property_attribution as event_attribution,
+        {{ klaviyo.json_to_string("property_attribution", source_columns_in_relation) }} as event_attribution,
         cast(_fivetran_synced as {{ dbt.type_timestamp() }} ) as _fivetran_synced,
         source_relation
         {{ fivetran_utils.fill_pass_through_columns('klaviyo__event_pass_through_columns') }}

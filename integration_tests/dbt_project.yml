@@ -1,5 +1,5 @@
 name: 'klaviyo_integration_tests'
-version: '1.1.0'
+version: '1.1.1'
 config-version: 2
 profile: 'integration_tests'
 
@@ -32,7 +32,7 @@ seeds:
       +quote_columns: "{{ true if target.type == 'redshift' else false }}"
     event:
       +column_types:
-        PROPERTY_ATTRIBUTION: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
+        PROPERTY_ATTRIBUTION: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar(65535)' }}"
 
 flags:
   send_anonymous_usage_stats: False
