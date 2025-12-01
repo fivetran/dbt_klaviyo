@@ -1,3 +1,10 @@
+# dbt_klaviyo v1.2.0
+
+[PR #55](https://github.com/fivetran/dbt_klaviyo/pull/55) includes the following updates:
+
+## Features
+  - Increases the required dbt version upper limit to v3.0.0
+
 # dbt_klaviyo v1.1.1
 [PR #54](https://github.com/fivetran/dbt_klaviyo/pull/54) includes the following updates:
 
