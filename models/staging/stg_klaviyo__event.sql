@@ -36,8 +36,14 @@ rename as (
         cast(person_id as {{ dbt.type_string() }} ) as person_id,
         type,
         uuid,
-        {{ klaviyo.remove_string_from_numeric('property_value') }} as numeric_value,
-        {{ klaviyo.json_to_string("property_attribution", source_columns_in_relation) }} as event_attribution,
+        coalesce(
+            {{ klaviyo.remove_string_from_numeric('property_value') }},
+            {{ klaviyo.remove_string_from_numeric('propertyValue') }}
+        ) as numeric_value,
+        coalesce(
+            {{ klaviyo.json_to_string("property_attribution", source_columns_in_relation) }},
+            {{ klaviyo.json_to_string("propertyAttribution", source_columns_in_relation) }}
+        ) as event_attribution,
         cast(_fivetran_synced as {{ dbt.type_timestamp() }} ) as _fivetran_synced,
         source_relation
         {{ fivetran_utils.fill_pass_through_columns('klaviyo__event_pass_through_columns') }}
