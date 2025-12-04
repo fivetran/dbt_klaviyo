@@ -1,3 +1,14 @@
+# dbt_klaviyo v1.3.0
+
+[PR #56](https://github.com/fivetran/dbt_klaviyo/pull/56) includes the following updates:
+
+## Schema/Data Change
+**1 total change • 0 possible breaking changes**
+
+| Data Model(s) | Change type | Old | New | Notes |
+|---------------|-------------|-----|-----|-------|
+| `stg_klaviyo__event` | Column normalization | Only snake_case columns recognized:<br>`property_value`<br>`property_attribution` | Accepts both snake_case and camelCase spellings:<br>`property_value` / `propertyValue`<br>`property_attribution` / `propertyAttribution` | Coalesces alternate source columns spellings into snake_case for consistency. |
+
 # dbt_klaviyo v1.2.0
 
 [PR #55](https://github.com/fivetran/dbt_klaviyo/pull/55) includes the following updates:
