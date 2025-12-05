@@ -1,6 +1,6 @@
 # dbt_klaviyo v1.3.0
 
-[PR #56](https://github.com/fivetran/dbt_klaviyo/pull/56) includes the following updates:
+In connection with the [December 2025 Fivetran Klaviyo Connector updates](https://fivetran.com/docs/connectors/applications/klaviyo/changelog#december2025), [PR #56](https://github.com/fivetran/dbt_klaviyo/pull/56) includes the following updates:
 
 ## Schema/Data Change
 **1 total change • 0 possible breaking changes**
