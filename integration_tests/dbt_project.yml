@@ -1,5 +1,5 @@
 name: 'klaviyo_integration_tests'
-version: '1.2.0'
+version: '1.2.1'
 config-version: 2
 profile: 'integration_tests'
 
@@ -28,11 +28,12 @@ seeds:
     person:
       +column_types:
         PHONE_NUMBER: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
-    flow:
-      +quote_columns: "{{ true if target.type == 'redshift' else false }}"
     event:
       +column_types:
         PROPERTY_ATTRIBUTION: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar(65535)' }}"
+    event_norename:
+      +column_types:
+        PROPERTYATTRIBUTION: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar(65535)' }}"
 
 flags:
   send_anonymous_usage_stats: False

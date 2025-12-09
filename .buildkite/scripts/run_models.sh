@@ -22,6 +22,8 @@ dbt run --target "$db"
 dbt test --target "$db"
 dbt run --vars '{using_native_attribution: false}' --target "$db" --full-refresh 
 dbt test --target "$db"
+dbt run --vars '{klaviyo_event_identifier: "event_norename"}' --target "$db" --full-refresh 
+dbt test --target "$db"
 dbt source freshness --target "$db" || echo "...Only verifying freshness runs…"
 
 dbt run-operation fivetran_utils.drop_schemas_automation --target "$db"
