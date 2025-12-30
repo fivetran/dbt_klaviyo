@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: klaviyo_airbyte_raw
+    database: "0006_wsg"
+    schema: "klaviyo_raw"
+    tables:
+      - name: campaigns
+      - name: campaigns_detailed
+      - name: events
+      - name: flows
+      - name: metrics
+      - name: profiles
+      - name: lists
+      - name: lists_detailed
+      - name: email_templates
+      - name: global_exclusions

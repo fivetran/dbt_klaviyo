@@ -41,6 +41,8 @@ vars:
     - 'cancelled order'
 
   klaviyo_source:
+    klaviyo_database: "0006_wsg"
+    klaviyo_schema: "klaviyo_airbyte_compat"
     klaviyo__event_pass_through_columns: []
     klaviyo__person_pass_through_columns: []
 models:
