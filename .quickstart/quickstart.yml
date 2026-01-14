@@ -82,11 +82,11 @@ supported_vars:
 
   klaviyo__event_pass_through_columns:
     type: dictionary
-    description: "Addtional `EVENT` fields to include in `klaviyo__events`"
+    description: "Additional `EVENT` fields to include in `klaviyo__events`"
     display_name: "Additional Event Columns"
 
   klaviyo__person_pass_through_columns:
     type: dictionary
-    description: "Addtional `PERSON` fields to include in `klaviyo__persons`"
+    description: "Additional `PERSON` fields to include in `klaviyo__persons`"
     display_name: "Additional Person Columns"
 
