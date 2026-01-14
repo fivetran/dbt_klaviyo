@@ -16,3 +16,77 @@ public_models: [
   "klaviyo__campaigns",
   "klaviyo__events"
 ]
+
+table_variables:
+  _fivetran_quickstart_integration:
+    - integration
+
+supported_vars:
+  using_native_attribution:
+    type: boolean
+    value: true
+    description: "Enable use of Klaviyo's built-in `property_attribution` field when available. If set to False (or if the `property_attribution` is missing), the model will perform a manual session-based attribution aligned with Klaviyo's parameters"
+    display_name: "Use Klaviyo's Native Attribution"
+
+  klaviyo__email_attribution_lookback:
+    type: integer
+    value: 120
+    description: "When performing manual attribution, set the lookback window for email event attribution (in hours)"
+    display_name: "Non-Native Email Attribution Window (Hours)"
+
+  klaviyo__sms_attribution_lookback:
+    type: integer
+    value: 24
+    description: "When performing manual attribution, set the lookback window for SMS event attribution (in hours)"
+    display_name: "Non-Native SMS Attribution Window (Hours)"
+
+  klaviyo__eligible_attribution_events:
+    type: list
+    value:
+      - "opened email"
+      - "clicked email"
+      - "clicked sms"
+    description: "When performing manual attribution, designate the `EVENT.type` values that are eligible to be credited with attribution"
+    display_name: "Attribution-Eligible Event Types"
+
+  klaviyo__count_metrics:
+    type: list
+    value:
+      - "Active on Site"
+      - "Viewed Product"
+      - "Ordered Product"
+      - "Placed Order"
+      - "Refunded Order"
+      - "Received Email"
+      - "Clicked Email"
+      - "Opened Email"
+      - "Marked Email as Spam"
+      - "Unsubscribed"
+      - "Received SMS"
+      - "Clicked SMS"
+      - "Sent SMS"
+      - "Unsubscribed from SMS"
+    description: "Types of events that will be aggregated in count metrics in `klaviyo__person_campaign_flow`, `klaviyo__campaigns`, `klaviyo__flows`, and `klaviyo__persons`"
+    display_name: "Count Metric Event Types"
+
+  klaviyo__sum_revenue_metrics:
+    type: list
+    value:
+      - "Refunded Order"
+      - "Placed Order"
+      - "Ordered Product"
+      - "checkout started"
+      - "cancelled order"
+    description: "Types of events who associated revenue will be aggregated in `klaviyo__person_campaign_flow`, `klaviyo__campaigns`, `klaviyo__flows`, and `klaviyo__persons`"
+    display_name: "Revenue Metric Event Types"
+
+  klaviyo__event_pass_through_columns:
+    type: dictionary
+    description: "Addtional `EVENT` fields to include in `klaviyo__events`"
+    display_name: "Additional Event Columns"
+
+  klaviyo__person_pass_through_columns:
+    type: dictionary
+    description: "Addtional `PERSON` fields to include in `klaviyo__persons`"
+    display_name: "Additional Person Columns"
+
