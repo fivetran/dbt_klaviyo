@@ -71,3 +71,7 @@ env/
 env.bak/
 venv/
 venv.bak/
+
+# Claude
+CLAUDE.md 
+.claude/
