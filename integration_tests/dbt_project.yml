@@ -30,7 +30,13 @@ seeds:
         PHONE_NUMBER: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
     event:
       +column_types:
-        PROPERTY_ATTRIBUTION: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar(65535)' }}"
+        PROPERTY_ATTRIBUTION: >-
+          {%- if target.type == 'bigquery' -%}json
+          {%- elif target.type == 'postgres' -%}jsonb
+          {%- elif target.type == 'snowflake' -%}variant
+          {%- elif target.type == 'redshift' -%}super
+          {%- else -%}varchar(65535)
+          {%- endif -%}
     event_norename:
       +column_types:
         PROPERTYATTRIBUTION: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar(65535)' }}"
