@@ -29,19 +29,20 @@ seeds:
       +column_types:
         PHONE_NUMBER: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
     event:
-      +enabled: "{{ target.type not in ('snowflake', 'redshift') }}"
+      +enabled: "{{ target.type != 'snowflake' }}"
       +column_types:
-        PROPERTY_ATTRIBUTION: "{{ 'json' if target.type in ('bigquery', 'postgres') else 'varchar(65535)' }}"
+        PROPERTY_ATTRIBUTION: "{{ 'json' if target.type in ('bigquery', 'postgres') else 'super' if target.type == 'redshift' else 'varchar(65535)' }}"
     event_snowflake:
+      # Complex JSON with embedded commas/quotes causes CSV parsing errors. Load as VARCHAR first, 
+      # then convert to VARIANT using PARSE_JSON() in post-hook to avoid CSV format conflicts.
       +enabled: "{{ target.type == 'snowflake' }}"
       +alias: "event"
       +column_types:
-        PROPERTY_ATTRIBUTION: "variant"
-    event_redshift:
-      +enabled: "{{ target.type == 'redshift' }}"
-      +alias: "event"
-      +column_types:
-        PROPERTY_ATTRIBUTION: "super"
+        PROPERTY_ATTRIBUTION_STRING: "varchar(65535)"
+      +post-hook: |
+        ALTER TABLE {{ this }} ADD COLUMN PROPERTY_ATTRIBUTION VARIANT;
+        UPDATE {{ this }} SET PROPERTY_ATTRIBUTION =
+          PARSE_JSON(PROPERTY_ATTRIBUTION_STRING);
     event_norename:
       +column_types:
         PROPERTYATTRIBUTION: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar(65535)' }}"
