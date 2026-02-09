@@ -34,14 +34,14 @@ seeds:
         PROPERTY_ATTRIBUTION: "{{ 'json' if target.type in ('bigquery', 'postgres') else 'varchar(65535)' }}"
     event_snowflake:
       +enabled: "{{ target.type == 'snowflake' }}"
-      +alias: event
+      +alias: "event"
       +column_types:
-        PROPERTY_ATTRIBUTION: variant
+        PROPERTY_ATTRIBUTION: "variant"
     event_redshift:
       +enabled: "{{ target.type == 'redshift' }}"
-      +alias: event
+      +alias: "event"
       +column_types:
-        PROPERTY_ATTRIBUTION: super
+        PROPERTY_ATTRIBUTION: "super"
     event_norename:
       +column_types:
         PROPERTYATTRIBUTION: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar(65535)' }}"
