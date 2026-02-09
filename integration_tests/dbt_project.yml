@@ -29,6 +29,7 @@ seeds:
       +column_types:
         PHONE_NUMBER: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
     event:
+      +enabled: "{{ target.type not in ('snowflake', 'redshift') }}"
       +column_types:
         PROPERTY_ATTRIBUTION: >-
           {%- if target.type == 'bigquery' -%}json
@@ -37,6 +38,16 @@ seeds:
           {%- elif target.type == 'redshift' -%}super
           {%- else -%}varchar(65535)
           {%- endif -%}
+    event_snowflake:
+      +enabled: "{{ target.type == 'snowflake' }}"
+      +alias: event
+      +column_types:
+        PROPERTY_ATTRIBUTION: variant
+    event_redshift:
+      +enabled: "{{ target.type == 'redshift' }}"
+      +alias: event
+      +column_types:
+        PROPERTY_ATTRIBUTION: super
     event_norename:
       +column_types:
         PROPERTYATTRIBUTION: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar(65535)' }}"
