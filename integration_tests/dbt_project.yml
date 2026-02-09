@@ -31,13 +31,7 @@ seeds:
     event:
       +enabled: "{{ target.type not in ('snowflake', 'redshift') }}"
       +column_types:
-        PROPERTY_ATTRIBUTION: >-
-          {%- if target.type == 'bigquery' -%}json
-          {%- elif target.type == 'postgres' -%}jsonb
-          {%- elif target.type == 'snowflake' -%}variant
-          {%- elif target.type == 'redshift' -%}super
-          {%- else -%}varchar(65535)
-          {%- endif -%}
+        PROPERTY_ATTRIBUTION: "{{ 'json' if target.type in ('bigquery', 'postgres') else 'varchar(65535)' }}"
     event_snowflake:
       +enabled: "{{ target.type == 'snowflake' }}"
       +alias: event
