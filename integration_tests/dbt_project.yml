@@ -8,7 +8,7 @@ dispatch:
     search_order: ['spark_utils', 'dbt_utils']
 
 vars:
-  klaviyo_schema: klaviyo_integration_tests
+  klaviyo_schema: zz_dbt_catherine # klaviyo_integration_tests
   klaviyo: 
     klaviyo_campaign_identifier: "campaign"
     klaviyo_event_identifier: "event"
@@ -33,16 +33,18 @@ seeds:
       +column_types:
         PROPERTY_ATTRIBUTION: "{{ 'json' if target.type in ('bigquery', 'postgres') else 'super' if target.type == 'redshift' else 'varchar(65535)' }}"
     event_snowflake:
-      # Complex JSON with embedded commas/quotes causes CSV parsing errors. Load as VARCHAR first, 
-      # then convert to VARIANT using PARSE_JSON() in post-hook to avoid CSV format conflicts.
       +enabled: "{{ target.type == 'snowflake' }}"
       +alias: "event"
       +column_types:
         PROPERTY_ATTRIBUTION_STRING: "varchar(65535)"
+      # Complex JSON with embedded commas/quotes causes CSV parsing errors. Load as VARCHAR first, 
+      # then convert to VARIANT using PARSE_JSON() in post-hook to avoid CSV format conflicts.
+      # This is only necessary for testing with seed data.
       +post-hook: |
         ALTER TABLE {{ this }} ADD COLUMN PROPERTY_ATTRIBUTION VARIANT;
         UPDATE {{ this }} SET PROPERTY_ATTRIBUTION =
           PARSE_JSON(PROPERTY_ATTRIBUTION_STRING);
+        ALTER TABLE {{ this }} DROP COLUMN PROPERTY_ATTRIBUTION_STRING;
     event_norename:
       +column_types:
         PROPERTYATTRIBUTION: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar(65535)' }}"

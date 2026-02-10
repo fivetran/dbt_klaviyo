@@ -11,7 +11,7 @@
 {%- endmacro -%}
 
 {%- macro default__json_to_string(column, column_list) -%}
-    {{ column }}
+    cast({{ column }} as {{ dbt.type_string() }})
 {%- endmacro -%}
 
 {%- macro bigquery__json_to_string(column, column_list) -%}
@@ -24,31 +24,11 @@
     {%- endif -%}
 {%- endmacro -%}
 
-{%- macro postgres__json_to_string(column, column_list) -%}
-    {%- set column_type = klaviyo.get_column_type(column, column_list) -%}
-
-    {%- if column_type in ('json', 'jsonb') -%}
-        {{ column }}::text
-    {%- else -%}
-        {{ column }}
-    {%- endif -%}
-{%- endmacro -%}
-
 {%- macro snowflake__json_to_string(column, column_list) -%}
     {%- set column_type = klaviyo.get_column_type(column, column_list) -%}
 
     {%- if column_type == 'variant' -%}
         to_json({{ column }})
-    {%- else -%}
-        {{ column }}
-    {%- endif -%}
-{%- endmacro -%}
-
-{%- macro redshift__json_to_string(column, column_list) -%}
-    {%- set column_type = klaviyo.get_column_type(column, column_list) -%}
-
-    {%- if column_type == 'super' -%}
-        json_serialize({{ column }})
     {%- else -%}
         {{ column }}
     {%- endif -%}
