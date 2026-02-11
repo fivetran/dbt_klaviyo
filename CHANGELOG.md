@@ -6,7 +6,7 @@
   - **Snowflake**: VARIANT  
   - **Redshift**: SUPER  
   - **Postgres**: JSON and JSONB  
-  - **BigQuery**: JSON (alredy supported)
+  - **BigQuery**: JSON (already supported)
 
 ## Under the Hood
 - Updates integration test seeds to validate JSON datatype handling.
