@@ -1,3 +1,16 @@
+# dbt_klaviyo v1.3.1
+[PR #59](https://github.com/fivetran/dbt_klaviyo/pull/59) includes the following updates:
+
+## Feature Update
+- Adds native JSON datatype support to the `stg_klaviyo__event` model across warehouses:
+  - **Snowflake**: VARIANT  
+  - **Redshift**: SUPER  
+  - **Postgres**: JSON and JSONB  
+  - **BigQuery**: JSON (alredy supported)
+
+## Under the Hood
+- Updates integration test seeds to validate JSON datatype handling.
+
 # dbt_klaviyo v1.3.0
 
 [PR #58](https://github.com/fivetran/dbt_klaviyo/pull/58) includes the following updates:

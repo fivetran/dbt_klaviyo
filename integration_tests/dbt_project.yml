@@ -1,5 +1,5 @@
 name: 'klaviyo_integration_tests'
-version: '1.3.0'
+version: '1.3.1'
 config-version: 2
 profile: 'integration_tests'
 
@@ -37,14 +37,12 @@ seeds:
       +alias: "event"
       +column_types:
         PROPERTY_ATTRIBUTION_STRING: "varchar(65535)"
-      # Complex JSON with embedded commas/quotes causes CSV parsing errors. Load as VARCHAR first, 
-      # then convert to VARIANT using PARSE_JSON() in post-hook to avoid CSV format conflicts.
-      # This is only necessary for testing with seed data.
+      # Complex JSON with embedded commas/quotes causes CSV parsing errors. 
+      # Load as VARCHAR first,  then convert to VARIANT using PARSE_JSON() in a post-hook.
+      # This is necessary for testing the VARIANT datatype with seed data.
       +post-hook: |
         ALTER TABLE {{ this }} ADD COLUMN PROPERTY_ATTRIBUTION VARIANT;
-        UPDATE {{ this }} SET PROPERTY_ATTRIBUTION =
-          PARSE_JSON(PROPERTY_ATTRIBUTION_STRING);
-        ALTER TABLE {{ this }} DROP COLUMN PROPERTY_ATTRIBUTION_STRING;
+        UPDATE {{ this }} SET PROPERTY_ATTRIBUTION = PARSE_JSON(PROPERTY_ATTRIBUTION_STRING);
     event_norename:
       +column_types:
         PROPERTYATTRIBUTION: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar(65535)' }}"
