@@ -2,7 +2,7 @@
 [PR #59](https://github.com/fivetran/dbt_klaviyo/pull/59) includes the following updates:
 
 ## Feature Update
-- Adds native JSON datatype support to the `stg_klaviyo__event` model across warehouses:
+- Adds native JSON datatype support to the `stg_klaviyo__event` model across warehouses when generating the `event_attribution` field:
   - **Snowflake**: VARIANT  
   - **Redshift**: SUPER  
   - **Postgres**: JSON and JSONB  
