@@ -18,6 +18,9 @@ vars:
     klaviyo_metric_identifier: "metric"
 
 models:
+  +persist_docs:
+    relation: true
+    columns: true
   +schema: "klaviyo_{{ var('directed_schema','dev') }}"
 
 seeds:
