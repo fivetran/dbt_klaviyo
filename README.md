@@ -63,7 +63,7 @@ Include the following klaviyo package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/klaviyo
-    version: [">=1.3.0", "<1.4.0"]
+    version: [">=1.4.0", "<1.5.0"]
 ```
 
 > All required sources and staging models are now bundled into this transformation package. Do not include `fivetran/klaviyo_source` in your `packages.yml` since this package has been deprecated.
@@ -77,29 +77,43 @@ dispatch:
 ```
 
 ### Define database and schema variables
+#### Option A: Single connection
 By default, this package runs using your destination and the `klaviyo` schema. If this is not where your Klaviyo data is (for example, if your Klaviyo schema is named `klaviyo_fivetran`), add the following configuration to your root `dbt_project.yml` file:
 
 ```yml
 vars:
-  klaviyo_database: your_database_name
-  klaviyo_schema: your_schema_name
+    klaviyo_database: your_destination_name
+    klaviyo_schema: your_schema_name
 ```
 
-### (Optional) Additional configurations
-<details open><summary>Expand/Collapse details</summary>
+#### Option B: Union multiple connections
+If you have multiple Klaviyo connections in Fivetran and would like to use this package on all of them simultaneously, we have provided functionality to do so. For each source table, the package will union all of the data together and pass the unioned table into the transformations. The `source_relation` column in each model indicates the origin of each record.
 
-#### Unioning Multiple Klaviyo Connections
-If you have multiple Klaviyo connections in Fivetran and would like to use this package on all of them simultaneously, we have provided functionality to do so. The package will union all of the data together and pass the unioned table into the transformations. You will be able to see which source it came from in the `source_relation` column of each model. To use this functionality, you will need to set either (**note that you cannot use both**) the `klaviyo_union_schemas` or `klaviyo_union_databases` variables:
+To use this functionality, you will need to set the `klaviyo_sources` variable in your root `dbt_project.yml` file:
 
 ```yml
 # dbt_project.yml
-...
-config-version: 2
+
 vars:
   klaviyo:
-    klaviyo_union_schemas: ['klaviyo_usa','klaviyo_canada'] # use this if the data is in different schemas/datasets of the same database/project
-    klaviyo_union_databases: ['klaviyo_usa','klaviyo_canada'] # use this if the data is in different databases/projects but uses the same schema name
+    klaviyo_sources:
+      - database: connection_1_destination_name # Required
+        schema: connection_1_schema_name # Required
+        name: connection_1_source_name # Required only if following the step in the following subsection
+
+      - database: connection_2_destination_name
+        schema: connection_2_schema_name
+        name: connection_2_source_name
 ```
+
+> Previous versions of this package employed two separate, mutually exclusive variables for unioning: `klaviyo_union_schemas` and `klaviyo_union_databases`. While these variables are still supported, `klaviyo_sources` is the recommended variable to configure.
+
+#### Optional: Incorporate unioned sources into DAG
+
+If you use [Fivetran Transformations for dbt Core™](https://fivetran.com/docs/transformations/dbt#transformationsfordbtcore) and are unioning multiple Klaviyo connections, you can define your sources in a property `.yml` file, [using this as a template](https://github.com/fivetran/dbt_klaviyo/blob/main/models/staging/src_klaviyo.yml). Set the variable `has_defined_sources: true` under the Klaviyo namespace in your `dbt_project.yml`. Otherwise, your Klaviyo connections won't appear in your DAG. See the `union_connections` macro [documentation](https://github.com/fivetran/dbt_fivetran_utils/tree/releases/v0.4.latest#optional-union-connections-defined-sources-configuration) for full configuration details.
+
+### (Optional) Additional configurations
+<details open><summary>Expand/Collapse details</summary>
 
 #### Event Attribution
 
@@ -237,6 +251,14 @@ If an individual source table has a different name than the package expects, add
 ```yml
 vars:
     klaviyo_<default_source_table_name>_identifier: your_table_name 
+```
+
+#### Source casing for case-sensitive destinations
+By default, the package applies case-insensitive comparisons when resolving `source_relation` values. If your destination is case-sensitive and you want downstream transformations to respect the exact casing of your source database and schema names, set the following variable:
+
+```yml
+vars:
+    fivetran_using_source_casing: true
 ```
 
 </details>
