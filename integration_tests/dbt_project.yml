@@ -30,13 +30,13 @@ seeds:
     +quote_columns: "{{ target.type == 'redshift' or var('fivetran_using_source_casing', false) }}"
     person:
       +column_types:
-        PHONE_NUMBER: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
+        phone_number: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
     event:
       +column_types:
-        PROPERTY_ATTRIBUTION: "{{ 'json' if target.type in ('bigquery', 'postgres') else 'super' if target.type == 'redshift' else 'varchar(65535)' }}"
+        property_attribution: "{{ 'json' if target.type in ('bigquery', 'postgres') else 'super' if target.type == 'redshift' else 'varchar(65535)' }}"
     event_norename:
       +column_types:
-        PROPERTYATTRIBUTION: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar(65535)' }}"
+        propertyattribution: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar(65535)' }}"
 
 flags:
   send_anonymous_usage_stats: False
