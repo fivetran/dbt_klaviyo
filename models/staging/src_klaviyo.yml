@@ -10,6 +10,7 @@ sources:
     loader: fivetran
       
     config:
+      enabled: "{{ var('klaviyo_sources', []) == [] }}"
       loaded_at_field: _fivetran_synced
       freshness:
         warn_after: {count: 72, period: hour}
@@ -194,4 +195,4 @@ sources:
           - name: integration_name
             description: Name of the integrated platform. 
           - name: _fivetran_deleted
-            description: Boolean that is true if the campaign has been soft-deleted. 
+            description: Boolean that is true if the campaign has been soft-deleted.
