@@ -1,5 +1,5 @@
 name: 'klaviyo_integration_tests'
-version: '1.4.0'
+version: '1.4.1'
 config-version: 2
 profile: 'integration_tests'
 
@@ -31,10 +31,12 @@ seeds:
     person:
       +column_types:
         phone_number: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
+        custom_first_purchase_date_: "{{ 'varchar' if target.type == 'duckdb' else 'date' }}"
     event:
       +column_types:
         property_attribution: "{{ 'json' if target.type in ('bigquery', 'postgres') else 'super' if target.type == 'redshift' else 'varchar(65535)' }}"
     event_norename:
+      # +enabled: false # @docs-include
       +column_types:
         propertyattribution: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar(65535)' }}"
 

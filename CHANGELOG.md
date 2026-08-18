@@ -1,3 +1,11 @@
+# dbt_klaviyo v1.4.1
+
+[PR #64](https://github.com/fivetran/dbt_klaviyo/pull/64) includes the following updates:
+
+## Feature Updates
+- Adds DuckDB as a supported destination.
+
+
 # dbt_klaviyo v1.4.0
 
 [PR #62](https://github.com/fivetran/dbt_klaviyo/pull/62) includes the following updates:
