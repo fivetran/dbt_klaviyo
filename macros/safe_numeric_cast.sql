@@ -3,7 +3,7 @@
 {%- endmacro -%}
 
 {%- macro default__safe_numeric_cast(field) -%}
-    {{ fivetran_utils.try_cast(field, "numeric") }}
+    {{ fivetran_utils.try_cast(field, dbt.type_numeric()) }}
 {%- endmacro -%}
 
 {%- macro redshift__safe_numeric_cast(field) -%}
