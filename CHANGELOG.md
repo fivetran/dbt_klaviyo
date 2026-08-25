@@ -9,7 +9,8 @@
 | ---------- | ----------- | -------- | -------- | ----- |
 | `klaviyo__person_campaign_flow`, `klaviyo__campaigns`, `klaviyo__flows` | Fixed value | `sum_revenue_*` columns return `0` for decimal revenue values on Redshift/Postgres, or round them to whole numbers on Snowflake/Databricks/SQL Server | `sum_revenue_*` columns return the correct decimal amount on all supported destinations | Re-run (`dbt run`) required to refresh existing data with correct revenue totals |
 
-- **Customers on Redshift and Postgres will see previously reported `sum_revenue_*` values change from `0` to their correct nonzero amounts; customers on Snowflake, Databricks, and SQL Server will see decimal cents restored where values were previously rounded to whole dollars.** Root cause: `fivetran_utils.try_cast` validates numeric values with a regex that only matches whole integers (nulling out decimals on Redshift/Postgres, then coalesced to `0`), and casts to an unscaled `numeric` type elsewhere (rounding decimals away on adapters that default to zero decimal places). Introduces `klaviyo.safe_numeric_cast`, a package-local macro that uses Redshift's native `TRY_CAST`, a corrected decimal-aware regex on Postgres, and an explicitly-scaled numeric type everywhere else. BigQuery is unaffected (its `numeric` type already retains decimals by default).
+- After upgrading and re-running the models, Redshift and Postgres customers will see affected `sum_revenue_*` values corrected from `0` to their actual nonzero amounts. Snowflake, Databricks, and SQL Server customers will see previously rounded values restored to include decimal cents.
+- Introduces `klaviyo.safe_numeric_cast`, which preserves decimal revenue values across these adapters. BigQuery is unaffected because its `numeric` type already retains decimals by default.
 
 [PR #64](https://github.com/fivetran/dbt_klaviyo/pull/64) includes the following updates:
 
