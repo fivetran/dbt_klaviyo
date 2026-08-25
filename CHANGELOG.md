@@ -9,10 +9,7 @@
 | ---------- | ----------- | -------- | -------- | ----- |
 | `klaviyo__person_campaign_flow`, `klaviyo__campaigns`, `klaviyo__flows` | Fixed value | `sum_revenue_*` columns return `0` for decimal revenue values on Redshift and Postgres | `sum_revenue_*` columns return the correct decimal amount | Re-run (`dbt run`) required to refresh existing Redshift/Postgres data with correct revenue totals |
 
-- On Redshift and Postgres, `fivetran_utils.try_cast` validates numeric values with a regex that only matches whole integers, so any revenue value with a decimal (e.g. `379.99`) is cast to `null`, which is then coalesced to `0` in the `sum_revenue_*` calculation. This shows revenue sums of `$0` for affected Redshift/Postgres customers even though the underlying data is correct. Introduces `klaviyo.safe_numeric_cast`, a package-local macro that uses Redshift's native `TRY_CAST` and a corrected decimal-aware regex on Postgres, falling back to `fivetran_utils.try_cast` on all other adapters (no behavior change there). **Redshift and Postgres customers will see previously reported `sum_revenue_*` values change from `0` to their correct nonzero amounts after upgrading and re-running the models.**
-
-## Under the Hood
-- Adds a decimal revenue value to the `event` integration test seed to cover the regression this fix addresses.
+- **Redshift and Postgres customers will see previously reported `sum_revenue_*` values change from `0` to their correct nonzero amounts** after upgrading and re-running the models. Root cause: `fivetran_utils.try_cast` validates numeric values with a regex that only matches whole integers, so any revenue value with a decimal (e.g. `379.99`) was cast to `null`, which is then coalesced to `0` in the `sum_revenue_*` calculation. Introduces `klaviyo.safe_numeric_cast`, a package-local macro that uses Redshift's native `TRY_CAST` and a corrected decimal-aware regex on Postgres, falling back to `fivetran_utils.try_cast` on all other adapters (no behavior change there).
 
 [PR #64](https://github.com/fivetran/dbt_klaviyo/pull/64) includes the following updates:
 
