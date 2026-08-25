@@ -1,15 +1,15 @@
 # dbt_klaviyo v1.5.0-a1
 
-[PR #TBD](https://github.com/fivetran/dbt_klaviyo/pull/TBD) includes the following updates:
+[PR #65](https://github.com/fivetran/dbt_klaviyo/pull/65) includes the following updates:
 
 ## Schema/Data Change
 **1 total change • 1 possible breaking change**
 
 | Data Model(s) | Change type | Old | New | Notes |
 | ---------- | ----------- | -------- | -------- | ----- |
-| `klaviyo__person_campaign_flow`, `klaviyo__campaigns`, `klaviyo__flows` | Fixed value | `sum_revenue_*` columns return `0` for decimal revenue values on Redshift | `sum_revenue_*` columns return the correct decimal amount | Re-run (`dbt run`) required to refresh existing Redshift data with correct revenue totals |
+| `klaviyo__person_campaign_flow`, `klaviyo__campaigns`, `klaviyo__flows` | Fixed value | `sum_revenue_*` columns return `0` for decimal revenue values on Redshift and Postgres | `sum_revenue_*` columns return the correct decimal amount | Re-run (`dbt run`) required to refresh existing Redshift/Postgres data with correct revenue totals |
 
-- On Redshift, `fivetran_utils.try_cast` casts any revenue value with a decimal (e.g. `379.99`) to `null`, which is then coalesced to `0` in the `sum_revenue_*` calculation, so revenue sums show `$0` for affected Redshift customers even though the underlying data is correct. Introduces `klaviyo.safe_numeric_cast`, a package-local macro that uses Redshift's native `TRY_CAST` for numeric casting while falling back to `fivetran_utils.try_cast` on all other adapters. **Redshift customers will see previously reported `sum_revenue_*` values change from `0` to their correct nonzero amounts after upgrading and re-running the models.**
+- On Redshift and Postgres, `fivetran_utils.try_cast` validates numeric values with a regex that only matches whole integers, so any revenue value with a decimal (e.g. `379.99`) is cast to `null`, which is then coalesced to `0` in the `sum_revenue_*` calculation. This shows revenue sums of `$0` for affected Redshift/Postgres customers even though the underlying data is correct. Introduces `klaviyo.safe_numeric_cast`, a package-local macro that uses Redshift's native `TRY_CAST` and a corrected decimal-aware regex on Postgres, falling back to `fivetran_utils.try_cast` on all other adapters (no behavior change there). **Redshift and Postgres customers will see previously reported `sum_revenue_*` values change from `0` to their correct nonzero amounts after upgrading and re-running the models.**
 
 ## Under the Hood
 - Adds a decimal revenue value to the `event` integration test seed to cover the regression this fix addresses.
