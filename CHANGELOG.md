@@ -7,11 +7,12 @@
 
 | Data Model(s) | Change type | Old | New | Notes |
 | ---------- | ----------- | -------- | -------- | ----- |
-| `klaviyo__person_campaign_flow`, `klaviyo__campaigns`, `klaviyo__flows` | Fixed value | `sum_revenue_*` columns return `0` for decimal revenue values on Redshift/Postgres, or round them to whole numbers on Snowflake/Databricks/SQL Server | `sum_revenue_*` columns return the correct decimal amount on all supported destinations | Re-run (`dbt run`) required to refresh existing data with correct revenue totals |
+| `klaviyo__person_campaign_flow`, `klaviyo__campaigns`, `klaviyo__flows` | Fixed value | `sum_revenue_*` columns return `0` for decimal revenue values on Redshift/Postgres, or round them to whole numbers on Snowflake/Databricks | `sum_revenue_*` columns return the correct decimal amount on all supported destinations | Re-run (`dbt run`) required to refresh existing data with correct revenue totals |
 
-- After upgrading and re-running the models, Redshift and Postgres customers will see affected `sum_revenue_*` values corrected from `0` to their actual nonzero amounts. Snowflake, Databricks, and SQL Server customers will see previously rounded values restored to include decimal cents.
+- After upgrading and re-running the models, Redshift and Postgres customers will see affected `sum_revenue_*` values corrected from `0` to their actual nonzero amounts. Snowflake and Databricks customers will see previously rounded values restored to include decimal cents.
 - Introduces `klaviyo.safe_numeric_cast`, which preserves decimal revenue values across these adapters. BigQuery is unaffected because its `numeric` type already retains decimals by default.
 
+# dbt_klaviyo v1.4.1
 [PR #64](https://github.com/fivetran/dbt_klaviyo/pull/64) includes the following updates:
 
 ## Feature Updates
