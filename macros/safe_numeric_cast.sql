@@ -3,9 +3,12 @@
 {%- endmacro -%}
 
 {%- macro default__safe_numeric_cast(field) -%}
-    cast({{ field }} as {{ dbt.type_numeric() }})
+    try_cast({{ field }} as {{ dbt.type_numeric() }})
 {%- endmacro -%}
 
+{#- Redshift's adapter dispatch falls back to postgres__ before default__ since dbt-redshift
+    extends dbt-postgres, so this needs to stay explicit to keep using native TRY_CAST instead
+    of postgres__safe_numeric_cast's regex-guarded cast. -#}
 {%- macro redshift__safe_numeric_cast(field) -%}
     try_cast({{ field }} as {{ dbt.type_numeric() }})
 {%- endmacro -%}
@@ -18,18 +21,6 @@
     end
 {%- endmacro -%}
 
-{%- macro snowflake__safe_numeric_cast(field) -%}
-    try_cast(cast({{ field }} as {{ dbt.type_string() }}) as {{ dbt.type_numeric() }})
-{%- endmacro -%}
-
 {%- macro bigquery__safe_numeric_cast(field) -%}
     safe_cast({{ field }} as {{ dbt.type_numeric() }})
-{%- endmacro -%}
-
-{%- macro spark__safe_numeric_cast(field) -%}
-    try_cast({{ field }} as {{ dbt.type_numeric() }})
-{%- endmacro -%}
-
-{%- macro duckdb__safe_numeric_cast(field) -%}
-    try_cast({{ field }} as {{ dbt.type_numeric() }})
 {%- endmacro -%}
