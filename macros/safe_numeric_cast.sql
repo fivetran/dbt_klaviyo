@@ -8,7 +8,7 @@
 
 {#- Prevents fallback to the postgres dispatch. -#}
 {%- macro redshift__safe_numeric_cast(field) -%}
-    {{ default__safe_numeric_cast(field) }}
+    try_cast({{ field }} as {{ dbt.type_numeric() }})
 {%- endmacro -%}
 
 {%- macro postgres__safe_numeric_cast(field) -%}
