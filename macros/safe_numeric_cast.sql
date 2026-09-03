@@ -8,7 +8,7 @@
 
 {#- Kept explicit: dbt-redshift extends dbt-postgres, so dispatch would otherwise fall back to postgres__'s regex-guarded cast instead of native TRY_CAST. -#}
 {%- macro redshift__safe_numeric_cast(field) -%}
-    try_cast({{ field }} as {{ dbt.type_numeric() }})
+    {{ default__safe_numeric_cast(field) }}
 {%- endmacro -%}
 
 {%- macro postgres__safe_numeric_cast(field) -%}
