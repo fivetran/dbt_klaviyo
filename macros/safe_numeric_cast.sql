@@ -3,7 +3,7 @@
 {%- endmacro -%}
 
 {%- macro default__safe_numeric_cast(field) -%}
-    {{ fivetran_utils.try_cast(field, dbt.type_numeric()) }}
+    cast({{ field }} as {{ dbt.type_numeric() }})
 {%- endmacro -%}
 
 {%- macro redshift__safe_numeric_cast(field) -%}
@@ -16,4 +16,20 @@
         then trim(cast({{ field }} as {{ dbt.type_string() }}))::{{ dbt.type_numeric() }}
         else null
     end
+{%- endmacro -%}
+
+{%- macro snowflake__safe_numeric_cast(field) -%}
+    try_cast(cast({{ field }} as {{ dbt.type_string() }}) as {{ dbt.type_numeric() }})
+{%- endmacro -%}
+
+{%- macro bigquery__safe_numeric_cast(field) -%}
+    safe_cast({{ field }} as {{ dbt.type_numeric() }})
+{%- endmacro -%}
+
+{%- macro spark__safe_numeric_cast(field) -%}
+    try_cast({{ field }} as {{ dbt.type_numeric() }})
+{%- endmacro -%}
+
+{%- macro duckdb__safe_numeric_cast(field) -%}
+    try_cast({{ field }} as {{ dbt.type_numeric() }})
 {%- endmacro -%}
