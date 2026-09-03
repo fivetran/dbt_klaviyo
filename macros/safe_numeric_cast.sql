@@ -6,9 +6,7 @@
     try_cast({{ field }} as {{ dbt.type_numeric() }})
 {%- endmacro -%}
 
-{#- Redshift's adapter dispatch falls back to postgres__ before default__ since dbt-redshift
-    extends dbt-postgres, so this needs to stay explicit to keep using native TRY_CAST instead
-    of postgres__safe_numeric_cast's regex-guarded cast. -#}
+{#- Kept explicit: dbt-redshift extends dbt-postgres, so dispatch would otherwise fall back to postgres__'s regex-guarded cast instead of native TRY_CAST. -#}
 {%- macro redshift__safe_numeric_cast(field) -%}
     try_cast({{ field }} as {{ dbt.type_numeric() }})
 {%- endmacro -%}
