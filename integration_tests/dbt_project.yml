@@ -35,6 +35,7 @@ seeds:
     event:
       +column_types:
         property_attribution: "{{ 'json' if target.type in ('bigquery', 'postgres') else 'super' if target.type == 'redshift' else 'varchar(65535)' }}"
+        property_total_discounts: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar(65535)' }}"
     event_norename:
       # +enabled: false # @docs-include
       +column_types:
