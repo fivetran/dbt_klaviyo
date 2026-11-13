@@ -1,4 +1,5 @@
 version: 1.5.1
+pr_number: 71
 under_the_hood:
   - description: Corrects the documented column names for `int_klaviyo__event_attribution` and `klaviyo__persons` so the documentation matches the columns these models actually output.
     details:
