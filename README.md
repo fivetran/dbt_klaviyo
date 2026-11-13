@@ -15,7 +15,7 @@ This dbt package transforms data from Fivetran's Klaviyo connector into analytic
   - [DAG](https://fivetran.github.io/dbt_klaviyo/#!/overview?g_v=1)
   - [Changelog](https://github.com/fivetran/dbt_klaviyo/blob/main/CHANGELOG.md)
 - dbt Core™ supported versions
-  - `>=1.3.0, <3.0.0`
+  - `>=1.10.0, <3.0.0`
 
 ## What does this dbt package do?
 This package enables you to better understand the efficacy of your email and SMS marketing efforts. It creates enriched models with metrics focused on last-touch attribution, user interactions, and revenue attribution.
@@ -63,7 +63,7 @@ Include the following klaviyo package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/klaviyo
-    version: [">=1.5.0", "<1.6.0"]
+    version: [">=1.6.0", "<1.7.0"]
 ```
 
 > All required sources and staging models are now bundled into this transformation package. Do not include `fivetran/klaviyo_source` in your `packages.yml` since this package has been deprecated.
