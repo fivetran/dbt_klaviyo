@@ -1,0 +1,98 @@
+title: Klaviyo Activity Overview
+notes: |
+  Event activity and last-touch campaign attribution from klaviyo__events.
+  Counts represent events, not unique recipients. Order events are not unique orders.
+  Campaign attribution follows the package's configured attribution windows.
+
+variables:
+  date_range:
+    label: Events between
+    input: daterange
+
+queries:
+  totals:
+    dialect: duckdb
+    sql: |
+      select count(*) as events,
+        sum(case when lower(type) = 'received email' then 1 else 0 end) as received_email,
+        sum(case when lower(type) = 'clicked email' then 1 else 0 end) as clicked_email,
+        sum(case when lower(type) = 'placed order' then 1 else 0 end) as placed_order
+      from {{ ref('klaviyo__events') }}
+      where {{ filter_date_range('occurred_at', date_range) }}
+  weekly_activity:
+    dialect: duckdb
+    sql: |
+      select date_trunc('week', occurred_at) as week, type as event_type, count(*) as events
+      from {{ ref('klaviyo__events') }}
+      where {{ filter_date_range('occurred_at', date_range) }}
+        and lower(type) in ('received email', 'opened email', 'clicked email', 'placed order')
+      group by 1, 2
+      order by 1, 2
+  event_mix:
+    dialect: duckdb
+    sql: |
+      select coalesce(type, 'Unknown') as event_type, count(*) as events
+      from {{ ref('klaviyo__events') }}
+      where {{ filter_date_range('occurred_at', date_range) }}
+      group by 1
+      order by 2 desc, 1
+      limit 15
+  campaigns:
+    dialect: duckdb
+    sql: |
+      select source_relation, last_touch_campaign_id as campaign_id,
+        campaign_name,
+        sum(case when lower(type) = 'placed order' then 1 else 0 end) as order_events,
+        sum(case when lower(type) = 'clicked email' then 1 else 0 end) as email_click_events
+      from {{ ref('klaviyo__events') }}
+      where {{ filter_date_range('occurred_at', date_range) }}
+        and last_touch_campaign_id is not null
+        and last_touch_campaign_id <> ''
+      group by 1, 2, 3
+      order by 4 desc, 5 desc, 1, 2
+      limit 15
+
+charts:
+  events:
+    type: kpi
+    query: totals
+    value: events
+    label: All events
+  received:
+    type: kpi
+    query: totals
+    value: received_email
+    label: Email received events
+  clicked:
+    type: kpi
+    query: totals
+    value: clicked_email
+    label: Email click events
+  orders:
+    type: kpi
+    query: totals
+    value: placed_order
+    label: Placed order events
+  activity:
+    type: line
+    query: weekly_activity
+    title: Weekly Event Activity
+    x: week
+    y: events
+    color: event_type
+  mix:
+    type: bar
+    query: event_mix
+    title: Top Event Types
+    x: event_type
+    y: events
+  campaign_table:
+    type: table
+    query: campaigns
+    title: Last-Touch Campaign Activity
+
+rows:
+  - cols: [events, received, clicked, orders]
+  - activity
+  - mix
+  - campaign_table
