@@ -4,6 +4,12 @@ models:
   - name: stg_klaviyo__campaign
     description: >
       Table capturing email campaigns in Klaviyo.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - campaign_id
     columns:
       - name: campaign_type
         description: Type of campaign.
@@ -53,6 +59,12 @@ models:
       Table of events (and metrics) triggered in Klaviyo or via its integrations.
       Custom columns can be passed through to downstream models via the `klaviyo__event_pass_through_columns` variable 
       (see README for details).
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - event_id
     columns:
       - name: variation_id
         description: >
@@ -100,6 +112,12 @@ models:
 
   - name: stg_klaviyo__flow
     description: Table of automated, triggered flow sequences in Klaviyo.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - flow_id
     columns:
       - name: created_at
         description: Timestamp of when the flow was first created. 
@@ -128,6 +146,12 @@ models:
       Table storing the profiles of all people/users interacted with. 
       Custom columns can be passed through to downstream models via the `klaviyo__person_pass_through_columns` variable 
       (see README for details).
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - person_id
     columns:
       - name: person_id
         description: >
@@ -177,6 +201,12 @@ models:
 
   - name: stg_klaviyo__metric
     description: Table of tracked metrics across integrations in Klaviyo.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - metric_id
     columns:
       - name: created_at
         description: Timestamp of when the metric was created. 
