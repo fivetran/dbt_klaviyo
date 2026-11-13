@@ -1,3 +1,13 @@
+# dbt_klaviyo v1.5.1
+
+[PR #71](https://github.com/fivetran/dbt_klaviyo/pull/71) includes the following updates:
+
+## Under the Hood
+- Corrects the documented column names for `int_klaviyo__event_attribution` and `klaviyo__persons` so the documentation matches the columns these models actually output.
+  - Renames the documented `last_touch_type` column to `session_touch_type` in `int_klaviyo__event_attribution`.
+  - Removes the documented `touch_session` column from `int_klaviyo__event_attribution`. This column is internal to the model's CTE logic and is not part of the model output.
+  - Renames the documented `last_event_date_at` column to `last_event_date` in `klaviyo__persons`.
+
 # dbt_klaviyo v1.5.0
 
 [PR #65](https://github.com/fivetran/dbt_klaviyo/pull/65) includes the following updates:

@@ -1,8 +1,13 @@
 version: 1.5.1
 pr_number: 71
 under_the_hood:
-  - description: Corrects the documented column names for `int_klaviyo__event_attribution` and `klaviyo__persons` so the documentation matches the columns these models actually output.
-    details:
-      - "Renames the documented `last_touch_type` column to `session_touch_type` in `int_klaviyo__event_attribution`."
-      - "Removes the documented `touch_session` column from `int_klaviyo__event_attribution`. This column is internal to the model's CTE logic and is not part of the model output."
-      - "Renames the documented `last_event_date_at` column to `last_event_date` in `klaviyo__persons`."
+- description: Corrects the documented column names for `int_klaviyo__event_attribution`
+    and `klaviyo__persons` so the documentation matches the columns these models actually
+    output.
+  details:
+  - Renames the documented `last_touch_type` column to `session_touch_type` in `int_klaviyo__event_attribution`.
+  - Removes the documented `touch_session` column from `int_klaviyo__event_attribution`.
+    This column is internal to the model's CTE logic and is not part of the model
+    output.
+  - Renames the documented `last_event_date_at` column to `last_event_date` in `klaviyo__persons`.
+date: '2026-11-13'
