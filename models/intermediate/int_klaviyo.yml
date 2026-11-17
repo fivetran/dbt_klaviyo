@@ -60,11 +60,6 @@ models:
         description: Calendar date (UTC) on which the event occurred.
       - name: touch_id
         description: Coalescing of the Klaviyo-attributed campaign_id and flow_id.
-      - name: touch_session
-        description: >
-          ID used to batch an individual person's events into attribution-groups. Each event that comes 
-          attributed to a campaign or flow begins a new session/batch, in which the following events without 
-          a flow/campaign_id have the same `touch_session` (and may be attributed to the same flow/campaign).
       - name: session_start_at
         description: >
           Timestamp of when, relative to the current event, this person last interacted with a campaign or flow 
@@ -75,7 +70,7 @@ models:
           or flow. This information is used to determine which lookback window to use (email vs sms).
       - name: last_touch_id 
         description: The campaign or flow that the package attributed the event to. 
-      - name: last_touch_type 
+      - name: session_touch_type
         description: What kind of touch the event was attributed to by the package -- 'campaign', 'flow', or null. 
       - name: _fivetran_synced
         description: UTC Timestamp that indicates the start time of the Fivetran job that synced this event row.
