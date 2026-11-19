@@ -5,8 +5,5 @@ new_features:
 - description: Adds `dbt_utils.unique_combination_of_columns` tests to staging and
     end models. If a test fails, please [open an issue](https://github.com/fivetran/dbt_klaviyo/issues/new/choose).
 under_the_hood:
-  details:
-  - Renames the documented `last_touch_type` column to `session_touch_type` in `int_klaviyo__event_attribution`.
-  - Removes the documented `touch_session` column from `int_klaviyo__event_attribution`.
-  - Renames the documented `last_event_date_at` column to `last_event_date` in `klaviyo__persons`.
+- description: Updates yml column documentation to match model output.
 date: '2026-11-18'
