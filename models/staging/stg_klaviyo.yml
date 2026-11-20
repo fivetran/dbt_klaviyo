@@ -26,7 +26,7 @@ models:
         description: The name or label associated with the email address you're sending from.
       - name: campaign_id
         description: Unique ID of the campaign. 
-        tests:
+        data_tests:
           - not_null
       - name: campaign_name
         description: A name for this campaign. If not specified, this will default to the subject of the campaign.
@@ -82,7 +82,7 @@ models:
           This does not map onto another table.
       - name: event_id
         description: Unique ID of the event. 
-        tests:
+        data_tests:
           - not_null
       - name: metric_id
         description: Foreign key referencing the metric being captured. 
@@ -123,7 +123,7 @@ models:
         description: Timestamp of when the flow was first created. 
       - name: flow_id
         description: Unique ID of the flow. 
-        tests:
+        data_tests:
           - not_null
       - name: flow_name
         description: Name of the flow. 
@@ -157,7 +157,7 @@ models:
         description: >
           Unique ID of the user if you use your own unique identifier. Otherwise, Klaviyo 
           recommends using the email as the primary key. 
-        tests:
+        data_tests:
           - not_null
       - name: address_1
         description: First line of the person's address.
@@ -212,7 +212,7 @@ models:
         description: Timestamp of when the metric was created. 
       - name: metric_id
         description: Unique ID of the metric being tracked. 
-        tests:
+        data_tests:
           - not_null
       - name: integration_id
         description: Foreign key referencing the INTEGRATION that the metric is being pulled from. 

@@ -36,7 +36,7 @@ models:
           This does not map onto another table.
       - name: event_id
         description: Unique ID of the event. 
-        tests:
+        data_tests:
           - not_null
       - name: metric_id
         description: Foreign key referencing the metric being captured. 

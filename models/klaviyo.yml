@@ -31,7 +31,7 @@ models:
           This does not map onto another table.
       - name: event_id
         description: Unique ID of the event. 
-        tests:
+        data_tests:
           - not_null
       - name: metric_id
         description: Foreign key referencing the metric being captured. 
@@ -164,7 +164,7 @@ models:
     columns:
       - name: campaign_variation_key
         description: Unique key hashed on the campaign and variation IDs. 
-        tests:
+        data_tests:
           - not_null
       - name: campaign_type
         description: Type of campaign.
@@ -233,7 +233,7 @@ models:
     columns:
       - name: flow_variation_key
         description: Unique key hashed on the flow and variation IDs. 
-        tests:
+        data_tests:
           - not_null
       - name: created_at
         description: Timestamp of when the flow was first created. 
@@ -286,7 +286,7 @@ models:
         description: >
           Unique ID of the user if you use your own unique identifier. Otherwise, Klaviyo 
           recommends using the email as the primary key. 
-        tests:
+        data_tests:
           - not_null
       - name: address_1
         description: First line of the person's address.
