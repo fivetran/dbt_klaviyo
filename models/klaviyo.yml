@@ -8,6 +8,12 @@ models:
 
       Note: this model has an incremental materialization. Custom event-columns specified by the `klaviyo__event_pass_through_columns`
       variable will appear here as well.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - event_id
     columns:
       - name: variation_id
         description: >
@@ -25,7 +31,7 @@ models:
           This does not map onto another table.
       - name: event_id
         description: Unique ID of the event. 
-        tests:
+        data_tests:
           - not_null
       - name: metric_id
         description: Foreign key referencing the metric being captured. 
@@ -108,6 +114,15 @@ models:
       with events (i.e. revenue) will be pivoted out into columns, as configured by the `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`
       variables, respectively. See the dbt_project.yml file for the default metrics used. 
       These columns will be prefixed with `count_` and `sum_revenue_`.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - person_id
+              - last_touch_campaign_id
+              - last_touch_flow_id
+              - variation_id
     columns:
       - name: person_id
         description: Foreign key referencing the PERSON who interacted with the flow/message.
@@ -140,10 +155,16 @@ models:
       with events (i.e. revenue) will be pivoted out into columns, as configured by the `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`
       variables, respectively. See the dbt_project.yml file for the default metrics used. 
       These columns will be prefixed with `count_`, `unique_count_`, and `sum_revenue_`.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - campaign_variation_key
     columns:
       - name: campaign_variation_key
         description: Unique key hashed on the campaign and variation IDs. 
-        tests:
+        data_tests:
           - not_null
       - name: campaign_type
         description: Type of campaign.
@@ -203,10 +224,16 @@ models:
       with events (i.e. revenue) will be pivoted out into columns, as configured by the `klaviyo__count_metrics` and `klaviyo__sum_revenue_metrics`
       variables, respectively. See the dbt_project.yml file for the default metrics used. 
       These columns will be prefixed with `count_`, `unique_count_`, and `sum_revenue_`.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - flow_variation_key
     columns:
       - name: flow_variation_key
         description: Unique key hashed on the flow and variation IDs. 
-        tests:
+        data_tests:
           - not_null
       - name: created_at
         description: Timestamp of when the flow was first created. 
@@ -248,12 +275,18 @@ models:
       the default metrics used. 
       These columns will be prefixed with `total_count_`, `total_sum_revenue_` (organic + attributed), and `organic_sum_revenue_`
       (not attributed to a campaign or flow). 
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - person_id
     columns:
       - name: person_id
         description: >
           Unique ID of the user if you use your own unique identifier. Otherwise, Klaviyo 
           recommends using the email as the primary key. 
-        tests:
+        data_tests:
           - not_null
       - name: address_1
         description: First line of the person's address.
@@ -303,7 +336,7 @@ models:
         description: Timestamp of when the user first interacted with a flow.
       - name: last_flow_touch_at
         description: Timestamp of when the user last interacted with a flow.
-      - name: last_event_date_at
+      - name: last_event_date
         description: Date and time of the most recent event the triggered an update to the profile, in ISO 8601 format (YYYY-MM-DDTHH:MM:SS.mmmmmm)
       - name: source_relation
         description: >
