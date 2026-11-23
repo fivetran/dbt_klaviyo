@@ -87,6 +87,7 @@ extracted_touch as (
         touch_id as extracted_touch_id,
         touch_type as extracted_touch_type,
         type as extracted_event_type,
+        occurred_at as extracted_occurred_at,
         source_relation
     from events
 ),
@@ -96,11 +97,10 @@ inherited as (
     select
         normalized_children.source_relation,
         normalized_children.unique_event_id,
-        normalized_children.occurred_at,
-        normalized_children.type as event_type,
         extracted_touch.extracted_touch_id,
         extracted_touch.extracted_touch_type,
-        extracted_touch.extracted_event_type
+        extracted_touch.extracted_event_type,
+        extracted_touch.extracted_occurred_at
     from normalized_children
     left join extracted_touch
         on normalized_children.extracted_event_id = extracted_touch.extracted_event_id
@@ -174,8 +174,8 @@ final as (
         events.*,
 
         {% if using_native_attribution %}
-        coalesce(inherited.occurred_at, events.occurred_at) as session_start_at,
-        coalesce(inherited.event_type, events.type) as session_event_type,
+        coalesce(inherited.extracted_occurred_at, events.occurred_at) as session_start_at,
+        coalesce(inherited.extracted_event_type, events.type) as session_event_type,
         coalesce(inherited.extracted_touch_id, events.touch_id) as last_touch_id,
         coalesce(inherited.extracted_touch_type, events.touch_type) as session_touch_type
         {% else %}
